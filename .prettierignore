@@ -1,0 +1,12 @@
+dist/
+build/
+.next/
+storybook-static/
+pnpm-lock.yaml
+.scratch/
+.agents/
+docs/
+CLAUDE.md
+AGENTS.md
+CONTEXT.md
+skills-lock.json

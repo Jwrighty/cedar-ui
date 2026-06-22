@@ -1,0 +1,26 @@
+{
+  "name": "docs",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "storybook dev -p 6006",
+    "build": "storybook build",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@cedar-ui/react": "workspace:*",
+    "@cedar-ui/tokens": "workspace:*",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@storybook/react": "^8.5.0",
+    "@storybook/react-vite": "^8.5.0",
+    "@types/react": "^19.0.7",
+    "@types/react-dom": "^19.0.3",
+    "storybook": "^8.5.0",
+    "typescript": "^5.7.3",
+    "vite": "^6.0.7"
+  }
+}
