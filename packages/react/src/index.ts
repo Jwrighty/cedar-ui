@@ -6,6 +6,10 @@ export { TextField } from "./TextField";
 export type { TextFieldProps } from "./TextField";
 export { textFieldMeta } from "./TextField.meta";
 
+export { Dialog } from "./Dialog";
+export type { DialogContentProps, DialogTitleProps } from "./Dialog";
+export { dialogMeta } from "./Dialog.meta";
+
 export type { ComponentMeta } from "./meta";
 export { recipe } from "./recipe";
 export type {

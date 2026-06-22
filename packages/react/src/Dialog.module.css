@@ -1,0 +1,47 @@
+/*
+ * Dialog styles. The overlay (scrim) and panel structure come from semantic +
+ * component tokens, so the dialog re-themes via [data-theme] with no code
+ * change. Entry/exit and dismiss behaviour are owned by React Aria; we only
+ * paint. [data-entering]/[data-exiting] are exposed by RAC for animation.
+ */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--semantic-space-inset-lg);
+  background: var(--semantic-color-overlay-scrim);
+}
+
+.modal {
+  width: 100%;
+  max-width: var(--component-dialog-max-width);
+  max-height: 100%;
+  overflow-y: auto;
+  background: var(--semantic-color-surface-raised);
+  border: var(--semantic-border-width) solid
+    var(--semantic-color-border-default);
+  border-radius: var(--semantic-radius-overlay);
+  box-shadow: 0 10px 38px -10px rgb(0 0 0 / 35%);
+}
+
+.dialog {
+  display: flex;
+  flex-direction: column;
+  gap: var(--semantic-space-stack-md);
+  box-sizing: border-box;
+  padding: var(--component-dialog-padding);
+  font-family: var(--semantic-font-body-family);
+  color: var(--semantic-color-text-default);
+  outline: none;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--semantic-font-body-size);
+  font-weight: var(--semantic-font-label-weight);
+  line-height: var(--semantic-font-body-line-height);
+  color: var(--semantic-color-text-default);
+}
