@@ -10,6 +10,10 @@ export { Dialog } from "./Dialog";
 export type { DialogContentProps, DialogTitleProps } from "./Dialog";
 export { dialogMeta } from "./Dialog.meta";
 
+export { RadioGroup, Radio } from "./RadioGroup";
+export type { RadioGroupProps, RadioProps } from "./RadioGroup";
+export { radioGroupMeta } from "./RadioGroup.meta";
+
 export type { ComponentMeta } from "./meta";
 export { recipe } from "./recipe";
 export type {
