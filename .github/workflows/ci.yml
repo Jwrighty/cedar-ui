@@ -71,9 +71,22 @@ jobs:
         run: pnpm build
 
       - name: Publish to Chromatic
+        id: chromatic
         uses: chromaui/action@latest
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           workingDir: apps/docs
           buildScriptName: build
           exitZeroOnChanges: true
+
+      # Surface the published Storybook so a reviewer can open it straight from
+      # the run summary — this is Cedar's public front door (ADR-0007).
+      - name: Publish hosted Storybook URL
+        if: always() && steps.chromatic.outputs.storybookUrl != ''
+        run: |
+          {
+            echo "### 📖 Hosted Storybook"
+            echo ""
+            echo "- Published: ${{ steps.chromatic.outputs.storybookUrl }}"
+            echo "- This build: ${{ steps.chromatic.outputs.buildUrl }}"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,56 @@
+import { Meta } from "@storybook/blocks";
+
+<Meta title="Introduction" />
+
+# Cedar
+
+An accessible, themeable React design system you install and consume like any
+real dependency — not a pile of components copied between projects.
+
+Everything in this Storybook is the **real published library**: the same
+`@jwrighty/cedar-react` components, styled against the same `@jwrighty/cedar-tokens`
+you would `npm install`. Nothing here is a mock.
+
+## Try the theme switch first
+
+Use the **Theme** control in the toolbar above (the paintbrush) to flip every
+story between **Light**, **Dark**, and the **Cedar** brand theme. Watch any
+component re-skin live — no prop changes, no component code, no rebuild. That is
+the entire token architecture paying off: a single `[data-theme]` attribute
+swapping a tier of CSS custom properties.
+
+Open **Components → Button → Themes** to see all three side by side.
+
+## Install
+
+```sh
+npm install @jwrighty/cedar-react @jwrighty/cedar-tokens
+```
+
+```tsx
+import "@jwrighty/cedar-tokens/tokens.css";
+import "@jwrighty/cedar-react/styles.css";
+import { Button } from "@jwrighty/cedar-react";
+
+export function App() {
+  return <Button variant="primary">Save</Button>;
+}
+```
+
+## What's here
+
+- **Button**, **TextField**, **Dialog** — the walking-skeleton primitives, each
+  driven end to end through tokens → theming → build → publish.
+- Every component page carries **usage docs** generated from its typed
+  `ComponentMeta`: when to use it, when to reach for something else, and the
+  accessibility behaviours you can rely on.
+- Interactive **controls** for every prop, plus focused stories for variants,
+  sizes, states, and theming.
+
+## The reasoning behind it
+
+Cedar's decisions are recorded as ADRs in
+[`docs/adr/`](https://github.com/jwrighty/cedar-ui/tree/main/docs/adr) and its
+domain vocabulary in
+[`CONTEXT.md`](https://github.com/jwrighty/cedar-ui/blob/main/CONTEXT.md) — read
+those to judge the *why*, not just the output.

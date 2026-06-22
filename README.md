@@ -3,6 +3,14 @@
 An accessible, themeable React design system you install and consume like any
 real dependency — not a pile of components copied between projects.
 
+## Showcase
+
+**[View the hosted Storybook →](https://main--6a393989afa7ada24819272a.chromatic.com/)**
+
+Themed, documented, interactive Button, TextField, and Dialog — from one link,
+nothing to clone. Use the **Theme** control in the toolbar to re-skin every
+component live across light, dark, and the Cedar brand theme.
+
 Cedar is published to npm as two packages:
 
 | Package                               | What it is                                                                                                                                                            |
