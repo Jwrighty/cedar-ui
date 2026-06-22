@@ -1,0 +1,90 @@
+/*
+ * Button styles. Structure comes from component tokens; colour comes from
+ * semantic tokens (so the button re-themes via [data-theme] with no code
+ * change). Interaction state is driven by the data-attributes React Aria
+ * Components exposes — [data-hovered] / [data-pressed] / [data-focus-visible] /
+ * [data-disabled] — not :hover/:focus, so touch + keyboard behave correctly.
+ */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border: var(--semantic-border-width) solid transparent;
+  border-radius: var(--semantic-radius-control);
+  font-family: var(--semantic-font-body-family);
+  font-weight: var(--semantic-font-label-weight);
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease;
+}
+
+/* --- Sizes ------------------------------------------------------------- */
+.sm {
+  height: var(--component-button-height-sm);
+  padding-inline: var(--component-button-padding-inline-sm);
+  font-size: var(--component-button-font-size-sm);
+}
+.md {
+  height: var(--component-button-height-md);
+  padding-inline: var(--component-button-padding-inline-md);
+  font-size: var(--component-button-font-size-md);
+}
+.lg {
+  height: var(--component-button-height-lg);
+  padding-inline: var(--component-button-padding-inline-lg);
+  font-size: var(--component-button-font-size-lg);
+}
+
+/* --- Variants --------------------------------------------------------- */
+.primary {
+  background: var(--semantic-color-action-rest);
+  color: var(--semantic-color-text-on-action);
+}
+.primary[data-hovered] {
+  background: var(--semantic-color-action-hover);
+}
+.primary[data-pressed] {
+  background: var(--semantic-color-action-active);
+}
+
+.secondary {
+  background: var(--semantic-color-surface-raised);
+  color: var(--semantic-color-text-default);
+  border-color: var(--semantic-color-border-default);
+}
+.secondary[data-hovered] {
+  background: var(--semantic-color-surface-sunken);
+  border-color: var(--semantic-color-border-strong);
+}
+.secondary[data-pressed] {
+  background: var(--semantic-color-surface-sunken);
+  border-color: var(--semantic-color-border-strong);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--semantic-color-action-rest);
+}
+.ghost[data-hovered] {
+  background: var(--semantic-color-action-subtle);
+}
+.ghost[data-pressed] {
+  background: var(--semantic-color-action-subtle);
+}
+
+/* --- Shared state ----------------------------------------------------- */
+.button[data-focus-visible] {
+  outline: var(--semantic-focus-ring-width) solid
+    var(--semantic-color-focus-ring);
+  outline-offset: var(--semantic-border-width);
+}
+.button[data-disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}

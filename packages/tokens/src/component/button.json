@@ -5,6 +5,16 @@
         "sm": { "$value": "{base.space.3}", "$type": "dimension" },
         "md": { "$value": "{base.space.4}", "$type": "dimension" },
         "lg": { "$value": "{base.space.6}", "$type": "dimension" }
+      },
+      "height": {
+        "sm": { "$value": "{base.size.control.sm}", "$type": "dimension" },
+        "md": { "$value": "{base.size.control.md}", "$type": "dimension" },
+        "lg": { "$value": "{base.size.control.lg}", "$type": "dimension" }
+      },
+      "font-size": {
+        "sm": { "$value": "{base.font.size.sm}", "$type": "dimension" },
+        "md": { "$value": "{base.font.size.sm}", "$type": "dimension" },
+        "lg": { "$value": "{base.font.size.md}", "$type": "dimension" }
       }
     }
   }

@@ -14,7 +14,12 @@ export default defineConfig({
       fileName: () => "index.js",
     },
     rollupOptions: {
-      external: ["react", "react-dom", "react/jsx-runtime"],
+      external: [
+        "react",
+        "react-dom",
+        "react/jsx-runtime",
+        "react-aria-components",
+      ],
       output: {
         preserveModules: false,
         assetFileNames: "styles.css",

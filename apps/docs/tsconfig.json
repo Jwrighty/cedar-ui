@@ -3,5 +3,9 @@
   "compilerOptions": {
     "noEmit": true
   },
-  "include": [".storybook", "../../packages/react/src"]
+  "include": [".storybook", "../../packages/react/src"],
+  "exclude": [
+    "../../packages/react/src/**/*.test.tsx",
+    "../../packages/react/src/test-setup.ts"
+  ]
 }
