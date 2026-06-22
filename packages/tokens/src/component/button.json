@@ -1,0 +1,11 @@
+{
+  "component": {
+    "button": {
+      "padding-inline": {
+        "sm": { "$value": "{base.space.3}", "$type": "dimension" },
+        "md": { "$value": "{base.space.4}", "$type": "dimension" },
+        "lg": { "$value": "{base.space.6}", "$type": "dimension" }
+      }
+    }
+  }
+}

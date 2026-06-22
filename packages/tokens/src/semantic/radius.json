@@ -1,0 +1,14 @@
+{
+  "semantic": {
+    "radius": {
+      "control": { "$value": "{base.radius.md}", "$type": "dimension" },
+      "overlay": { "$value": "{base.radius.lg}", "$type": "dimension" }
+    },
+    "border": {
+      "width": { "$value": "{base.size.border.thin}", "$type": "dimension" }
+    },
+    "focus-ring": {
+      "width": { "$value": "{base.size.border.thick}", "$type": "dimension" }
+    }
+  }
+}

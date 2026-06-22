@@ -1,0 +1,15 @@
+{
+  "base": {
+    "size": {
+      "control": {
+        "sm": { "$value": "32px", "$type": "dimension" },
+        "md": { "$value": "40px", "$type": "dimension" },
+        "lg": { "$value": "48px", "$type": "dimension" }
+      },
+      "border": {
+        "thin": { "$value": "1px", "$type": "dimension" },
+        "thick": { "$value": "2px", "$type": "dimension" }
+      }
+    }
+  }
+}

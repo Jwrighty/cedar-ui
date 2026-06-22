@@ -1,0 +1,28 @@
+{
+  "semantic": {
+    "font": {
+      "body": {
+        "family": {
+          "$value": "{base.font.family.sans}",
+          "$type": "fontFamily"
+        },
+        "size": { "$value": "{base.font.size.md}", "$type": "dimension" },
+        "weight": {
+          "$value": "{base.font.weight.regular}",
+          "$type": "fontWeight"
+        },
+        "line-height": {
+          "$value": "{base.font.lineHeight.normal}",
+          "$type": "number"
+        }
+      },
+      "label": {
+        "size": { "$value": "{base.font.size.sm}", "$type": "dimension" },
+        "weight": {
+          "$value": "{base.font.weight.medium}",
+          "$type": "fontWeight"
+        }
+      }
+    }
+  }
+}

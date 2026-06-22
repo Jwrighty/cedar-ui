@@ -1,0 +1,8 @@
+{
+  "component": {
+    "dialog": {
+      "max-width": { "$value": "512px", "$type": "dimension" },
+      "padding": { "$value": "{base.space.6}", "$type": "dimension" }
+    }
+  }
+}

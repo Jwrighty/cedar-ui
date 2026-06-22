@@ -14,10 +14,11 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "build": "node build.js && tsc -p tsconfig.json",
+    "typecheck": "node build.js && tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {
+    "style-dictionary": "^5.5.0",
     "typescript": "^5.7.3"
   }
 }

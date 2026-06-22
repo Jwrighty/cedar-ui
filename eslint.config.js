@@ -31,4 +31,14 @@ export default tseslint.config(
       react: { version: "detect" },
     },
   },
+  {
+    // Node build scripts (e.g. token pipeline) run outside the browser.
+    files: ["**/build.js", "**/*.config.{js,ts}"],
+    languageOptions: {
+      globals: {
+        console: "readonly",
+        process: "readonly",
+      },
+    },
+  },
 );

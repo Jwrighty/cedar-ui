@@ -19,3 +19,5 @@ AGENTS.md
 docs/agents/
 docs/learning-backlog.md
 docs/essays/
+# Generated token TS source (built by build.js, compiled to dist/)
+generated/
