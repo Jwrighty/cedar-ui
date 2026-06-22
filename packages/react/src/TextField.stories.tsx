@@ -1,10 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { TextField } from "./TextField";
+import { textFieldMeta } from "./TextField.meta";
+import { usageDocs } from "./usage-docs";
 
 const meta = {
   title: "Components/TextField",
   component: TextField,
-  parameters: { layout: "centered" },
+  parameters: {
+    layout: "centered",
+    docs: { description: { component: usageDocs(textFieldMeta) } },
+  },
   args: { label: "Email", placeholder: "you@example.com" },
   argTypes: {
     isDisabled: { control: "boolean" },

@@ -1,10 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Dialog } from "./Dialog";
+import { dialogMeta } from "./Dialog.meta";
+import { usageDocs } from "./usage-docs";
 
 const meta = {
   title: "Components/Dialog",
   component: Dialog.Root,
-  parameters: { layout: "centered" },
+  parameters: {
+    layout: "centered",
+    docs: { description: { component: usageDocs(dialogMeta) } },
+  },
   // Stories supply their own composition via `render`; this satisfies the
   // required `children` arg on Dialog.Root.
   args: { children: null },

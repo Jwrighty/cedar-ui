@@ -1,10 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Button } from "./Button";
+import { buttonMeta } from "./Button.meta";
+import { usageDocs } from "./usage-docs";
 
 const meta = {
   title: "Components/Button",
   component: Button,
-  parameters: { layout: "centered" },
+  parameters: {
+    layout: "centered",
+    docs: { description: { component: usageDocs(buttonMeta) } },
+  },
   args: { children: "Button", variant: "primary", size: "md" },
   argTypes: {
     variant: {
