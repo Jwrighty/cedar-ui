@@ -1,0 +1,12 @@
+{
+  // Declaration build: the shippable surface only. Tests, stories, and
+  // test-only type augmentation are excluded so they don't land in dist/.
+  "extends": "./tsconfig.json",
+  "include": ["src"],
+  "exclude": [
+    "src/**/*.stories.tsx",
+    "src/**/*.test.tsx",
+    "src/test-setup.ts",
+    "src/vitest.d.ts"
+  ]
+}

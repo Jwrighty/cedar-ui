@@ -6,6 +6,7 @@
   "include": [".storybook", "../../packages/react/src"],
   "exclude": [
     "../../packages/react/src/**/*.test.tsx",
-    "../../packages/react/src/test-setup.ts"
+    "../../packages/react/src/test-setup.ts",
+    "../../packages/react/src/vitest.d.ts"
   ]
 }
