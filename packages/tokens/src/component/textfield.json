@@ -1,0 +1,10 @@
+{
+  "component": {
+    "textfield": {
+      "height": { "$value": "{base.size.control.md}", "$type": "dimension" },
+      "padding-inline": { "$value": "{base.space.3}", "$type": "dimension" },
+      "font-size": { "$value": "{base.font.size.md}", "$type": "dimension" },
+      "gap": { "$value": "{base.space.1}", "$type": "dimension" }
+    }
+  }
+}

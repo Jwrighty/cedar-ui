@@ -1,0 +1,70 @@
+/*
+ * TextField styles. Structure comes from component tokens; colour comes from
+ * semantic tokens (so the field re-themes via [data-theme] with no code change).
+ * Interaction + validation state is driven by the data-attributes React Aria
+ * Components exposes on the wrapper and input — [data-hovered] / [data-focused]
+ * / [data-invalid] / [data-disabled] — not :hover/:focus, so touch + keyboard
+ * behave correctly.
+ */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--component-textfield-gap);
+  font-family: var(--semantic-font-body-family);
+}
+
+.label {
+  font-size: var(--semantic-font-label-size);
+  font-weight: var(--semantic-font-label-weight);
+  color: var(--semantic-color-text-default);
+}
+
+.input {
+  box-sizing: border-box;
+  width: 100%;
+  height: var(--component-textfield-height);
+  padding-inline: var(--component-textfield-padding-inline);
+  font-family: inherit;
+  font-size: var(--component-textfield-font-size);
+  line-height: 1;
+  color: var(--semantic-color-text-default);
+  background: var(--semantic-color-surface-raised);
+  border: var(--semantic-border-width) solid
+    var(--semantic-color-border-default);
+  border-radius: var(--semantic-radius-control);
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+.input::placeholder {
+  color: var(--semantic-color-text-muted);
+}
+.input[data-hovered] {
+  border-color: var(--semantic-color-border-strong);
+}
+.input[data-focused] {
+  border-color: var(--semantic-color-action-rest);
+  outline: var(--semantic-focus-ring-width) solid
+    var(--semantic-color-focus-ring);
+  outline-offset: var(--semantic-border-width);
+}
+.input[data-invalid] {
+  border-color: var(--semantic-color-danger-rest);
+}
+.input[data-invalid][data-focused] {
+  outline-color: var(--semantic-color-danger-rest);
+}
+.input[data-disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.description {
+  font-size: var(--semantic-font-label-size);
+  color: var(--semantic-color-text-muted);
+}
+
+.error {
+  font-size: var(--semantic-font-label-size);
+  color: var(--semantic-color-text-danger);
+}
