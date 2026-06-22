@@ -8,6 +8,10 @@
   "scripts": {
     "build": "pnpm -r --filter=./packages/* run build",
     "dev": "pnpm -r --parallel run dev",
+    "storybook": "pnpm --filter docs dev",
+    "storybook:build": "pnpm --filter docs build",
+    "playground": "pnpm --filter playground dev",
+    "test": "pnpm -r run test",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
