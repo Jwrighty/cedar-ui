@@ -11,6 +11,8 @@ concurrency:
 permissions:
   contents: write
   pull-requests: write
+  # Required for npm Trusted Publishing (OIDC): GitHub mints a short-lived
+  # id-token that npm exchanges for publish auth — no long-lived NPM_TOKEN.
   id-token: write
 
 jobs:
@@ -23,19 +25,28 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v4
 
+      # OIDC trusted publishing needs Node >= 22.14 and npm >= 11.5.1. Node 22
+      # ships an older npm, so upgrade it explicitly — `pnpm publish` shells out
+      # to the system npm, so it must be the version that understands OIDC.
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
           registry-url: https://registry.npmjs.org
+
+      - name: Upgrade npm for OIDC support
+        run: npm install -g npm@latest
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       # changesets/action opens (or updates) a "Version Packages" PR when there
       # are pending changesets, and runs `pnpm release` to publish when that PR
-      # is merged and no changesets remain.
+      # is merged and no changesets remain. Publish auth comes from OIDC — each
+      # package must have a Trusted Publisher configured on npmjs.com pointing at
+      # this repo + workflow. The very first publish of a new package cannot use
+      # OIDC and is done by hand (see .changeset/RELEASING.md).
       - name: Create release PR or publish
         uses: changesets/action@v1
         with:
@@ -45,5 +56,6 @@ jobs:
           title: "chore: version packages"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # Attach build provenance to the published packages (shows the
+          # verified-provenance badge on npm).
+          NPM_CONFIG_PROVENANCE: "true"
