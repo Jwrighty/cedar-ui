@@ -9,8 +9,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@cedar-ui/react": "workspace:*",
-    "@cedar-ui/tokens": "workspace:*",
+    "@jwrighty/cedar-react": "workspace:*",
+    "@jwrighty/cedar-tokens": "workspace:*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

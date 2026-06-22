@@ -1,9 +1,9 @@
 # Cedar
 
-A React + TypeScript design system, built on a framework-neutral token pipeline, intended as a portfolio centrepiece demonstrating end-to-end design-system ownership. Published under the personal `@cedar-ui` scope as `@cedar-ui/tokens` and `@cedar-ui/react`.
+A React + TypeScript design system, built on a framework-neutral token pipeline, intended as a portfolio centrepiece demonstrating end-to-end design-system ownership. Published under the personal `@jwrighty` scope as `@jwrighty/cedar-tokens` and `@jwrighty/cedar-react`.
 
 **Cedar**:
-The design system itself. Use "Cedar" for the system as a whole; name the packages explicitly (`@cedar-ui/tokens`, `@cedar-ui/react`) when referring to a specific publishable unit.
+The design system itself. Use "Cedar" for the system as a whole; name the packages explicitly (`@jwrighty/cedar-tokens`, `@jwrighty/cedar-react`) when referring to a specific publishable unit.
 
 ## Language
 

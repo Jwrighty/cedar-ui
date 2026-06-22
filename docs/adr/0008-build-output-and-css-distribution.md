@@ -1,6 +1,6 @@
 # Build output and CSS distribution
 
-`@cedar-ui/react` is built with **Vite library mode** (ESM-first), and `@cedar-ui/tokens` is built with **Style Dictionary** (no bundler needed — it emits CSS custom properties + typed TS). Cedar ships **two importable stylesheets**: `@cedar-ui/tokens/tokens.css` (the CSS custom properties / themes) and `@cedar-ui/react/styles.css` (extracted component styles). Consumers do two CSS imports; there is no runtime style injection.
+`@jwrighty/cedar-react` is built with **Vite library mode** (ESM-first), and `@jwrighty/cedar-tokens` is built with **Style Dictionary** (no bundler needed — it emits CSS custom properties + typed TS). Cedar ships **two importable stylesheets**: `@jwrighty/cedar-tokens/tokens.css` (the CSS custom properties / themes) and `@jwrighty/cedar-react/styles.css` (extracted component styles). Consumers do two CSS imports; there is no runtime style injection.
 
 ## Two non-obvious constraints (the reason this is recorded)
 
@@ -9,5 +9,5 @@
 
 ## Considered Options
 
-- **tsup / esbuild** — rejected for `@cedar-ui/react`: handles CSS Modules + stylesheet extraction poorly. (Fine for pure-TS builds, but tokens already use Style Dictionary.)
+- **tsup / esbuild** — rejected for `@jwrighty/cedar-react`: handles CSS Modules + stylesheet extraction poorly. (Fine for pure-TS builds, but tokens already use Style Dictionary.)
 - **Runtime CSS injection** — rejected: SSR/RSC friction; the two-stylesheet import model is simpler and server-safe.

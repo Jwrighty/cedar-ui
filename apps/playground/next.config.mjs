@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: ["@cedar-ui/react", "@cedar-ui/tokens"],
+  transpilePackages: ["@jwrighty/cedar-react", "@jwrighty/cedar-tokens"],
 };
 
 export default nextConfig;

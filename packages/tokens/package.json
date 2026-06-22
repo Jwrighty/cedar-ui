@@ -1,8 +1,31 @@
 {
-  "name": "@cedar-ui/tokens",
+  "name": "@jwrighty/cedar-tokens",
   "version": "0.0.0",
-  "private": true,
+  "description": "Cedar design tokens — a neutral DTCG source compiled to CSS custom properties and typed TS exports.",
+  "license": "MIT",
+  "author": "Jason Wright <jason.wrighty@gmail.com>",
+  "homepage": "https://github.com/Jwrighty/cedar-ui/tree/main/packages/tokens#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jwrighty/cedar-ui.git",
+    "directory": "packages/tokens"
+  },
+  "bugs": {
+    "url": "https://github.com/Jwrighty/cedar-ui/issues"
+  },
+  "keywords": [
+    "design-tokens",
+    "design-system",
+    "css-custom-properties",
+    "style-dictionary",
+    "dtcg",
+    "theming",
+    "cedar"
+  ],
   "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -13,6 +36,9 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "node build.js && tsc -p tsconfig.json",
     "typecheck": "node build.js && tsc -p tsconfig.json --noEmit"

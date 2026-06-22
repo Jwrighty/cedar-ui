@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import "@cedar-ui/tokens/tokens.css";
-import "@cedar-ui/react/styles.css";
+import "@jwrighty/cedar-tokens/tokens.css";
+import "@jwrighty/cedar-react/styles.css";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (

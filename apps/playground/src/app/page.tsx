@@ -1,11 +1,11 @@
-import * as CedarReact from "@cedar-ui/react";
+import * as CedarReact from "@jwrighty/cedar-react";
 
 export default function Page() {
   return (
     <main>
       <p>
         Cedar playground — {Object.keys(CedarReact).length} export(s) from
-        @cedar-ui/react.
+        @jwrighty/cedar-react.
       </p>
     </main>
   );

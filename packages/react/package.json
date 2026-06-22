@@ -1,8 +1,32 @@
 {
-  "name": "@cedar-ui/react",
+  "name": "@jwrighty/cedar-react",
   "version": "0.0.0",
-  "private": true,
+  "description": "Cedar React components — accessible, themeable primitives built on React Aria, styled against @jwrighty/cedar-tokens.",
+  "license": "MIT",
+  "author": "Jason Wright <jason.wrighty@gmail.com>",
+  "homepage": "https://github.com/Jwrighty/cedar-ui/tree/main/packages/react#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jwrighty/cedar-ui.git",
+    "directory": "packages/react"
+  },
+  "bugs": {
+    "url": "https://github.com/Jwrighty/cedar-ui/issues"
+  },
+  "keywords": [
+    "react",
+    "design-system",
+    "component-library",
+    "react-aria",
+    "accessible",
+    "themeable",
+    "ui-components",
+    "cedar"
+  ],
   "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -13,6 +37,9 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "vite build && tsc -p tsconfig.build.json --emitDeclarationOnly",
     "dev": "vite build --watch",
@@ -24,7 +51,7 @@
     "react-dom": "^19.0.0"
   },
   "dependencies": {
-    "@cedar-ui/tokens": "workspace:*",
+    "@jwrighty/cedar-tokens": "workspace:*",
     "react-aria-components": "^1.19.0"
   },
   "devDependencies": {
