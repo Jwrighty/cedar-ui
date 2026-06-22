@@ -36,3 +36,12 @@ A token owned by one component (`button-bg-rest`), referencing a semantic token.
 
 **Theme**:
 A named runtime set of CSS custom-property values, swapped via a `[data-theme]` attribute with no rebuild. Initial themes: light, dark, and one alternate brand; density is a planned axis.
+
+### Agent consumability
+
+**Usage metadata**:
+A typed object (`ComponentMeta`) co-located with each component capturing its purpose, when-to-use / when-to-avoid (and alternatives), accessibility notes, and related components. The single source of truth feeding both human docs and machine-readable agent artifacts. See ADR-0009.
+_Avoid_: usage guidelines (when meaning the structured object), docs metadata
+
+**Manifest**:
+The generated machine-readable description of Cedar (`cedar.manifest.json`) — components, props, variants, tokens, and usage rules, derived from usage metadata + types — for consumption by AI agents and tools.
