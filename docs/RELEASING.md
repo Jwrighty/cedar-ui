@@ -16,12 +16,14 @@ npm login                       # authenticate (interactive 2FA)
 pnpm changeset version          # consume pending changesets → bump versions, write CHANGELOGs
 pnpm install                    # refresh the lockfile to the new versions
 pnpm build                      # build @jwrighty/cedar-tokens then @jwrighty/cedar-react
+git add -A && git commit -m "chore: version packages"  # pnpm publish requires a clean tree
 pnpm -r publish --access public # publish both packages
 ```
 
-Then commit the version bump + changelogs and push `main`. Because the
-changesets are now consumed, the Release workflow sees nothing pending and does
-not attempt to republish.
+Commit the version bump **before** publishing — `pnpm publish` refuses on an
+unclean working tree (`ERR_PNPM_GIT_UNCLEAN`). Push `main` afterwards. Because
+the changesets are now consumed, the Release workflow sees nothing pending and
+does not attempt to republish.
 
 After this, configure a Trusted Publisher for **each** package:
 
