@@ -61,8 +61,11 @@ export const LongContent: Story = {
 
 /**
  * The same dialog re-themed purely by the `[data-theme]` attribute — no prop or
- * code change. The wrapper carries the theme so the portalled overlay inherits
- * it. (Light is the default and needs no attribute.)
+ * code change. The dialog overlay is portalled to `document.body`, so the theme
+ * is re-applied on `Dialog.Content` (via `data-theme`) rather than inherited
+ * from the wrapper. In an app where the theme lives on `<html>`/`<body>`, the
+ * portal inherits it and this is unnecessary. (Light is the default and needs
+ * no attribute.)
  */
 export const Themes: Story = {
   render: () => (
@@ -71,7 +74,9 @@ export const Themes: Story = {
         <div key={theme} data-theme={theme === "light" ? undefined : theme}>
           <Dialog.Root>
             <Dialog.Trigger>{`Open (${theme})`}</Dialog.Trigger>
-            <Dialog.Content>
+            <Dialog.Content
+              data-theme={theme === "light" ? undefined : theme}
+            >
               <Dialog.Title>{`${theme} theme`}</Dialog.Title>
               <p style={{ margin: 0, color: "var(--semantic-color-text-muted)" }}>
                 Overlay, panel, and buttons all re-point through the semantic

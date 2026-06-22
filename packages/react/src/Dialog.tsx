@@ -64,6 +64,13 @@ export interface DialogContentProps
   /** Extra class names, merged onto the dialog panel. */
   className?: string;
   style?: CSSProperties;
+  /**
+   * `data-*` attributes forwarded to the portalled overlay element. The overlay
+   * renders in a portal at `document.body`, so a `[data-theme]` on an ancestor
+   * of the trigger does **not** reach it — set `data-theme` here to theme the
+   * dialog (scrim, panel, and contents) when the theme isn't applied globally.
+   */
+  [dataAttr: `data-${string}`]: string | undefined;
 }
 
 /**
@@ -81,6 +88,7 @@ function Content({
   isOpen,
   defaultOpen,
   onOpenChange,
+  ...dataAttrs
 }: DialogContentProps) {
   return (
     <ModalOverlay
@@ -90,6 +98,7 @@ function Content({
       isOpen={isOpen}
       defaultOpen={defaultOpen}
       onOpenChange={onOpenChange}
+      {...dataAttrs}
     >
       <Modal className={styles.modal}>
         <AriaDialog

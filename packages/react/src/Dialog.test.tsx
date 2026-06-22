@@ -68,6 +68,24 @@ describe("Dialog", () => {
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
+  it("forwards data-theme onto the portalled overlay (for theming portals)", async () => {
+    const user = userEvent.setup();
+    render(
+      <Dialog.Root>
+        <Dialog.Trigger>Open</Dialog.Trigger>
+        <Dialog.Content data-theme="dark">
+          <Dialog.Title>Themed</Dialog.Title>
+        </Dialog.Content>
+      </Dialog.Root>,
+    );
+
+    await user.click(screen.getByRole("button", { name: "Open" }));
+
+    // The dialog must sit inside an element carrying the theme, so semantic
+    // tokens re-point even though the overlay is portalled out of the wrapper.
+    expect(screen.getByRole("dialog").closest("[data-theme='dark']")).not.toBeNull();
+  });
+
   it("has no axe violations when open", async () => {
     const user = userEvent.setup();
     render(<Example />);
