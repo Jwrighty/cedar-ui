@@ -46,7 +46,7 @@ jobs:
       # is merged and no changesets remain. Publish auth comes from OIDC — each
       # package must have a Trusted Publisher configured on npmjs.com pointing at
       # this repo + workflow. The very first publish of a new package cannot use
-      # OIDC and is done by hand (see .changeset/RELEASING.md).
+      # OIDC and is done by hand (see docs/RELEASING.md).
       - name: Create release PR or publish
         uses: changesets/action@v1
         with:
