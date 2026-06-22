@@ -1,8 +1,12 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import preserveDirectives from "rollup-preserve-directives";
 
 export default defineConfig({
-  plugins: [react({ jsxRuntime: "automatic" })],
+  // preserveDirectives keeps the `"use client"` banner that React Aria leaf
+  // components carry — without it Rollup strips the directive and Next.js App
+  // Router consumers break on import (ADR-0008).
+  plugins: [react({ jsxRuntime: "automatic" }), preserveDirectives()],
   build: {
     lib: {
       entry: "src/index.ts",
@@ -10,7 +14,7 @@ export default defineConfig({
       fileName: () => "index.js",
     },
     rollupOptions: {
-      external: ["react", "react-dom"],
+      external: ["react", "react-dom", "react/jsx-runtime"],
       output: {
         preserveModules: false,
         assetFileNames: "styles.css",
