@@ -10,6 +10,10 @@ export { Dialog } from "./Dialog";
 export type { DialogContentProps, DialogTitleProps } from "./Dialog";
 export { dialogMeta } from "./Dialog.meta";
 
+export { Switch } from "./Switch";
+export type { SwitchProps } from "./Switch";
+export { switchMeta } from "./Switch.meta";
+
 export type { ComponentMeta } from "./meta";
 export { recipe } from "./recipe";
 export type {

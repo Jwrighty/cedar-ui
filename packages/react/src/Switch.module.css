@@ -1,0 +1,98 @@
+/*
+ * Switch structure comes from component tokens, while colour comes from
+ * semantic tokens so themes can re-point it. React Aria's state attributes
+ * drive every interaction style.
+ */
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--semantic-space-gap-sm);
+  font-family: var(--semantic-font-body-family);
+  font-weight: var(--semantic-font-label-weight);
+  color: var(--semantic-color-text-default);
+  cursor: pointer;
+  user-select: none;
+}
+
+.label {
+  line-height: var(--semantic-font-body-line-height);
+}
+
+.track {
+  position: relative;
+  flex: none;
+  box-sizing: border-box;
+  width: var(--switch-track-width);
+  height: var(--switch-track-height);
+  padding: var(--semantic-border-width);
+  border-radius: var(--switch-track-height);
+  background: var(--semantic-color-border-strong);
+  transition:
+    background-color 120ms ease,
+    outline-color 120ms ease;
+}
+
+.thumb {
+  display: block;
+  width: calc(var(--switch-track-height) - 2 * var(--semantic-border-width));
+  height: calc(var(--switch-track-height) - 2 * var(--semantic-border-width));
+  border-radius: inherit;
+  background: var(--semantic-color-surface-raised);
+  box-shadow: 0 0 0 var(--semantic-border-width)
+    var(--semantic-color-border-default);
+  transition: transform 120ms ease;
+}
+
+.sm {
+  --switch-track-width: var(--component-switch-track-width-sm);
+  --switch-track-height: var(--component-switch-track-height-sm);
+
+  font-size: var(--semantic-font-label-size);
+}
+
+.md {
+  --switch-track-width: var(--component-switch-track-width-md);
+  --switch-track-height: var(--component-switch-track-height-md);
+
+  font-size: var(--semantic-font-body-size);
+}
+
+.lg {
+  --switch-track-width: var(--component-switch-track-width-lg);
+  --switch-track-height: var(--component-switch-track-height-lg);
+
+  font-size: var(--semantic-font-body-size);
+}
+
+.switch[data-hovered] .track {
+  background: var(--semantic-color-text-muted);
+}
+
+.switch[data-selected] .track {
+  background: var(--semantic-color-action-rest);
+}
+
+.switch[data-selected][data-hovered] .track {
+  background: var(--semantic-color-action-hover);
+}
+
+.switch[data-pressed] .track {
+  background: var(--semantic-color-action-active);
+}
+
+.switch[data-selected] .thumb {
+  transform: translateX(
+    calc(var(--switch-track-width) - var(--switch-track-height))
+  );
+}
+
+.switch[data-focus-visible] .track {
+  outline: var(--semantic-focus-ring-width) solid
+    var(--semantic-color-focus-ring);
+  outline-offset: var(--semantic-border-width);
+}
+
+.switch[data-disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
