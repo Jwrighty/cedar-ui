@@ -1,0 +1,23 @@
+.stack {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  margin: var(--semantic-space-stack-none);
+  padding: var(--semantic-space-stack-none);
+}
+
+.gapNone {
+  gap: var(--semantic-space-stack-none);
+}
+
+.gapSm {
+  gap: var(--semantic-space-stack-sm);
+}
+
+.gapMd {
+  gap: var(--semantic-space-stack-md);
+}
+
+.gapLg {
+  gap: var(--semantic-space-stack-lg);
+}
