@@ -5,6 +5,7 @@
         "default": { "$value": "{base.color.gray.900}", "$type": "color" },
         "muted": { "$value": "{base.color.gray.500}", "$type": "color" },
         "on-action": { "$value": "{base.color.white}", "$type": "color" },
+        "accent": { "$value": "{base.color.blue.600}", "$type": "color" },
         "danger": { "$value": "{base.color.red.600}", "$type": "color" }
       },
       "surface": {

@@ -1,0 +1,47 @@
+{
+  "component": {
+    "radio-group": {
+      "gap": { "$value": "{semantic.space.stack.md}", "$type": "dimension" },
+      "options-gap": {
+        "$value": "{semantic.space.gap.sm}",
+        "$type": "dimension"
+      },
+      "radio-gap": {
+        "$value": "{semantic.space.gap.sm}",
+        "$type": "dimension"
+      },
+      "control-size": {
+        "$value": "{semantic.space.inset.lg}",
+        "$type": "dimension"
+      },
+      "indicator-size": {
+        "$value": "{semantic.space.inset.sm}",
+        "$type": "dimension"
+      },
+      "background": {
+        "$value": "{semantic.color.surface.raised}",
+        "$type": "color"
+      },
+      "border-rest": {
+        "$value": "{semantic.color.border.strong}",
+        "$type": "color"
+      },
+      "border-hover": {
+        "$value": "{semantic.color.action.hover}",
+        "$type": "color"
+      },
+      "border-selected": {
+        "$value": "{semantic.color.action.rest}",
+        "$type": "color"
+      },
+      "border-invalid": {
+        "$value": "{semantic.color.danger.rest}",
+        "$type": "color"
+      },
+      "indicator-selected": {
+        "$value": "{semantic.color.action.rest}",
+        "$type": "color"
+      }
+    }
+  }
+}

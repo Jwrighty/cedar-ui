@@ -22,6 +22,38 @@
           "$value": "{base.font.weight.medium}",
           "$type": "fontWeight"
         }
+      },
+      "size": {
+        "xs": { "$value": "{base.font.size.xs}", "$type": "dimension" },
+        "sm": { "$value": "{base.font.size.sm}", "$type": "dimension" },
+        "md": { "$value": "{base.font.size.md}", "$type": "dimension" },
+        "lg": { "$value": "{base.font.size.lg}", "$type": "dimension" },
+        "xl": { "$value": "{base.font.size.xl}", "$type": "dimension" },
+        "2xl": { "$value": "{base.font.size.2xl}", "$type": "dimension" }
+      },
+      "weight": {
+        "regular": {
+          "$value": "{base.font.weight.regular}",
+          "$type": "fontWeight"
+        },
+        "medium": {
+          "$value": "{base.font.weight.medium}",
+          "$type": "fontWeight"
+        },
+        "semibold": {
+          "$value": "{base.font.weight.semibold}",
+          "$type": "fontWeight"
+        }
+      },
+      "line-height": {
+        "tight": {
+          "$value": "{base.font.lineHeight.tight}",
+          "$type": "number"
+        },
+        "normal": {
+          "$value": "{base.font.lineHeight.normal}",
+          "$type": "number"
+        }
       }
     }
   }

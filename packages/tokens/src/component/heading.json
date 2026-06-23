@@ -1,0 +1,55 @@
+{
+  "component": {
+    "heading": {
+      "font": {
+        "family": {
+          "$value": "{semantic.font.body.family}",
+          "$type": "fontFamily"
+        },
+        "size": {
+          "xs": { "$value": "{semantic.font.size.xs}", "$type": "dimension" },
+          "sm": { "$value": "{semantic.font.size.sm}", "$type": "dimension" },
+          "md": { "$value": "{semantic.font.size.md}", "$type": "dimension" },
+          "lg": { "$value": "{semantic.font.size.lg}", "$type": "dimension" },
+          "xl": { "$value": "{semantic.font.size.xl}", "$type": "dimension" },
+          "2xl": {
+            "$value": "{semantic.font.size.2xl}",
+            "$type": "dimension"
+          }
+        },
+        "weight": {
+          "regular": {
+            "$value": "{semantic.font.weight.regular}",
+            "$type": "fontWeight"
+          },
+          "medium": {
+            "$value": "{semantic.font.weight.medium}",
+            "$type": "fontWeight"
+          },
+          "semibold": {
+            "$value": "{semantic.font.weight.semibold}",
+            "$type": "fontWeight"
+          }
+        }
+      },
+      "line-height": {
+        "tight": {
+          "$value": "{semantic.font.line-height.tight}",
+          "$type": "number"
+        }
+      },
+      "color": {
+        "default": {
+          "$value": "{semantic.color.text.default}",
+          "$type": "color"
+        },
+        "muted": { "$value": "{semantic.color.text.muted}", "$type": "color" },
+        "accent": {
+          "$value": "{semantic.color.text.accent}",
+          "$type": "color"
+        },
+        "danger": { "$value": "{semantic.color.text.danger}", "$type": "color" }
+      }
+    }
+  }
+}

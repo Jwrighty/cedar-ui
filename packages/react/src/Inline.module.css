@@ -1,0 +1,24 @@
+.inline {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  box-sizing: border-box;
+  margin: var(--semantic-space-gap-none);
+  padding: var(--semantic-space-gap-none);
+}
+
+.gapNone {
+  gap: var(--semantic-space-gap-none);
+}
+
+.gapSm {
+  gap: var(--semantic-space-gap-sm);
+}
+
+.gapMd {
+  gap: var(--semantic-space-gap-md);
+}
+
+.gapLg {
+  gap: var(--semantic-space-gap-lg);
+}
