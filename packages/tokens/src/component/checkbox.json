@@ -1,0 +1,16 @@
+{
+  "component": {
+    "checkbox": {
+      "control-size": {
+        "$value": "{base.size.control.sm}",
+        "$type": "dimension"
+      },
+      "indicator-size": { "$value": "{base.space.4}", "$type": "dimension" },
+      "indicator-radius": {
+        "$value": "{base.radius.sm}",
+        "$type": "dimension"
+      },
+      "label-gap": { "$value": "{semantic.space.gap.sm}", "$type": "dimension" }
+    }
+  }
+}
