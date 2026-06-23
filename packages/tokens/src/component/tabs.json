@@ -1,0 +1,17 @@
+{
+  "component": {
+    "tabs": {
+      "content-gap": { "$value": "{base.space.2}", "$type": "dimension" },
+      "list-gap": { "$value": "{base.space.1}", "$type": "dimension" },
+      "tab": {
+        "height": { "$value": "{base.size.control.md}", "$type": "dimension" },
+        "padding-inline": { "$value": "{base.space.3}", "$type": "dimension" },
+        "font-size": { "$value": "{base.font.size.sm}", "$type": "dimension" }
+      },
+      "panel": {
+        "padding-block": { "$value": "{base.space.3}", "$type": "dimension" },
+        "padding-inline": { "$value": "{base.space.1}", "$type": "dimension" }
+      }
+    }
+  }
+}

@@ -1,0 +1,110 @@
+/*
+ * RadioGroup styles. Structural and state colours come from component tokens,
+ * which reference semantic tokens so [data-theme] can re-skin the primitive.
+ * RAC data attributes drive interaction, selection, validation, and disabled
+ * states rather than DOM pseudo-classes.
+ */
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--component-radio-group-gap);
+  font-family: var(--semantic-font-body-family);
+  color: var(--semantic-color-text-default);
+}
+
+.label {
+  font-size: var(--semantic-font-label-size);
+  font-weight: var(--semantic-font-label-weight);
+}
+
+.options {
+  display: flex;
+  gap: var(--component-radio-group-options-gap);
+}
+
+.vertical .options {
+  flex-direction: column;
+}
+
+.horizontal .options {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.radio {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--component-radio-group-radio-gap);
+  width: fit-content;
+  font-size: var(--semantic-font-body-size);
+  line-height: var(--semantic-font-body-line-height);
+  cursor: pointer;
+  user-select: none;
+}
+
+.control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: var(--component-radio-group-control-size);
+  height: var(--component-radio-group-control-size);
+  flex: 0 0 auto;
+  border: var(--semantic-border-width) solid
+    var(--component-radio-group-border-rest);
+  border-radius: 50%;
+  background: var(--component-radio-group-background);
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.indicator {
+  width: var(--component-radio-group-indicator-size);
+  height: var(--component-radio-group-indicator-size);
+  border-radius: 50%;
+  background: transparent;
+}
+
+.radio[data-hovered] .control {
+  border-color: var(--component-radio-group-border-hover);
+}
+
+.radio[data-selected] .control {
+  border-color: var(--component-radio-group-border-selected);
+}
+
+.radio[data-selected] .indicator {
+  background: var(--component-radio-group-indicator-selected);
+}
+
+.radio[data-focus-visible] .control {
+  outline: var(--semantic-focus-ring-width) solid
+    var(--semantic-color-focus-ring);
+  outline-offset: var(--semantic-border-width);
+}
+
+.group[data-invalid] .control,
+.radio[data-invalid] .control {
+  border-color: var(--component-radio-group-border-invalid);
+}
+
+.radio[data-disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.group[data-disabled] > .label,
+.group[data-disabled] > .description {
+  opacity: 0.5;
+}
+
+.description {
+  font-size: var(--semantic-font-label-size);
+  color: var(--semantic-color-text-muted);
+}
+
+.error {
+  font-size: var(--semantic-font-label-size);
+  color: var(--semantic-color-text-danger);
+}
