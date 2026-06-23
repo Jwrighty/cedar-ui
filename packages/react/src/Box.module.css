@@ -1,0 +1,19 @@
+.box {
+  box-sizing: border-box;
+}
+
+.paddingNone {
+  padding: var(--semantic-space-inset-none);
+}
+
+.paddingSm {
+  padding: var(--semantic-space-inset-sm);
+}
+
+.paddingMd {
+  padding: var(--semantic-space-inset-md);
+}
+
+.paddingLg {
+  padding: var(--semantic-space-inset-lg);
+}
