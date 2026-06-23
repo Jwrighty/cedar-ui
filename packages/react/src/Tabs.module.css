@@ -1,0 +1,118 @@
+/*
+ * Tabs styles. Structure is defined with component tokens while colour comes
+ * from semantic tokens, so the primitive re-themes via [data-theme]. Interaction
+ * state is driven by React Aria data attributes rather than raw pseudo-classes.
+ */
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--component-tabs-content-gap);
+  color: var(--semantic-color-text-default);
+}
+
+.root[data-orientation="vertical"] {
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.list {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--component-tabs-list-gap);
+  border-bottom: var(--semantic-border-width) solid
+    var(--semantic-color-border-default);
+}
+
+.list[data-orientation="vertical"] {
+  flex-direction: column;
+  align-items: stretch;
+  border-bottom: 0;
+  border-right: var(--semantic-border-width) solid
+    var(--semantic-color-border-default);
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: var(--component-tabs-tab-height);
+  padding-inline: var(--component-tabs-tab-padding-inline);
+  margin-bottom: calc(-1 * var(--semantic-border-width));
+  border: var(--semantic-border-width) solid transparent;
+  border-bottom-color: transparent;
+  border-radius: var(--semantic-radius-control) var(--semantic-radius-control) 0
+    0;
+  background: transparent;
+  color: var(--semantic-color-text-muted);
+  font-family: var(--semantic-font-body-family);
+  font-size: var(--component-tabs-tab-font-size);
+  font-weight: var(--semantic-font-label-weight);
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease;
+}
+
+.tab[data-hovered] {
+  background: var(--semantic-color-action-subtle);
+  color: var(--semantic-color-text-default);
+}
+
+.tab[data-pressed] {
+  background: var(--semantic-color-surface-sunken);
+  color: var(--semantic-color-text-default);
+}
+
+.tab[data-selected] {
+  border-bottom-color: var(--semantic-color-action-rest);
+  color: var(--semantic-color-action-rest);
+}
+
+.tab[data-focus-visible] {
+  outline: var(--semantic-focus-ring-width) solid
+    var(--semantic-color-focus-ring);
+  outline-offset: var(--semantic-border-width);
+}
+
+.tab[data-disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.list[data-orientation="vertical"] .tab {
+  justify-content: flex-start;
+  margin-right: calc(-1 * var(--semantic-border-width));
+  margin-bottom: 0;
+  border-radius: var(--semantic-radius-control) 0 0 var(--semantic-radius-control);
+  border-bottom-color: transparent;
+  border-right-color: transparent;
+}
+
+.list[data-orientation="vertical"] .tab[data-selected] {
+  border-right-color: var(--semantic-color-action-rest);
+}
+
+.panel {
+  flex: 1;
+  min-width: 0;
+  padding-block: var(--component-tabs-panel-padding-block);
+  padding-inline: var(--component-tabs-panel-padding-inline);
+  border-radius: var(--semantic-radius-control);
+  color: var(--semantic-color-text-default);
+  font-family: var(--semantic-font-body-family);
+  font-size: var(--semantic-font-body-size);
+  line-height: var(--semantic-font-body-line-height);
+  outline: none;
+}
+
+.panel[data-focus-visible] {
+  outline: var(--semantic-focus-ring-width) solid
+    var(--semantic-color-focus-ring);
+  outline-offset: var(--semantic-border-width);
+}

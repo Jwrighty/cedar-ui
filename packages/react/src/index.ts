@@ -10,6 +10,15 @@ export { Dialog } from "./Dialog";
 export type { DialogContentProps, DialogTitleProps } from "./Dialog";
 export { dialogMeta } from "./Dialog.meta";
 
+export { Tabs } from "./Tabs";
+export type {
+  TabsRootProps,
+  TabsListProps,
+  TabsTabProps,
+  TabsPanelProps,
+} from "./Tabs";
+export { tabsMeta } from "./Tabs.meta";
+
 export type { ComponentMeta } from "./meta";
 export { recipe } from "./recipe";
 export type {
