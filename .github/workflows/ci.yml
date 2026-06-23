@@ -78,6 +78,10 @@ jobs:
           workingDir: apps/docs
           buildScriptName: build
           exitZeroOnChanges: true
+          # Builds on main auto-advance the baseline so already-merged global
+          # changes (e.g. a Storybook decorator) don't surface as phantom diffs
+          # on later PRs. PR builds still show diffs for an optional glance.
+          autoAcceptChanges: main
 
       # Surface the published Storybook so a reviewer can open it straight from
       # the run summary — this is Cedar's public front door (ADR-0007).
