@@ -4,6 +4,7 @@
       "text": {
         "default": { "$value": "{base.color.gray.50}", "$type": "color" },
         "muted": { "$value": "{base.color.gray.400}", "$type": "color" },
+        "accent": { "$value": "{base.color.blue.500}", "$type": "color" },
         "danger": { "$value": "{base.color.red.500}", "$type": "color" }
       },
       "surface": {

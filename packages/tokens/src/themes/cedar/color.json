@@ -1,6 +1,9 @@
 {
   "semantic": {
     "color": {
+      "text": {
+        "accent": { "$value": "{base.color.amber.600}", "$type": "color" }
+      },
       "action": {
         "rest": { "$value": "{base.color.amber.600}", "$type": "color" },
         "hover": { "$value": "{base.color.amber.700}", "$type": "color" },

@@ -15,7 +15,9 @@
         "xs": { "$value": "12px", "$type": "dimension" },
         "sm": { "$value": "14px", "$type": "dimension" },
         "md": { "$value": "16px", "$type": "dimension" },
-        "lg": { "$value": "18px", "$type": "dimension" }
+        "lg": { "$value": "18px", "$type": "dimension" },
+        "xl": { "$value": "24px", "$type": "dimension" },
+        "2xl": { "$value": "32px", "$type": "dimension" }
       },
       "weight": {
         "regular": { "$value": 400, "$type": "fontWeight" },
