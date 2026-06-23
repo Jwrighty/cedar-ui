@@ -1,0 +1,18 @@
+{
+  "component": {
+    "switch": {
+      "track": {
+        "width": {
+          "sm": { "$value": "{base.size.control.sm}", "$type": "dimension" },
+          "md": { "$value": "{base.size.control.md}", "$type": "dimension" },
+          "lg": { "$value": "{base.size.control.lg}", "$type": "dimension" }
+        },
+        "height": {
+          "sm": { "$value": "{base.space.4}", "$type": "dimension" },
+          "md": { "$value": "{base.space.6}", "$type": "dimension" },
+          "lg": { "$value": "{base.space.8}", "$type": "dimension" }
+        }
+      }
+    }
+  }
+}
