@@ -1,0 +1,50 @@
+/*
+ * Popover owns only its surface. React Aria owns portal placement, collision,
+ * dismissal, and focus behaviour, exposing placement and transition states as
+ * data attributes for Cedar to paint.
+ */
+.popover {
+  box-sizing: border-box;
+  padding: var(--component-popover-padding);
+  overflow: auto;
+  background: var(--component-popover-background);
+  color: var(--component-popover-text);
+  border: var(--component-popover-border-width) solid
+    var(--component-popover-border-color);
+  border-radius: var(--component-popover-radius);
+  font-family: var(--semantic-font-body-family);
+  outline: none;
+}
+
+.sm {
+  max-inline-size: var(--component-popover-max-width-sm);
+}
+
+.md {
+  max-inline-size: var(--component-popover-max-width-md);
+}
+
+.lg {
+  max-inline-size: var(--component-popover-max-width-lg);
+}
+
+.popover[data-placement="top"] {
+  transform-origin: bottom center;
+}
+
+.popover[data-placement="right"] {
+  transform-origin: left center;
+}
+
+.popover[data-placement="bottom"] {
+  transform-origin: top center;
+}
+
+.popover[data-placement="left"] {
+  transform-origin: right center;
+}
+
+.popover[data-entering],
+.popover[data-exiting] {
+  opacity: 0;
+}
