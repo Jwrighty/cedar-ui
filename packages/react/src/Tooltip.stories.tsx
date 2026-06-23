@@ -45,6 +45,7 @@ export const IconButton: Story = {
 
 /** Posed open so Chromatic captures the portalled overlay deterministically. */
 export const PosedOpen: Story = {
+  tags: ["!autodocs"],
   render: (args) => (
     <Tooltip.Trigger isOpen>
       <Button>Save</Button>
@@ -55,6 +56,7 @@ export const PosedOpen: Story = {
 
 /** Every placement recipe variant, posed open for visual regression coverage. */
 export const Placements: Story = {
+  tags: ["!autodocs"],
   render: (args) => (
     <div
       style={{
@@ -82,6 +84,7 @@ export const Placements: Story = {
  * the overlay; apps that theme `<html>` or `<body>` inherit it automatically.
  */
 export const Themes: Story = {
+  tags: ["!autodocs"],
   render: (args) => (
     <div style={{ display: "flex", gap: 112, padding: 80 }}>
       {(["light", "dark", "cedar"] as const).map((theme) => (
