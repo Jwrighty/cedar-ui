@@ -2,17 +2,22 @@
   "semantic": {
     "space": {
       "inset": {
+        "none": { "$value": "{base.space.0}", "$type": "dimension" },
         "sm": { "$value": "{base.space.2}", "$type": "dimension" },
         "md": { "$value": "{base.space.3}", "$type": "dimension" },
         "lg": { "$value": "{base.space.4}", "$type": "dimension" }
       },
       "stack": {
+        "none": { "$value": "{base.space.0}", "$type": "dimension" },
         "sm": { "$value": "{base.space.1}", "$type": "dimension" },
-        "md": { "$value": "{base.space.2}", "$type": "dimension" }
+        "md": { "$value": "{base.space.2}", "$type": "dimension" },
+        "lg": { "$value": "{base.space.4}", "$type": "dimension" }
       },
       "gap": {
+        "none": { "$value": "{base.space.0}", "$type": "dimension" },
         "sm": { "$value": "{base.space.2}", "$type": "dimension" },
-        "md": { "$value": "{base.space.3}", "$type": "dimension" }
+        "md": { "$value": "{base.space.3}", "$type": "dimension" },
+        "lg": { "$value": "{base.space.4}", "$type": "dimension" }
       }
     }
   }

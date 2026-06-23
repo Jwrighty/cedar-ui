@@ -1,0 +1,35 @@
+{
+  "component": {
+    "popover": {
+      "background": {
+        "$value": "{semantic.color.surface.raised}",
+        "$type": "color"
+      },
+      "text": {
+        "$value": "{semantic.color.text.default}",
+        "$type": "color"
+      },
+      "border-color": {
+        "$value": "{semantic.color.border.default}",
+        "$type": "color"
+      },
+      "border-width": {
+        "$value": "{semantic.border.width}",
+        "$type": "dimension"
+      },
+      "radius": {
+        "$value": "{semantic.radius.overlay}",
+        "$type": "dimension"
+      },
+      "padding": {
+        "$value": "{semantic.space.inset.md}",
+        "$type": "dimension"
+      },
+      "max-width": {
+        "sm": { "$value": "192px", "$type": "dimension" },
+        "md": { "$value": "320px", "$type": "dimension" },
+        "lg": { "$value": "448px", "$type": "dimension" }
+      }
+    }
+  }
+}

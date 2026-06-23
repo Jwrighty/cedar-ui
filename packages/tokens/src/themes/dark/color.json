@@ -19,7 +19,8 @@
       "action": {
         "rest": { "$value": "{base.color.blue.500}", "$type": "color" },
         "hover": { "$value": "{base.color.blue.600}", "$type": "color" },
-        "active": { "$value": "{base.color.blue.600}", "$type": "color" }
+        "active": { "$value": "{base.color.blue.600}", "$type": "color" },
+        "subtle": { "$value": "{base.color.blue.700}", "$type": "color" }
       },
       "danger": {
         "rest": { "$value": "{base.color.red.500}", "$type": "color" }
