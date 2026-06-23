@@ -10,6 +10,14 @@ export { Dialog } from "./Dialog";
 export type { DialogContentProps, DialogTitleProps } from "./Dialog";
 export { dialogMeta } from "./Dialog.meta";
 
+export { Text } from "./Text";
+export type { TextElement, TextProps } from "./Text";
+export { textMeta } from "./Text.meta";
+
+export { Heading } from "./Heading";
+export type { HeadingLevel, HeadingProps } from "./Heading";
+export { headingMeta } from "./Heading.meta";
+
 export type { ComponentMeta } from "./meta";
 export { recipe } from "./recipe";
 export type {
