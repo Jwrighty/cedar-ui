@@ -1,0 +1,53 @@
+/*
+ * Heading styles are intentionally behaviour-free. The element rendered by
+ * `level` owns document outline semantics; these variant classes only paint the
+ * visual scale, weight and foreground tone through component tokens.
+ */
+.heading {
+  margin: 0;
+  font-family: var(--component-heading-font-family);
+  line-height: var(--component-heading-line-height-tight);
+  text-wrap: balance;
+}
+
+.xs {
+  font-size: var(--component-heading-font-size-xs);
+}
+.sm {
+  font-size: var(--component-heading-font-size-sm);
+}
+.md {
+  font-size: var(--component-heading-font-size-md);
+}
+.lg {
+  font-size: var(--component-heading-font-size-lg);
+}
+.xl {
+  font-size: var(--component-heading-font-size-xl);
+}
+.\32xl {
+  font-size: var(--component-heading-font-size-2xl);
+}
+
+.regular {
+  font-weight: var(--component-heading-font-weight-regular);
+}
+.medium {
+  font-weight: var(--component-heading-font-weight-medium);
+}
+.semibold {
+  font-weight: var(--component-heading-font-weight-semibold);
+}
+
+.default {
+  color: var(--component-heading-color-default);
+}
+.muted {
+  color: var(--component-heading-color-muted);
+}
+.accent {
+  color: var(--component-heading-color-accent);
+}
+.danger {
+  color: var(--component-heading-color-danger);
+}
