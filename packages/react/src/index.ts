@@ -10,6 +10,10 @@ export { Dialog } from "./Dialog";
 export type { DialogContentProps, DialogTitleProps } from "./Dialog";
 export { dialogMeta } from "./Dialog.meta";
 
+export { Tooltip } from "./Tooltip";
+export type { TooltipProps, TooltipTriggerProps } from "./Tooltip";
+export { tooltipMeta } from "./Tooltip.meta";
+
 export type { ComponentMeta } from "./meta";
 export { recipe } from "./recipe";
 export type {

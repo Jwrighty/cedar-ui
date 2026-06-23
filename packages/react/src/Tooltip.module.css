@@ -1,0 +1,53 @@
+/*
+ * Tooltip is a portalled overlay. React Aria owns positioning and emits
+ * [data-placement], [data-entering], and [data-exiting]; Cedar only paints the
+ * result against component tokens. The recipe records the requested side;
+ * animation origin follows RAC's final placement after any collision flip.
+ */
+.tooltip {
+  z-index: 100;
+  box-sizing: border-box;
+  max-width: var(--component-tooltip-max-width);
+  padding: var(--component-tooltip-padding-block)
+    var(--component-tooltip-padding-inline);
+  border-radius: var(--semantic-radius-control);
+  background: var(--component-tooltip-background);
+  color: var(--component-tooltip-foreground);
+  font-family: var(--semantic-font-body-family);
+  font-size: var(--component-tooltip-font-size);
+  font-weight: var(--semantic-font-label-weight);
+  line-height: var(--semantic-font-body-line-height);
+  pointer-events: none;
+  transition:
+    opacity 120ms ease,
+    scale 120ms ease;
+}
+
+.tooltip[data-entering],
+.tooltip[data-exiting] {
+  opacity: 0;
+  scale: 0.96;
+}
+
+.top,
+.right,
+.bottom,
+.left {
+  will-change: opacity, scale;
+}
+
+.tooltip[data-placement="top"] {
+  transform-origin: bottom center;
+}
+
+.tooltip[data-placement="right"] {
+  transform-origin: left center;
+}
+
+.tooltip[data-placement="bottom"] {
+  transform-origin: top center;
+}
+
+.tooltip[data-placement="left"] {
+  transform-origin: right center;
+}

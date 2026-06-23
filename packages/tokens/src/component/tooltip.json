@@ -1,0 +1,27 @@
+{
+  "component": {
+    "tooltip": {
+      "background": {
+        "$value": "{semantic.color.text.default}",
+        "$type": "color"
+      },
+      "foreground": {
+        "$value": "{semantic.color.surface.raised}",
+        "$type": "color"
+      },
+      "padding-block": {
+        "$value": "{base.space.1}",
+        "$type": "dimension"
+      },
+      "padding-inline": {
+        "$value": "{base.space.2}",
+        "$type": "dimension"
+      },
+      "font-size": {
+        "$value": "{base.font.size.xs}",
+        "$type": "dimension"
+      },
+      "max-width": { "$value": "256px", "$type": "dimension" }
+    }
+  }
+}
