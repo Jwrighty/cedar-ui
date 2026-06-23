@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import type { CSSProperties } from "react";
 import { Button } from "./Button";
 import { Popover } from "./Popover";
 import { popoverMeta } from "./Popover.meta";
@@ -21,12 +22,12 @@ const content = {
   display: "grid",
   gap: 12,
   minInlineSize: 180,
-} satisfies React.CSSProperties;
+} satisfies CSSProperties;
 
 const paragraph = {
   margin: 0,
   color: "var(--semantic-color-text-muted)",
-} satisfies React.CSSProperties;
+} satisfies CSSProperties;
 
 export const Default: Story = {
   render: () => (
@@ -47,13 +48,28 @@ export const Default: Story = {
 
 /** All recipe variants, posed open for visual regression. */
 export const Sizes: Story = {
-  parameters: { chromatic: { pauseAnimationAtEnd: true } },
+  tags: ["!autodocs"],
+  parameters: {
+    layout: "fullscreen",
+    chromatic: { pauseAnimationAtEnd: true },
+  },
   render: () => (
-    <div style={{ display: "flex", gap: 160, padding: 80 }}>
+    <div
+      style={{
+        display: "flex",
+        gap: 160,
+        padding: 80,
+      }}
+    >
       {(["sm", "md", "lg"] as const).map((size) => (
         <Popover.Root key={size} isOpen>
           <Popover.Trigger variant="secondary">{size}</Popover.Trigger>
-          <Popover.Content size={size} isNonModal>
+          <Popover.Content
+            size={size}
+            placement="bottom"
+            shouldFlip={false}
+            isNonModal
+          >
             <div style={content}>
               <strong>{size} surface</strong>
               <p style={paragraph}>
@@ -69,6 +85,7 @@ export const Sizes: Story = {
 
 /** RAC placements, posed open so Chromatic captures every anchor direction. */
 export const Placements: Story = {
+  tags: ["!autodocs"],
   parameters: {
     layout: "fullscreen",
     chromatic: { pauseAnimationAtEnd: true },
@@ -87,7 +104,7 @@ export const Placements: Story = {
       {(["top", "right", "bottom", "left"] as const).map((placement) => (
         <Popover.Root key={placement} isOpen>
           <Popover.Trigger variant="secondary">{placement}</Popover.Trigger>
-          <Popover.Content placement={placement} isNonModal>
+          <Popover.Content placement={placement} shouldFlip={false} isNonModal>
             <strong>{placement} placement</strong>
           </Popover.Content>
         </Popover.Root>
@@ -101,6 +118,7 @@ export const Placements: Story = {
  * surfaces are portalled, the theme attribute is applied to Content directly.
  */
 export const Themes: Story = {
+  tags: ["!autodocs"],
   parameters: {
     layout: "fullscreen",
     chromatic: { pauseAnimationAtEnd: true },
@@ -123,6 +141,7 @@ export const Themes: Story = {
             <Popover.Content
               isNonModal
               placement="bottom"
+              shouldFlip={false}
               data-theme={theme === "light" ? undefined : theme}
             >
               <div style={content}>
