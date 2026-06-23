@@ -1,6 +1,6 @@
 {
   "name": "@jwrighty/cedar-react",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Cedar React components — accessible, themeable primitives built on React Aria, styled against @jwrighty/cedar-tokens.",
   "license": "MIT",
   "author": "Jason Wright <jason.wrighty@gmail.com>",
