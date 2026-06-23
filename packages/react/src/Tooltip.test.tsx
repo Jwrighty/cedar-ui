@@ -69,11 +69,10 @@ describe("Tooltip", () => {
   it("forwards its ref, extension props, theme, and placement variant", () => {
     const ref = createRef<HTMLDivElement>();
     render(
-      <Tooltip.Trigger>
+      <Tooltip.Trigger isOpen>
         <Button>Save</Button>
         <Tooltip
           ref={ref}
-          isOpen
           placement="bottom"
           className="consumer-tooltip"
           style={{ maxWidth: 240 }}
@@ -85,6 +84,9 @@ describe("Tooltip", () => {
     );
 
     const tooltip = screen.getByRole("tooltip");
+    expect(
+      screen.getByRole("button", { name: "Save" }),
+    ).toHaveAccessibleDescription("Save your changes");
     expect(ref.current).toBe(tooltip);
     expect(tooltip).toHaveClass("consumer-tooltip");
     expect(tooltip).toHaveStyle({ maxWidth: "240px" });
@@ -94,9 +96,9 @@ describe("Tooltip", () => {
 
   it("has no axe violations when open", async () => {
     const { container } = render(
-      <Tooltip.Trigger>
+      <Tooltip.Trigger isOpen>
         <Button>Save</Button>
-        <Tooltip isOpen>Save your changes</Tooltip>
+        <Tooltip>Save your changes</Tooltip>
       </Tooltip.Trigger>,
     );
 

@@ -46,9 +46,9 @@ export const IconButton: Story = {
 /** Posed open so Chromatic captures the portalled overlay deterministically. */
 export const PosedOpen: Story = {
   render: (args) => (
-    <Tooltip.Trigger>
+    <Tooltip.Trigger isOpen>
       <Button>Save</Button>
-      <Tooltip {...args} isOpen />
+      <Tooltip {...args} />
     </Tooltip.Trigger>
   ),
 };
@@ -65,9 +65,9 @@ export const Placements: Story = {
       }}
     >
       {(["top", "right", "bottom", "left"] as const).map((placement) => (
-        <Tooltip.Trigger key={placement}>
+        <Tooltip.Trigger key={placement} isOpen>
           <Button variant="secondary">{placement}</Button>
-          <Tooltip {...args} isOpen placement={placement}>
+          <Tooltip {...args} placement={placement}>
             {`${placement} placement`}
           </Tooltip>
         </Tooltip.Trigger>
@@ -95,11 +95,10 @@ export const Themes: Story = {
             border: "1px solid var(--semantic-color-border-default)",
           }}
         >
-          <Tooltip.Trigger>
+          <Tooltip.Trigger isOpen>
             <Button variant="secondary">{theme}</Button>
             <Tooltip
               {...args}
-              isOpen
               data-theme={theme === "light" ? undefined : theme}
             />
           </Tooltip.Trigger>
