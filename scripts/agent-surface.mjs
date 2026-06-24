@@ -493,8 +493,27 @@ function readPropSignature(sourceFile, checker, typeName) {
     type: typeNode ? typeNode.getText(sourceFile) : undefined,
     properties: checker
       .getPropertiesOfType(type)
+      .filter(isAuthoredProperty)
       .map((prop) => readResolvedProp(checker, prop, sourceFile)),
   };
+}
+
+// Keep only props authored in Cedar's own source. The inherited surface —
+// whether from `@types/react`'s HTMLAttributes (~275 of HeadingProps' 282
+// members) or from react-aria-components, both of which re-declare the full
+// DOM/ARIA/event prop set — is what produced the original 25k-line manifest.
+// That surface is documented by reference through each signature's `extends`
+// and `type` fields, so an agent knows where to look without us enumerating it.
+function isAuthoredProperty(prop) {
+  return Boolean(
+    prop.declarations?.some((declaration) => {
+      const fileName = declaration.getSourceFile().fileName;
+      return (
+        fileName.startsWith(`${repoRoot}/`) &&
+        !fileName.includes("/node_modules/")
+      );
+    }),
+  );
 }
 
 function readResolvedProp(checker, prop, fallbackNode) {
@@ -778,15 +797,12 @@ export async function writeAgentSurface() {
 }
 
 export async function checkAgentSurface() {
+  // Only the repo-root copies are committed. The packages/react copies are
+  // generated at publish time (`prepack`) and gitignored, so they may not
+  // exist on a fresh checkout — don't assert them here.
   await assertFileFresh(llmsTxtPath, await generateLlmsTxt());
-
-  const manifest = stableJson(await generateManifest());
-  await assertFileFresh(manifestPath, manifest);
-  await assertFileFresh(packageManifestPath, manifest);
-
-  const manifestSchema = stableJson(renderManifestSchema());
-  await assertFileFresh(manifestSchemaPath, manifestSchema);
-  await assertFileFresh(packageManifestSchemaPath, manifestSchema);
+  await assertFileFresh(manifestPath, stableJson(await generateManifest()));
+  await assertFileFresh(manifestSchemaPath, stableJson(renderManifestSchema()));
 }
 
 async function assertFileFresh(filePath, expected) {
