@@ -33,11 +33,12 @@ export default tseslint.config(
   },
   {
     // Node build scripts (e.g. token pipeline) run outside the browser.
-    files: ["**/build.js", "**/*.config.{js,ts}"],
+    files: ["**/build.js", "**/*.config.{js,ts}", "scripts/**/*.mjs"],
     languageOptions: {
       globals: {
         console: "readonly",
         process: "readonly",
+        URL: "readonly",
       },
     },
   },

@@ -6,12 +6,14 @@
     "node": ">=20"
   },
   "scripts": {
+    "agent:surface": "node scripts/agent-surface.mjs generate",
+    "agent:surface:check": "node scripts/agent-surface.mjs check",
     "build": "pnpm -r --filter=./packages/* run build",
     "dev": "pnpm -r --parallel run dev",
     "storybook": "pnpm --filter docs dev",
     "storybook:build": "pnpm --filter docs build",
     "playground": "pnpm --filter playground dev",
-    "test": "pnpm -r run test",
+    "test": "pnpm -r run test && node --test scripts/*.test.mjs",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

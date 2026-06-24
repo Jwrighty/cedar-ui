@@ -35,6 +35,9 @@ jobs:
       - name: Build packages
         run: pnpm build
 
+      - name: Check generated agent surface
+        run: pnpm agent:surface:check
+
       - name: Lint
         run: pnpm lint
 
