@@ -32,9 +32,13 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./cedar.manifest.json": "./cedar.manifest.json",
+    "./cedar.manifest.schema.json": "./cedar.manifest.schema.json",
     "./styles.css": "./dist/styles.css"
   },
   "files": [
+    "cedar.manifest.json",
+    "cedar.manifest.schema.json",
     "dist"
   ],
   "publishConfig": {
@@ -42,6 +46,7 @@
   },
   "scripts": {
     "build": "vite build && tsc -p tsconfig.build.json --emitDeclarationOnly",
+    "prepack": "node ../../scripts/agent-surface.mjs generate",
     "dev": "vite build --watch",
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit"

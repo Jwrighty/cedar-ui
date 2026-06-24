@@ -21,3 +21,7 @@ docs/learning-backlog.md
 docs/essays/
 # Generated token TS source (built by build.js, compiled to dist/)
 generated/
+
+# Published agent-surface copies (generated at prepack; root copies are committed)
+packages/react/cedar.manifest.json
+packages/react/cedar.manifest.schema.json

@@ -1,0 +1,2574 @@
+{
+  "$schema": "./cedar.manifest.schema.json",
+  "schemaVersion": 1,
+  "name": "Cedar",
+  "description": "Agent-consumable manifest generated from Cedar ComponentMeta, source prop types, and DTCG token sources.",
+  "packages": {
+    "react": {
+      "name": "@jwrighty/cedar-react",
+      "version": "0.2.0"
+    },
+    "tokens": {
+      "name": "@jwrighty/cedar-tokens",
+      "version": "0.2.0"
+    }
+  },
+  "generatedFrom": {
+    "components": "packages/react/src/*.meta.ts via packages/react/dist/index.js",
+    "props": "packages/react/src/*.tsx TSDoc and TypeScript signatures",
+    "tokens": "packages/tokens/src/**/*.json"
+  },
+  "components": [
+    {
+      "name": "Box",
+      "exports": [
+        "Box"
+      ],
+      "status": "experimental",
+      "summary": "A polymorphic layout primitive for token-backed inset spacing.",
+      "useWhen": [
+        "A region needs semantic padding without imposing flow on its children.",
+        "The rendered HTML element must be selected to match the content semantics.",
+        "Building a surface that will contain Stack or Inline layouts."
+      ],
+      "avoidWhen": [
+        {
+          "situation": "Children need a consistent vertical rhythm",
+          "useInstead": "Stack"
+        },
+        {
+          "situation": "Children need a wrapping horizontal flow",
+          "useInstead": "Inline"
+        }
+      ],
+      "a11yNotes": [
+        "Box adds no role or interactive behaviour; choose an `as` element that matches the content semantics.",
+        "Native ARIA attributes and refs pass through to the selected element."
+      ],
+      "relatedComponents": [
+        "Stack",
+        "Inline"
+      ],
+      "source": "packages/react/src/Box.tsx",
+      "props": [
+        {
+          "typeName": "BoxProps",
+          "kind": "type",
+          "exported": true,
+          "description": "Props for {@link Box}, including props from the element selected by `as`.",
+          "extends": [],
+          "type": "PolymorphicProps<\n  E,\n  BoxOwnProps<E>\n>",
+          "properties": [
+            {
+              "name": "as",
+              "type": "E | undefined",
+              "required": false,
+              "default": "\"div\"",
+              "description": "Element or custom component rendered by Box."
+            },
+            {
+              "name": "padding",
+              "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | undefined",
+              "required": false,
+              "default": "\"none\"",
+              "description": "Semantic inset applied on every side."
+            },
+            {
+              "name": "className",
+              "type": "string | undefined",
+              "required": false,
+              "description": "Extra class names, merged after the layout classes."
+            }
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "name": "padding",
+          "options": [
+            "none",
+            "sm",
+            "md",
+            "lg"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Button",
+      "exports": [
+        "Button"
+      ],
+      "status": "experimental",
+      "summary": "A pressable button that triggers an action in the current view.",
+      "useWhen": [
+        "Submitting a form or confirming a decision.",
+        "Triggering an in-page action (open a dialog, save, delete).",
+        "Any of the three emphasis levels fit: primary, secondary, or ghost."
+      ],
+      "avoidWhen": [
+        {
+          "situation": "Navigating to a URL or route",
+          "useInstead": "Link"
+        },
+        {
+          "situation": "Toggling a binary on/off state",
+          "useInstead": "Switch or ToggleButton"
+        },
+        {
+          "situation": "Choosing one of several options",
+          "useInstead": "RadioGroup or Select"
+        }
+      ],
+      "a11yNotes": [
+        "Renders a native <button>; keyboard- and screen-reader-operable by default.",
+        "Use onPress (not onClick) so pointer, keyboard, and touch are unified.",
+        "Disable with isDisabled; focus is managed by React Aria.",
+        "Focus-visible ring is driven by [data-focus-visible], shown only for keyboard focus."
+      ],
+      "relatedComponents": [
+        "Link",
+        "ToggleButton"
+      ],
+      "source": "packages/react/src/Button.tsx",
+      "props": [
+        {
+          "typeName": "ButtonProps",
+          "kind": "interface",
+          "exported": true,
+          "description": "A pressable button built on React Aria Components.\n\nInteraction state is exposed through `data-*` attributes (`data-hovered`,\n`data-pressed`, `data-focus-visible`) and styled against Cedar's design\ntokens, so it re-themes via `[data-theme]` with no code change.\n\nFollows React Aria's prop conventions: use `isDisabled` (not `disabled`) and\n`onPress` (not `onClick`) — `onPress` unifies pointer, keyboard and touch.",
+          "extends": [
+            "AriaButtonProps"
+          ],
+          "properties": [
+            {
+              "name": "variant",
+              "type": "\"primary\" | \"secondary\" | \"ghost\" | undefined",
+              "required": false,
+              "default": "\"primary\"",
+              "description": "Visual emphasis."
+            },
+            {
+              "name": "size",
+              "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+              "required": false,
+              "default": "\"md\"",
+              "description": "Control size."
+            },
+            {
+              "name": "className",
+              "type": "string | undefined",
+              "required": false,
+              "description": "Extra class names, merged after the variant classes."
+            }
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "name": "variant",
+          "options": [
+            "primary",
+            "secondary",
+            "ghost"
+          ]
+        },
+        {
+          "name": "size",
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Checkbox",
+      "exports": [
+        "Checkbox"
+      ],
+      "status": "experimental",
+      "summary": "A labelled binary form control for selecting one or more independent options.",
+      "useWhen": [
+        "A form asks the user to opt in to or acknowledge a choice.",
+        "Multiple options may be selected independently.",
+        "A parent option needs an indeterminate state to summarize child selections."
+      ],
+      "avoidWhen": [
+        {
+          "situation": "A setting takes effect immediately when toggled",
+          "useInstead": "Switch"
+        },
+        {
+          "situation": "Exactly one option must be chosen from a set",
+          "useInstead": "RadioGroup"
+        }
+      ],
+      "a11yNotes": [
+        "The visible label is associated with a native checkbox input by React Aria.",
+        "Pointer and Space-key interaction are supported; selection may be controlled or uncontrolled.",
+        "Indeterminate is a visual mixed state and does not replace the selected value submitted by a form.",
+        "Use isInvalid and isDisabled so React Aria exposes the corresponding accessible state."
+      ],
+      "relatedComponents": [
+        "Switch",
+        "RadioGroup"
+      ],
+      "source": "packages/react/src/Checkbox.tsx",
+      "props": [
+        {
+          "typeName": "CheckboxProps",
+          "kind": "interface",
+          "exported": true,
+          "description": "Props for Cedar's Checkbox Primitive.\n\nState follows React Aria's conventions: use `isSelected`, `defaultSelected`,\n`isIndeterminate`, `isDisabled`, `isInvalid`, and `onChange` rather than DOM\ncheckbox prop names.",
+          "extends": [
+            "Omit<\n  AriaCheckboxProps,\n  \"children\" | \"className\" | \"inputRef\"\n>"
+          ],
+          "properties": [
+            {
+              "name": "children",
+              "type": "ReactNode",
+              "required": true,
+              "description": "Visible label associated with the checkbox input."
+            },
+            {
+              "name": "className",
+              "type": "string | undefined",
+              "required": false,
+              "description": "Extra class names, merged after the Checkbox class."
+            }
+          ]
+        }
+      ],
+      "variants": []
+    },
+    {
+      "name": "Dialog",
+      "exports": [
+        "Dialog"
+      ],
+      "status": "experimental",
+      "summary": "A modal dialog that interrupts the user to confirm, warn, or collect focused input.",
+      "useWhen": [
+        "Confirming a destructive or irreversible action before it runs.",
+        "Collecting a small, focused set of input without leaving the page.",
+        "Showing content that must be acknowledged or dismissed before continuing."
+      ],
+      "avoidWhen": [
+        {
+          "situation": "Showing a brief, non-blocking notification",
+          "useInstead": "Toast"
+        },
+        {
+          "situation": "Anchored, dismissible content next to a trigger",
+          "useInstead": "Popover"
+        },
+        {
+          "situation": "Non-essential supplementary info on hover/focus",
+          "useInstead": "Tooltip"
+        }
+      ],
+      "a11yNotes": [
+        "Focus is trapped while open and returns to the trigger on close (React Aria).",
+        "Escape and outside-click dismiss by default; set isDismissable={false} to block.",
+        "Always include a Dialog.Title — React Aria uses it for aria-labelledby.",
+        "Scroll on the page behind the dialog is locked while it is open."
+      ],
+      "relatedComponents": [
+        "Popover",
+        "Tooltip",
+        "Button"
+      ],
+      "source": "packages/react/src/Dialog.tsx",
+      "props": [
+        {
+          "typeName": "DialogContentProps",
+          "kind": "interface",
+          "exported": true,
+          "description": "Props for {@link Dialog.Content}.",
+          "extends": [
+            "Pick<\n    ModalOverlayProps,\n    | \"isDismissable\"\n    | \"isKeyboardDismissDisabled\"\n    | \"isOpen\"\n    | \"defaultOpen\"\n    | \"onOpenChange\"\n  >"
+          ],
+          "properties": [
+            {
+              "name": "children",
+              "type": "ReactNode",
+              "required": true
+            },
+            {
+              "name": "role",
+              "type": "\"dialog\" | \"alertdialog\" | undefined",
+              "required": false,
+              "default": "\"dialog\"",
+              "description": "Dialog ARIA role."
+            },
+            {
+              "name": "className",
+              "type": "string | undefined",
+              "required": false,
+              "description": "Extra class names, merged onto the dialog panel."
+            },
+            {
+              "name": "style",
+              "type": "CSSProperties | undefined",
+              "required": false
+            }
+          ]
+        },
+        {
+          "typeName": "DialogTitleProps",
+          "kind": "interface",
+          "exported": true,
+          "description": "Props for {@link Dialog.Title}.",
+          "extends": [],
+          "properties": [
+            {
+              "name": "children",
+              "type": "ReactNode",
+              "required": true
+            },
+            {
+              "name": "className",
+              "type": "string | undefined",
+              "required": false
+            },
+            {
+              "name": "style",
+              "type": "CSSProperties | undefined",
+              "required": false
+            }
+          ]
+        }
+      ],
+      "variants": []
+    },
+    {
+      "name": "Heading",
+      "exports": [
+        "Heading"
+      ],
+      "status": "experimental",
+      "summary": "A themeable semantic heading primitive with document level decoupled from visual scale.",
+      "useWhen": [
+        "Rendering page, section, card, or panel headings.",
+        "Preserving a logical document outline while choosing any visual type-scale step.",
+        "A heading's size, weight, and foreground tone should follow Cedar theme tokens."
+      ],
+      "avoidWhen": [
+        {
+          "situation": "Rendering body copy, captions, or inline prose",
+          "useInstead": "Text"
+        },
+        {
+          "situation": "Rendering a dialog title inside Cedar Dialog",
+          "useInstead": "Dialog.Title"
+        },
+        {
+          "situation": "Making a heading itself perform an action",
+          "useInstead": "Button or a composed disclosure primitive"
+        }
+      ],
+      "a11yNotes": [
+        "`level` renders a real h1–h6 element; keep levels in logical document order.",
+        "Visual `size` does not change the semantic level exposed to assistive technology.",
+        "Do not skip heading levels just to get a smaller or larger visual style."
+      ],
+      "relatedComponents": [
+        "Text",
+        "Dialog",
+        "Button"
+      ],
+      "source": "packages/react/src/Heading.tsx",
+      "props": [
+        {
+          "typeName": "HeadingProps",
+          "kind": "interface",
+          "exported": true,
+          "description": "Props for the Heading primitive.\n\n`level` controls document outline semantics, while `size`, `weight` and\n`tone` independently control visual treatment through Cedar tokens.",
+          "extends": [
+            "Omit<\n  HTMLAttributes<HTMLHeadingElement>,\n  \"className\" | \"style\" | \"children\"\n>"
+          ],
+          "properties": [
+            {
+              "name": "level",
+              "type": "HeadingLevel | undefined",
+              "required": false,
+              "default": "2",
+              "description": "Semantic heading level to render."
+            },
+            {
+              "name": "size",
+              "type": "\"sm\" | \"md\" | \"lg\" | \"xs\" | \"xl\" | \"2xl\" | undefined",
+              "required": false,
+              "default": "\"xl\"",
+              "description": "Visual type-scale step."
+            },
+            {
+              "name": "weight",
+              "type": "\"regular\" | \"medium\" | \"semibold\" | undefined",
+              "required": false,
+              "default": "\"semibold\"",
+              "description": "Visual font weight."
+            },
+            {
+              "name": "tone",
+              "type": "\"default\" | \"muted\" | \"accent\" | \"danger\" | undefined",
+              "required": false,
+              "default": "\"default\"",
+              "description": "Foreground colour role."
+            },
+            {
+              "name": "children",
+              "type": "ReactNode",
+              "required": true,
+              "description": "Heading content."
+            },
+            {
+              "name": "className",
+              "type": "string | undefined",
+              "required": false,
+              "description": "Extra class names, merged after the variant classes."
+            },
+            {
+              "name": "style",
+              "type": "CSSProperties | undefined",
+              "required": false,
+              "description": "Inline styles passed through to the rendered heading element."
+            }
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "name": "size",
+          "options": [
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ]
+        },
+        {
+          "name": "weight",
+          "options": [
+            "regular",
+            "medium",
+            "semibold"
+          ]
+        },
+        {
+          "name": "tone",
+          "options": [
+            "default",
+            "muted",
+            "accent",
+            "danger"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Inline",
+      "exports": [
+        "Inline"
+      ],
+      "status": "experimental",
+      "summary": "A polymorphic layout primitive for token-spaced wrapping rows.",
+      "useWhen": [
+        "Sibling elements should read in a horizontal flow.",
+        "Actions, tags, or navigation items need consistent token-backed gaps.",
+        "Items should wrap naturally when horizontal space runs out."
+      ],
+      "avoidWhen": [
+        {
+          "situation": "Children need a vertical rhythm",
+          "useInstead": "Stack"
+        },
+        {
+          "situation": "Only inset padding is needed",
+          "useInstead": "Box"
+        }
+      ],
+      "a11yNotes": [
+        "Inline adds no role or interaction; choose `as` and ARIA attributes for the content's semantics.",
+        "Wrapping does not alter DOM or keyboard focus order."
+      ],
+      "relatedComponents": [
+        "Box",
+        "Stack"
+      ],
+      "source": "packages/react/src/Inline.tsx",
+      "props": [
+        {
+          "typeName": "InlineProps",
+          "kind": "type",
+          "exported": true,
+          "description": "Props for {@link Inline}, including props from the element selected by `as`.",
+          "extends": [],
+          "type": "PolymorphicProps<\n  E,\n  InlineOwnProps<E>\n>",
+          "properties": [
+            {
+              "name": "as",
+              "type": "E | undefined",
+              "required": false,
+              "default": "\"div\"",
+              "description": "Element or custom component rendered by Inline."
+            },
+            {
+              "name": "gap",
+              "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | undefined",
+              "required": false,
+              "default": "\"md\"",
+              "description": "Semantic spacing between children."
+            },
+            {
+              "name": "className",
+              "type": "string | undefined",
+              "required": false,
+              "description": "Extra class names, merged after the layout classes."
+            }
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "name": "gap",
+          "options": [
+            "none",
+            "sm",
+            "md",
+            "lg"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Popover",
+      "exports": [
+        "Popover"
+      ],
+      "status": "experimental",
+      "summary": "An anchored overlay for interactive content that dismisses without interrupting the page.",
+      "useWhen": [
+        "Showing interactive controls or supporting actions next to their trigger.",
+        "Keeping supplementary content available without navigating away or blocking the page.",
+        "Building an anchored overlay that needs collision-aware placement and focus management."
+      ],
+      "avoidWhen": [
+        {
+          "situation": "Showing brief, non-interactive help on hover or focus",
+          "useInstead": "Tooltip"
+        },
+        {
+          "situation": "Requiring the user to acknowledge or complete a blocking task",
+          "useInstead": "Dialog"
+        },
+        {
+          "situation": "Presenting a list of commands or actions",
+          "useInstead": "Menu"
+        },
+        {
+          "situation": "Choosing one value from a predefined list",
+          "useInstead": "Select"
+        }
+      ],
+      "a11yNotes": [
+        "React Aria labels the popover from its trigger and moves focus into the overlay when it opens.",
+        "Escape and outside interaction dismiss the popover, then focus returns to the trigger.",
+        "Keep interactive content keyboard operable and use a concise trigger label that also names the popover.",
+        "Positioning and collision avoidance are delegated to React Aria and adapt to the available viewport space."
+      ],
+      "relatedComponents": [
+        "Tooltip",
+        "Dialog",
+        "Menu",
+        "Select"
+      ],
+      "source": "packages/react/src/Popover.tsx",
+      "props": [
+        {
+          "typeName": "PopoverRootProps",
+          "kind": "interface",
+          "exported": true,
+          "description": "Props for {@link Popover.Root}.",
+          "extends": [
+            "DialogTriggerProps"
+          ],
+          "properties": [
+            {
+              "name": "isOpen",
+              "type": "boolean | undefined",
+              "required": false,
+              "description": "Whether the popover is open when controlled. Pair with `onOpenChange`."
+            },
+            {
+              "name": "defaultOpen",
+              "type": "boolean | undefined",
+              "required": false,
+              "description": "Whether the popover is initially open when uncontrolled."
+            },
+            {
+              "name": "onOpenChange",
+              "type": "((isOpen: boolean) => void) | undefined",
+              "required": false,
+              "description": "Called whenever the user or application requests an open-state change."
+            }
+          ]
+        },
+        {
+          "typeName": "PopoverTriggerProps",
+          "kind": "interface",
+          "exported": true,
+          "description": "Props for {@link Popover.Trigger}.",
+          "extends": [
+            "ButtonProps"
+          ],
+          "properties": [
+            {
+              "name": "children",
+              "type": "import(\"react-aria-components/dist/types/src/utils\").ChildrenOrFunction<import(\"react-aria-components/dist/types/src/Button\").ButtonRenderProps>",
+              "required": true,
+              "description": "The trigger's visible label or content."
+            },
+            {
+              "name": "variant",
+              "type": "\"primary\" | \"secondary\" | \"ghost\" | undefined",
+              "required": false,
+              "default": "\"primary\"",
+              "description": "Visual emphasis."
+            },
+            {
+              "name": "size",
+              "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+              "required": false,
+              "default": "\"md\"",
+              "description": "Control size."
+            },
+            {
+              "name": "className",
+              "type": "string | undefined",
+              "required": false,
+              "description": "Extra class names, merged after the variant classes."
+            }
+          ]
+        },
+        {
+          "typeName": "PopoverContentProps",
+          "kind": "interface",
+          "exported": true,
+          "description": "Props for {@link Popover.Content}.",
+          "extends": [
+            "Omit<\n  AriaPopoverProps,\n  \"className\" | \"style\"\n>"
+          ],
+          "properties": [
+            {
+              "name": "size",
+              "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+              "required": false,
+              "default": "\"md\"",
+              "description": "Maximum inline size of the overlay surface."
+            },
+            {
+              "name": "className",
+              "type": "string | undefined",
+              "required": false,
+              "description": "Extra class names, merged after Cedar's surface and size classes."
+            },
+            {
+              "name": "style",
+              "type": "CSSProperties | undefined",
+              "required": false,
+              "description": "Inline styles forwarded to the portalled overlay surface."
+            }
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "name": "size",
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "RadioGroup",
+      "exports": [
+        "RadioGroup",
+        "Radio"
+      ],
+      "status": "experimental",
+      "summary": "A labelled group for selecting exactly one value from a visible set of options.",
+      "useWhen": [
+        "The user must choose exactly one option from a short, visible list.",
+        "Seeing every option at once helps the user compare them.",
+        "Selection needs controlled or uncontrolled state with arrow-key navigation."
+      ],
+      "avoidWhen": [
+        {
+          "situation": "The option list is long or space is constrained",
+          "useInstead": "Select"
+        },
+        {
+          "situation": "The user may choose multiple independent options",
+          "useInstead": "Checkbox"
+        },
+        {
+          "situation": "Representing one immediate on/off setting",
+          "useInstead": "Switch"
+        }
+      ],
+      "a11yNotes": [
+        "Always provide a visible group label; React Aria associates it with the radiogroup.",
+        "Arrow keys move roving focus and selection between enabled options.",
+        "Description and error text are associated with the group automatically.",
+        "Use isDisabled on the group or an individual Radio, and isInvalid on the group."
+      ],
+      "relatedComponents": [
+        "Checkbox",
+        "Select",
+        "Switch"
+      ],
+      "source": "packages/react/src/RadioGroup.tsx",
+      "props": [
+        {
+          "typeName": "RadioGroupProps",
+          "kind": "interface",
+          "exported": true,
+          "description": "Props for a labelled group of mutually exclusive `Radio` options.\n\nSelection is owned by the group. Use `value` with `onChange` for controlled\nstate, or `defaultValue` for uncontrolled state.",
+          "extends": [
+            "Omit<\n  AriaRadioGroupProps,\n  \"children\" | \"className\" | \"orientation\"\n>"
+          ],
+          "properties": [
+            {
+              "name": "label",
+              "type": "ReactNode",
+              "required": true,
+              "description": "Visible group label, associated with the radiogroup for assistive tech."
+            },
+            {
+              "name": "children",
+              "type": "ReactNode",
+              "required": true,
+              "description": "The `Radio` options in this group."
+            },
+            {
+              "name": "description",
+              "type": "ReactNode",
+              "required": false,
+              "description": "Optional helper text associated with the radiogroup."
+            },
+            {
+              "name": "errorMessage",
+              "type": "ReactNode | ((validation: ValidationResult) => ReactNode)",
+              "required": false,
+              "description": "Validation message shown when the group is invalid."
+            },
+            {
+              "name": "orientation",
+              "type": "\"vertical\" | \"horizontal\" | undefined",
+              "required": false,
+              "default": "\"vertical\"",
+              "description": "Layout direction for the options."
+            },
+            {
+              "name": "className",
+              "type": "string | undefined",
+              "required": false,
+              "description": "Extra class names, merged after the group variant classes."
+            }
+          ]
+        },
+        {
+          "typeName": "RadioProps",
+          "kind": "interface",
+          "exported": true,
+          "description": "Props for one value within a `RadioGroup`.",
+          "extends": [
+            "Omit<\n  AriaRadioProps,\n  \"children\" | \"className\"\n>"
+          ],
+          "properties": [
+            {
+              "name": "value",
+              "type": "string",
+              "required": true,
+              "description": "Unique value submitted to the owning `RadioGroup` when selected."
+            },
+            {
+              "name": "children",
+              "type": "ReactNode",
+              "required": true,
+              "description": "Visible option label."
+            },
+            {
+              "name": "className",
+              "type": "string | undefined",
+              "required": false,
+              "description": "Extra class names, merged after the radio class."
+            }
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "name": "orientation",
+          "options": [
+            "vertical",
+            "horizontal"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Stack",
+      "exports": [
+        "Stack"
+      ],
+      "status": "experimental",
+      "summary": "A polymorphic layout primitive for token-spaced vertical flow.",
+      "useWhen": [
+        "Sibling elements need a consistent vertical rhythm.",
+        "A list, form section, or content region should flow from top to bottom.",
+        "Spacing should follow Cedar semantic stack tokens."
+      ],
+      "avoidWhen": [
+        {
+          "situation": "Children should flow horizontally and wrap",
+          "useInstead": "Inline"
+        },
+        {
+          "situation": "Only inset padding is needed",
+          "useInstead": "Box"
+        }
+      ],
+      "a11yNotes": [
+        "Stack adds no role; use `as` to preserve list, section, or other document semantics.",
+        "Visual order follows DOM order and should not replace meaningful semantic structure."
+      ],
+      "relatedComponents": [
+        "Box",
+        "Inline"
+      ],
+      "source": "packages/react/src/Stack.tsx",
+      "props": [
+        {
+          "typeName": "StackProps",
+          "kind": "type",
+          "exported": true,
+          "description": "Props for {@link Stack}, including props from the element selected by `as`.",
+          "extends": [],
+          "type": "PolymorphicProps<\n  E,\n  StackOwnProps<E>\n>",
+          "properties": [
+            {
+              "name": "as",
+              "type": "E | undefined",
+              "required": false,
+              "default": "\"div\"",
+              "description": "Element or custom component rendered by Stack."
+            },
+            {
+              "name": "gap",
+              "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | undefined",
+              "required": false,
+              "default": "\"md\"",
+              "description": "Semantic spacing between children."
+            },
+            {
+              "name": "className",
+              "type": "string | undefined",
+              "required": false,
+              "description": "Extra class names, merged after the layout classes."
+            }
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "name": "gap",
+          "options": [
+            "none",
+            "sm",
+            "md",
+            "lg"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Switch",
+      "exports": [
+        "Switch"
+      ],
+      "status": "experimental",
+      "summary": "A labelled control that turns an immediate setting on or off.",
+      "useWhen": [
+        "A binary setting takes effect immediately when changed.",
+        "Users need to see whether a setting is currently on or off."
+      ],
+      "avoidWhen": [
+        {
+          "situation": "Selecting an option for later form submission or agreement",
+          "useInstead": "Checkbox"
+        },
+        {
+          "situation": "Choosing exactly one option from a group",
+          "useInstead": "RadioGroup or Select"
+        }
+      ],
+      "a11yNotes": [
+        "Renders a labelled switch input with pointer and keyboard support from React Aria.",
+        "Provide a concise visible label through children; it becomes the accessible name.",
+        "Use isSelected/onChange for controlled state or defaultSelected for uncontrolled state.",
+        "Focus-visible styling is shown for keyboard focus through [data-focus-visible]."
+      ],
+      "relatedComponents": [
+        "Checkbox"
+      ],
+      "source": "packages/react/src/Switch.tsx",
+      "props": [
+        {
+          "typeName": "SwitchProps",
+          "kind": "interface",
+          "exported": true,
+          "description": "Props for the Cedar {@link Switch} primitive.\n\nControlled and uncontrolled state use React Aria's names: pass `isSelected`\nwith `onChange` for controlled state, or `defaultSelected` for uncontrolled\nstate. Disable interaction with `isDisabled`.",
+          "extends": [
+            "AriaSwitchProps"
+          ],
+          "properties": [
+            {
+              "name": "children",
+              "type": "ReactNode",
+              "required": true,
+              "description": "Visible label that gives the switch its accessible name."
+            },
+            {
+              "name": "size",
+              "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+              "required": false,
+              "default": "\"md\"",
+              "description": "Visual control size."
+            },
+            {
+              "name": "className",
+              "type": "string | undefined",
+              "required": false,
+              "description": "Extra class names, merged after the size classes."
+            }
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "name": "size",
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Tabs",
+      "exports": [
+        "Tabs"
+      ],
+      "status": "experimental",
+      "summary": "A tabbed interface for switching between related panels without leaving the current page.",
+      "useWhen": [
+        "Grouping peer sections that share one page or card context.",
+        "Letting users switch between related views such as Overview, Activity, and Settings.",
+        "Keeping the selected section addressable by app state with selectedKey when needed."
+      ],
+      "avoidWhen": [
+        {
+          "situation": "Choosing one value from a form field set",
+          "useInstead": "RadioGroup or Select"
+        },
+        {
+          "situation": "Navigating between app routes or unrelated destinations",
+          "useInstead": "Link or navigation primitives"
+        },
+        {
+          "situation": "Revealing a single optional section inline",
+          "useInstead": "Disclosure or Accordion"
+        }
+      ],
+      "a11yNotes": [
+        "Built on React Aria Components Tabs, TabList, Tab, and TabPanel.",
+        "React Aria wires role=tablist, role=tab, role=tabpanel, aria-controls, and aria-labelledby.",
+        "Provide an aria-label or aria-labelledby on Tabs.List to name the tab strip.",
+        "Arrow-key navigation and disabled tabs are handled by React Aria; style focus with [data-focus-visible]."
+      ],
+      "relatedComponents": [
+        "RadioGroup",
+        "Select",
+        "Disclosure"
+      ],
+      "source": "packages/react/src/Tabs.tsx",
+      "props": [
+        {
+          "typeName": "TabsRootProps",
+          "kind": "type",
+          "exported": true,
+          "description": "Props for {@link Tabs.Root}.\n\nSupports React Aria's controlled (`selectedKey` + `onSelectionChange`) and\nuncontrolled (`defaultSelectedKey`) selection props, plus orientation,\nkeyboard activation, `className`, `style`, and `data-*` passthrough.",
+          "extends": [],
+          "type": "AriaTabsProps",
+          "properties": []
+        },
+        {
+          "typeName": "TabsListProps",
+          "kind": "type",
+          "exported": true,
+          "description": "Props for {@link Tabs.List}.\n\nProvide either `aria-label` or `aria-labelledby` so assistive technology can\nannounce the tab strip's purpose. Tabs may be supplied as children or through\nReact Aria's collection props.",
+          "extends": [],
+          "type": "AriaTabListProps<T>",
+          "properties": []
+        },
+        {
+          "typeName": "TabsTabProps",
+          "kind": "type",
+          "exported": true,
+          "description": "Props for {@link Tabs.Tab}.\n\nThe `id` identifies the tab and connects it to the corresponding\n`Tabs.Panel`. Use React Aria's `isDisabled` prop for unavailable tabs.",
+          "extends": [],
+          "type": "AriaTabProps",
+          "properties": []
+        },
+        {
+          "typeName": "TabsPanelProps",
+          "kind": "type",
+          "exported": true,
+          "description": "Props for {@link Tabs.Panel}.\n\nThe `id` should match its associated `Tabs.Tab`; React Aria wires the\n`tab`/`tabpanel` roles and ARIA relationship. `className`, `style`, and\n`data-*` attributes pass through to the panel element.",
+          "extends": [],
+          "type": "AriaTabPanelProps",
+          "properties": []
+        }
+      ],
+      "variants": []
+    },
+    {
+      "name": "Text",
+      "exports": [
+        "Text"
+      ],
+      "status": "experimental",
+      "summary": "A themeable typography primitive for body copy and inline non-heading text.",
+      "useWhen": [
+        "Rendering paragraphs, helper copy, captions, or inline text.",
+        "You need semantic element choice (`p`, `span`, `strong`, etc.) independent from visual size.",
+        "Size, weight, and foreground tone should follow Cedar's semantic type-scale and theme tokens."
+      ],
+      "avoidWhen": [
+        {
+          "situation": "Rendering a page, section, or card heading",
+          "useInstead": "Heading"
+        },
+        {
+          "situation": "Triggering an action or navigation",
+          "useInstead": "Button or Link"
+        },
+        {
+          "situation": "Labelling or validating an input field",
+          "useInstead": "TextField or a composed form-field primitive"
+        }
+      ],
+      "a11yNotes": [
+        "Choose the semantic element with `as`; the default is a paragraph.",
+        "Do not use Text to fake headings visually — use Heading so assistive technology gets the document outline.",
+        "Tone changes colour only; do not rely on colour alone to communicate required or error state."
+      ],
+      "relatedComponents": [
+        "Heading",
+        "TextField",
+        "Button"
+      ],
+      "source": "packages/react/src/Text.tsx",
+      "props": [
+        {
+          "typeName": "TextProps",
+          "kind": "interface",
+          "exported": true,
+          "description": "Props for the Text primitive.\n\n`Text` is a styling-only primitive: the rendered semantic element comes from\n`as`, while `size`, `weight` and `tone` only change visual treatment through\nCedar tokens.",
+          "extends": [
+            "Omit<\n  HTMLAttributes<HTMLElement>,\n  \"className\" | \"style\" | \"children\"\n>"
+          ],
+          "properties": [
+            {
+              "name": "as",
+              "type": "TextElement | undefined",
+              "required": false,
+              "default": "\"p\"",
+              "description": "Semantic element to render."
+            },
+            {
+              "name": "size",
+              "type": "\"sm\" | \"md\" | \"lg\" | \"xs\" | \"xl\" | \"2xl\" | undefined",
+              "required": false,
+              "default": "\"md\"",
+              "description": "Visual type-scale step."
+            },
+            {
+              "name": "weight",
+              "type": "\"regular\" | \"medium\" | \"semibold\" | undefined",
+              "required": false,
+              "default": "\"regular\"",
+              "description": "Visual font weight."
+            },
+            {
+              "name": "tone",
+              "type": "\"default\" | \"muted\" | \"accent\" | \"danger\" | undefined",
+              "required": false,
+              "default": "\"default\"",
+              "description": "Foreground colour role."
+            },
+            {
+              "name": "children",
+              "type": "ReactNode",
+              "required": true,
+              "description": "Text or inline content to render."
+            },
+            {
+              "name": "className",
+              "type": "string | undefined",
+              "required": false,
+              "description": "Extra class names, merged after the variant classes."
+            },
+            {
+              "name": "style",
+              "type": "CSSProperties | undefined",
+              "required": false,
+              "description": "Inline styles passed through to the rendered element."
+            }
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "name": "size",
+          "options": [
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ]
+        },
+        {
+          "name": "weight",
+          "options": [
+            "regular",
+            "medium",
+            "semibold"
+          ]
+        },
+        {
+          "name": "tone",
+          "options": [
+            "default",
+            "muted",
+            "accent",
+            "danger"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "TextField",
+      "exports": [
+        "TextField"
+      ],
+      "status": "experimental",
+      "summary": "A labelled single-line text input with description and error support.",
+      "useWhen": [
+        "Collecting one line of free-form text (name, email, search term).",
+        "A field needs a visible label, helper text, and/or a validation message.",
+        "Controlled or uncontrolled input with React Aria's field semantics."
+      ],
+      "avoidWhen": [
+        {
+          "situation": "Capturing multiple lines of text",
+          "useInstead": "TextArea"
+        },
+        {
+          "situation": "Choosing from a fixed set of options",
+          "useInstead": "Select or RadioGroup"
+        },
+        {
+          "situation": "Toggling a single boolean",
+          "useInstead": "Checkbox or Switch"
+        }
+      ],
+      "a11yNotes": [
+        "Label is associated with the input automatically — always pass `label`.",
+        "Description and error are linked via aria-describedby by React Aria.",
+        "Mark invalid state with isInvalid + errorMessage; the input gets aria-invalid.",
+        "Focus ring is driven by [data-focused]; styling reflects keyboard and pointer focus."
+      ],
+      "relatedComponents": [
+        "TextArea",
+        "SearchField",
+        "Select"
+      ],
+      "source": "packages/react/src/TextField.tsx",
+      "props": [
+        {
+          "typeName": "TextFieldProps",
+          "kind": "interface",
+          "exported": true,
+          "description": "A labelled single-line text input built on React Aria Components.\n\nComposes RAC's `Label`, `Input`, `Text` (description) and `FieldError` parts\ninto one field, wiring up the label/input/description/error associations for\nyou. Controlled (`value`) and uncontrolled (`defaultValue`) both work.\n\nState is exposed through `data-*` attributes (`data-hovered`, `data-focused`,\n`data-invalid`, `data-disabled`) and styled against Cedar's design tokens, so\nit re-themes via `[data-theme]` with no code change.\n\nFollows React Aria's prop conventions: `isDisabled`/`isInvalid`/`isRequired`\n(not the bare DOM attributes). Pass `errorMessage` to show validation state.",
+          "extends": [
+            "AriaTextFieldProps"
+          ],
+          "properties": [
+            {
+              "name": "label",
+              "type": "ReactNode",
+              "required": true,
+              "description": "Visible field label, associated with the input for assistive tech."
+            },
+            {
+              "name": "description",
+              "type": "ReactNode",
+              "required": false,
+              "description": "Optional helper text shown below the input."
+            },
+            {
+              "name": "errorMessage",
+              "type": "ReactNode | ((validation: ValidationResult) => ReactNode)",
+              "required": false,
+              "description": "Validation message shown when the field is invalid. Accepts a string or a\nfunction of RAC's validation state (for native-constraint messages)."
+            },
+            {
+              "name": "placeholder",
+              "type": "string | undefined",
+              "required": false,
+              "description": "Placeholder text shown in the empty input."
+            },
+            {
+              "name": "className",
+              "type": "string | undefined",
+              "required": false,
+              "description": "Extra class names, merged after the field class."
+            }
+          ]
+        }
+      ],
+      "variants": []
+    },
+    {
+      "name": "Tooltip",
+      "exports": [
+        "Tooltip"
+      ],
+      "status": "experimental",
+      "summary": "A short, supplementary description that appears beside a focusable trigger on hover or keyboard focus.",
+      "useWhen": [
+        "Explaining an unfamiliar icon button without replacing its accessible name.",
+        "Adding a brief hint that is useful but not required to complete the task.",
+        "Describing a focusable interactive trigger in one short phrase."
+      ],
+      "avoidWhen": [
+        {
+          "situation": "Showing interactive controls, links, or rich structured content",
+          "useInstead": "Popover"
+        },
+        {
+          "situation": "Providing instructions that are required to complete a task",
+          "useInstead": "Persistent visible help text"
+        },
+        {
+          "situation": "Attaching supplementary text to a non-focusable element",
+          "useInstead": "Visible text or make the trigger genuinely interactive"
+        }
+      ],
+      "a11yNotes": [
+        "React Aria opens the tooltip on both pointer hover and keyboard focus, with shared warmup/cooldown delays.",
+        "The trigger receives aria-describedby while the tooltip is open, so its text is discoverable to assistive technology.",
+        "Escape, blur, pointer exit, and trigger press dismiss the tooltip as appropriate.",
+        "Tooltip content must remain non-interactive; use Popover when users need to act inside the overlay."
+      ],
+      "relatedComponents": [
+        "Popover",
+        "Button",
+        "Dialog"
+      ],
+      "source": "packages/react/src/Tooltip.tsx",
+      "props": [
+        {
+          "typeName": "TooltipTriggerProps",
+          "kind": "interface",
+          "exported": true,
+          "description": "Props for {@link Tooltip.Trigger}.",
+          "extends": [
+            "AriaTooltipTriggerProps"
+          ],
+          "properties": [
+            {
+              "name": "children",
+              "type": "ReactNode",
+              "required": true,
+              "description": "The focusable trigger followed by its associated {@link Tooltip}."
+            }
+          ]
+        },
+        {
+          "typeName": "TooltipProps",
+          "kind": "interface",
+          "exported": true,
+          "description": "Props for {@link Tooltip}.",
+          "extends": [
+            "Omit<\n  AriaTooltipProps,\n  \"children\" | \"className\" | \"style\"\n>"
+          ],
+          "properties": [
+            {
+              "name": "children",
+              "type": "ReactNode",
+              "required": true,
+              "description": "Supplementary, non-interactive text that describes the trigger."
+            },
+            {
+              "name": "className",
+              "type": "string | undefined",
+              "required": false,
+              "description": "Extra class names, merged after Cedar's placement classes."
+            },
+            {
+              "name": "style",
+              "type": "CSSProperties | undefined",
+              "required": false,
+              "description": "Inline styles merged with React Aria's overlay positioning styles."
+            }
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "name": "side",
+          "options": [
+            "top",
+            "right",
+            "bottom",
+            "left"
+          ]
+        }
+      ]
+    }
+  ],
+  "tokens": {
+    "sources": [
+      {
+        "path": "packages/tokens/src/base/color.json",
+        "tier": "base",
+        "category": "color",
+        "tokens": {
+          "base": {
+            "color": {
+              "white": {
+                "$value": "#ffffff",
+                "$type": "color"
+              },
+              "black": {
+                "$value": "#000000",
+                "$type": "color"
+              },
+              "scrim": {
+                "$value": "rgba(15, 23, 42, 0.5)",
+                "$type": "color"
+              },
+              "gray": {
+                "50": {
+                  "$value": "#f8fafc",
+                  "$type": "color"
+                },
+                "100": {
+                  "$value": "#f1f5f9",
+                  "$type": "color"
+                },
+                "200": {
+                  "$value": "#e2e8f0",
+                  "$type": "color"
+                },
+                "300": {
+                  "$value": "#cbd5e1",
+                  "$type": "color"
+                },
+                "400": {
+                  "$value": "#94a3b8",
+                  "$type": "color"
+                },
+                "500": {
+                  "$value": "#64748b",
+                  "$type": "color"
+                },
+                "600": {
+                  "$value": "#475569",
+                  "$type": "color"
+                },
+                "700": {
+                  "$value": "#334155",
+                  "$type": "color"
+                },
+                "800": {
+                  "$value": "#1e293b",
+                  "$type": "color"
+                },
+                "900": {
+                  "$value": "#0f172a",
+                  "$type": "color"
+                }
+              },
+              "blue": {
+                "50": {
+                  "$value": "#eff6ff",
+                  "$type": "color"
+                },
+                "100": {
+                  "$value": "#dbeafe",
+                  "$type": "color"
+                },
+                "500": {
+                  "$value": "#3b82f6",
+                  "$type": "color"
+                },
+                "600": {
+                  "$value": "#2563eb",
+                  "$type": "color"
+                },
+                "700": {
+                  "$value": "#1d4ed8",
+                  "$type": "color"
+                }
+              },
+              "red": {
+                "50": {
+                  "$value": "#fef2f2",
+                  "$type": "color"
+                },
+                "500": {
+                  "$value": "#ef4444",
+                  "$type": "color"
+                },
+                "600": {
+                  "$value": "#dc2626",
+                  "$type": "color"
+                },
+                "700": {
+                  "$value": "#b91c1c",
+                  "$type": "color"
+                }
+              },
+              "amber": {
+                "50": {
+                  "$value": "#fdf3e7",
+                  "$type": "color"
+                },
+                "500": {
+                  "$value": "#d97706",
+                  "$type": "color"
+                },
+                "600": {
+                  "$value": "#b45309",
+                  "$type": "color"
+                },
+                "700": {
+                  "$value": "#92400e",
+                  "$type": "color"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "packages/tokens/src/base/radius.json",
+        "tier": "base",
+        "category": "radius",
+        "tokens": {
+          "base": {
+            "radius": {
+              "sm": {
+                "$value": "4px",
+                "$type": "dimension"
+              },
+              "md": {
+                "$value": "8px",
+                "$type": "dimension"
+              },
+              "lg": {
+                "$value": "12px",
+                "$type": "dimension"
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "packages/tokens/src/base/size.json",
+        "tier": "base",
+        "category": "size",
+        "tokens": {
+          "base": {
+            "size": {
+              "control": {
+                "sm": {
+                  "$value": "32px",
+                  "$type": "dimension"
+                },
+                "md": {
+                  "$value": "40px",
+                  "$type": "dimension"
+                },
+                "lg": {
+                  "$value": "48px",
+                  "$type": "dimension"
+                }
+              },
+              "border": {
+                "thin": {
+                  "$value": "1px",
+                  "$type": "dimension"
+                },
+                "thick": {
+                  "$value": "2px",
+                  "$type": "dimension"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "packages/tokens/src/base/space.json",
+        "tier": "base",
+        "category": "space",
+        "tokens": {
+          "base": {
+            "space": {
+              "0": {
+                "$value": "0px",
+                "$type": "dimension"
+              },
+              "1": {
+                "$value": "4px",
+                "$type": "dimension"
+              },
+              "2": {
+                "$value": "8px",
+                "$type": "dimension"
+              },
+              "3": {
+                "$value": "12px",
+                "$type": "dimension"
+              },
+              "4": {
+                "$value": "16px",
+                "$type": "dimension"
+              },
+              "6": {
+                "$value": "24px",
+                "$type": "dimension"
+              },
+              "8": {
+                "$value": "32px",
+                "$type": "dimension"
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "packages/tokens/src/base/typography.json",
+        "tier": "base",
+        "category": "typography",
+        "tokens": {
+          "base": {
+            "font": {
+              "family": {
+                "sans": {
+                  "$value": "system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+                  "$type": "fontFamily"
+                },
+                "mono": {
+                  "$value": "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
+                  "$type": "fontFamily"
+                }
+              },
+              "size": {
+                "xs": {
+                  "$value": "12px",
+                  "$type": "dimension"
+                },
+                "sm": {
+                  "$value": "14px",
+                  "$type": "dimension"
+                },
+                "md": {
+                  "$value": "16px",
+                  "$type": "dimension"
+                },
+                "lg": {
+                  "$value": "18px",
+                  "$type": "dimension"
+                },
+                "xl": {
+                  "$value": "24px",
+                  "$type": "dimension"
+                },
+                "2xl": {
+                  "$value": "32px",
+                  "$type": "dimension"
+                }
+              },
+              "weight": {
+                "regular": {
+                  "$value": 400,
+                  "$type": "fontWeight"
+                },
+                "medium": {
+                  "$value": 500,
+                  "$type": "fontWeight"
+                },
+                "semibold": {
+                  "$value": 600,
+                  "$type": "fontWeight"
+                }
+              },
+              "lineHeight": {
+                "tight": {
+                  "$value": 1.2,
+                  "$type": "number"
+                },
+                "normal": {
+                  "$value": 1.5,
+                  "$type": "number"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "packages/tokens/src/component/button.json",
+        "tier": "component",
+        "category": "button",
+        "tokens": {
+          "component": {
+            "button": {
+              "padding-inline": {
+                "sm": {
+                  "$value": "{base.space.3}",
+                  "$type": "dimension"
+                },
+                "md": {
+                  "$value": "{base.space.4}",
+                  "$type": "dimension"
+                },
+                "lg": {
+                  "$value": "{base.space.6}",
+                  "$type": "dimension"
+                }
+              },
+              "height": {
+                "sm": {
+                  "$value": "{base.size.control.sm}",
+                  "$type": "dimension"
+                },
+                "md": {
+                  "$value": "{base.size.control.md}",
+                  "$type": "dimension"
+                },
+                "lg": {
+                  "$value": "{base.size.control.lg}",
+                  "$type": "dimension"
+                }
+              },
+              "font-size": {
+                "sm": {
+                  "$value": "{base.font.size.sm}",
+                  "$type": "dimension"
+                },
+                "md": {
+                  "$value": "{base.font.size.sm}",
+                  "$type": "dimension"
+                },
+                "lg": {
+                  "$value": "{base.font.size.md}",
+                  "$type": "dimension"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "packages/tokens/src/component/checkbox.json",
+        "tier": "component",
+        "category": "checkbox",
+        "tokens": {
+          "component": {
+            "checkbox": {
+              "control-size": {
+                "$value": "{base.size.control.sm}",
+                "$type": "dimension"
+              },
+              "indicator-size": {
+                "$value": "{base.space.4}",
+                "$type": "dimension"
+              },
+              "indicator-radius": {
+                "$value": "{base.radius.sm}",
+                "$type": "dimension"
+              },
+              "label-gap": {
+                "$value": "{semantic.space.gap.sm}",
+                "$type": "dimension"
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "packages/tokens/src/component/dialog.json",
+        "tier": "component",
+        "category": "dialog",
+        "tokens": {
+          "component": {
+            "dialog": {
+              "max-width": {
+                "$value": "512px",
+                "$type": "dimension"
+              },
+              "padding": {
+                "$value": "{base.space.6}",
+                "$type": "dimension"
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "packages/tokens/src/component/heading.json",
+        "tier": "component",
+        "category": "heading",
+        "tokens": {
+          "component": {
+            "heading": {
+              "font": {
+                "family": {
+                  "$value": "{semantic.font.body.family}",
+                  "$type": "fontFamily"
+                },
+                "size": {
+                  "xs": {
+                    "$value": "{semantic.font.size.xs}",
+                    "$type": "dimension"
+                  },
+                  "sm": {
+                    "$value": "{semantic.font.size.sm}",
+                    "$type": "dimension"
+                  },
+                  "md": {
+                    "$value": "{semantic.font.size.md}",
+                    "$type": "dimension"
+                  },
+                  "lg": {
+                    "$value": "{semantic.font.size.lg}",
+                    "$type": "dimension"
+                  },
+                  "xl": {
+                    "$value": "{semantic.font.size.xl}",
+                    "$type": "dimension"
+                  },
+                  "2xl": {
+                    "$value": "{semantic.font.size.2xl}",
+                    "$type": "dimension"
+                  }
+                },
+                "weight": {
+                  "regular": {
+                    "$value": "{semantic.font.weight.regular}",
+                    "$type": "fontWeight"
+                  },
+                  "medium": {
+                    "$value": "{semantic.font.weight.medium}",
+                    "$type": "fontWeight"
+                  },
+                  "semibold": {
+                    "$value": "{semantic.font.weight.semibold}",
+                    "$type": "fontWeight"
+                  }
+                }
+              },
+              "line-height": {
+                "tight": {
+                  "$value": "{semantic.font.line-height.tight}",
+                  "$type": "number"
+                }
+              },
+              "color": {
+                "default": {
+                  "$value": "{semantic.color.text.default}",
+                  "$type": "color"
+                },
+                "muted": {
+                  "$value": "{semantic.color.text.muted}",
+                  "$type": "color"
+                },
+                "accent": {
+                  "$value": "{semantic.color.text.accent}",
+                  "$type": "color"
+                },
+                "danger": {
+                  "$value": "{semantic.color.text.danger}",
+                  "$type": "color"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "packages/tokens/src/component/popover.json",
+        "tier": "component",
+        "category": "popover",
+        "tokens": {
+          "component": {
+            "popover": {
+              "background": {
+                "$value": "{semantic.color.surface.raised}",
+                "$type": "color"
+              },
+              "text": {
+                "$value": "{semantic.color.text.default}",
+                "$type": "color"
+              },
+              "border-color": {
+                "$value": "{semantic.color.border.default}",
+                "$type": "color"
+              },
+              "border-width": {
+                "$value": "{semantic.border.width}",
+                "$type": "dimension"
+              },
+              "radius": {
+                "$value": "{semantic.radius.overlay}",
+                "$type": "dimension"
+              },
+              "padding": {
+                "$value": "{semantic.space.inset.md}",
+                "$type": "dimension"
+              },
+              "max-width": {
+                "sm": {
+                  "$value": "192px",
+                  "$type": "dimension"
+                },
+                "md": {
+                  "$value": "320px",
+                  "$type": "dimension"
+                },
+                "lg": {
+                  "$value": "448px",
+                  "$type": "dimension"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "packages/tokens/src/component/radio-group.json",
+        "tier": "component",
+        "category": "radio-group",
+        "tokens": {
+          "component": {
+            "radio-group": {
+              "gap": {
+                "$value": "{semantic.space.stack.md}",
+                "$type": "dimension"
+              },
+              "options-gap": {
+                "$value": "{semantic.space.gap.sm}",
+                "$type": "dimension"
+              },
+              "radio-gap": {
+                "$value": "{semantic.space.gap.sm}",
+                "$type": "dimension"
+              },
+              "control-size": {
+                "$value": "{semantic.space.inset.lg}",
+                "$type": "dimension"
+              },
+              "indicator-size": {
+                "$value": "{semantic.space.inset.sm}",
+                "$type": "dimension"
+              },
+              "background": {
+                "$value": "{semantic.color.surface.raised}",
+                "$type": "color"
+              },
+              "border-rest": {
+                "$value": "{semantic.color.border.strong}",
+                "$type": "color"
+              },
+              "border-hover": {
+                "$value": "{semantic.color.action.hover}",
+                "$type": "color"
+              },
+              "border-selected": {
+                "$value": "{semantic.color.action.rest}",
+                "$type": "color"
+              },
+              "border-invalid": {
+                "$value": "{semantic.color.danger.rest}",
+                "$type": "color"
+              },
+              "indicator-selected": {
+                "$value": "{semantic.color.action.rest}",
+                "$type": "color"
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "packages/tokens/src/component/switch.json",
+        "tier": "component",
+        "category": "switch",
+        "tokens": {
+          "component": {
+            "switch": {
+              "track": {
+                "width": {
+                  "sm": {
+                    "$value": "{base.size.control.sm}",
+                    "$type": "dimension"
+                  },
+                  "md": {
+                    "$value": "{base.size.control.md}",
+                    "$type": "dimension"
+                  },
+                  "lg": {
+                    "$value": "{base.size.control.lg}",
+                    "$type": "dimension"
+                  }
+                },
+                "height": {
+                  "sm": {
+                    "$value": "{base.space.4}",
+                    "$type": "dimension"
+                  },
+                  "md": {
+                    "$value": "{base.space.6}",
+                    "$type": "dimension"
+                  },
+                  "lg": {
+                    "$value": "{base.space.8}",
+                    "$type": "dimension"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "packages/tokens/src/component/tabs.json",
+        "tier": "component",
+        "category": "tabs",
+        "tokens": {
+          "component": {
+            "tabs": {
+              "content-gap": {
+                "$value": "{base.space.2}",
+                "$type": "dimension"
+              },
+              "list-gap": {
+                "$value": "{base.space.1}",
+                "$type": "dimension"
+              },
+              "tab": {
+                "height": {
+                  "$value": "{base.size.control.md}",
+                  "$type": "dimension"
+                },
+                "padding-inline": {
+                  "$value": "{base.space.3}",
+                  "$type": "dimension"
+                },
+                "font-size": {
+                  "$value": "{base.font.size.sm}",
+                  "$type": "dimension"
+                }
+              },
+              "panel": {
+                "padding-block": {
+                  "$value": "{base.space.3}",
+                  "$type": "dimension"
+                },
+                "padding-inline": {
+                  "$value": "{base.space.1}",
+                  "$type": "dimension"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "packages/tokens/src/component/text.json",
+        "tier": "component",
+        "category": "text",
+        "tokens": {
+          "component": {
+            "text": {
+              "font": {
+                "family": {
+                  "$value": "{semantic.font.body.family}",
+                  "$type": "fontFamily"
+                },
+                "size": {
+                  "xs": {
+                    "$value": "{semantic.font.size.xs}",
+                    "$type": "dimension"
+                  },
+                  "sm": {
+                    "$value": "{semantic.font.size.sm}",
+                    "$type": "dimension"
+                  },
+                  "md": {
+                    "$value": "{semantic.font.size.md}",
+                    "$type": "dimension"
+                  },
+                  "lg": {
+                    "$value": "{semantic.font.size.lg}",
+                    "$type": "dimension"
+                  },
+                  "xl": {
+                    "$value": "{semantic.font.size.xl}",
+                    "$type": "dimension"
+                  },
+                  "2xl": {
+                    "$value": "{semantic.font.size.2xl}",
+                    "$type": "dimension"
+                  }
+                },
+                "weight": {
+                  "regular": {
+                    "$value": "{semantic.font.weight.regular}",
+                    "$type": "fontWeight"
+                  },
+                  "medium": {
+                    "$value": "{semantic.font.weight.medium}",
+                    "$type": "fontWeight"
+                  },
+                  "semibold": {
+                    "$value": "{semantic.font.weight.semibold}",
+                    "$type": "fontWeight"
+                  }
+                }
+              },
+              "line-height": {
+                "normal": {
+                  "$value": "{semantic.font.line-height.normal}",
+                  "$type": "number"
+                }
+              },
+              "color": {
+                "default": {
+                  "$value": "{semantic.color.text.default}",
+                  "$type": "color"
+                },
+                "muted": {
+                  "$value": "{semantic.color.text.muted}",
+                  "$type": "color"
+                },
+                "accent": {
+                  "$value": "{semantic.color.text.accent}",
+                  "$type": "color"
+                },
+                "danger": {
+                  "$value": "{semantic.color.text.danger}",
+                  "$type": "color"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "packages/tokens/src/component/textfield.json",
+        "tier": "component",
+        "category": "textfield",
+        "tokens": {
+          "component": {
+            "textfield": {
+              "height": {
+                "$value": "{base.size.control.md}",
+                "$type": "dimension"
+              },
+              "padding-inline": {
+                "$value": "{base.space.3}",
+                "$type": "dimension"
+              },
+              "font-size": {
+                "$value": "{base.font.size.md}",
+                "$type": "dimension"
+              },
+              "gap": {
+                "$value": "{base.space.1}",
+                "$type": "dimension"
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "packages/tokens/src/component/tooltip.json",
+        "tier": "component",
+        "category": "tooltip",
+        "tokens": {
+          "component": {
+            "tooltip": {
+              "background": {
+                "$value": "{semantic.color.text.default}",
+                "$type": "color"
+              },
+              "foreground": {
+                "$value": "{semantic.color.surface.raised}",
+                "$type": "color"
+              },
+              "padding-block": {
+                "$value": "{base.space.1}",
+                "$type": "dimension"
+              },
+              "padding-inline": {
+                "$value": "{base.space.2}",
+                "$type": "dimension"
+              },
+              "font-size": {
+                "$value": "{base.font.size.xs}",
+                "$type": "dimension"
+              },
+              "max-width": {
+                "$value": "256px",
+                "$type": "dimension"
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "packages/tokens/src/semantic/color.json",
+        "tier": "semantic",
+        "category": "color",
+        "tokens": {
+          "semantic": {
+            "color": {
+              "text": {
+                "default": {
+                  "$value": "{base.color.gray.900}",
+                  "$type": "color"
+                },
+                "muted": {
+                  "$value": "{base.color.gray.500}",
+                  "$type": "color"
+                },
+                "on-action": {
+                  "$value": "{base.color.white}",
+                  "$type": "color"
+                },
+                "accent": {
+                  "$value": "{base.color.blue.600}",
+                  "$type": "color"
+                },
+                "danger": {
+                  "$value": "{base.color.red.600}",
+                  "$type": "color"
+                }
+              },
+              "surface": {
+                "page": {
+                  "$value": "{base.color.white}",
+                  "$type": "color"
+                },
+                "raised": {
+                  "$value": "{base.color.white}",
+                  "$type": "color"
+                },
+                "sunken": {
+                  "$value": "{base.color.gray.50}",
+                  "$type": "color"
+                }
+              },
+              "border": {
+                "default": {
+                  "$value": "{base.color.gray.300}",
+                  "$type": "color"
+                },
+                "strong": {
+                  "$value": "{base.color.gray.400}",
+                  "$type": "color"
+                }
+              },
+              "action": {
+                "rest": {
+                  "$value": "{base.color.blue.600}",
+                  "$type": "color"
+                },
+                "hover": {
+                  "$value": "{base.color.blue.700}",
+                  "$type": "color"
+                },
+                "active": {
+                  "$value": "{base.color.blue.700}",
+                  "$type": "color"
+                },
+                "subtle": {
+                  "$value": "{base.color.blue.50}",
+                  "$type": "color"
+                }
+              },
+              "danger": {
+                "rest": {
+                  "$value": "{base.color.red.600}",
+                  "$type": "color"
+                },
+                "hover": {
+                  "$value": "{base.color.red.700}",
+                  "$type": "color"
+                },
+                "subtle": {
+                  "$value": "{base.color.red.50}",
+                  "$type": "color"
+                }
+              },
+              "focus-ring": {
+                "$value": "{base.color.blue.500}",
+                "$type": "color"
+              },
+              "overlay-scrim": {
+                "$value": "{base.color.scrim}",
+                "$type": "color"
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "packages/tokens/src/semantic/radius.json",
+        "tier": "semantic",
+        "category": "radius",
+        "tokens": {
+          "semantic": {
+            "radius": {
+              "control": {
+                "$value": "{base.radius.md}",
+                "$type": "dimension"
+              },
+              "overlay": {
+                "$value": "{base.radius.lg}",
+                "$type": "dimension"
+              }
+            },
+            "border": {
+              "width": {
+                "$value": "{base.size.border.thin}",
+                "$type": "dimension"
+              }
+            },
+            "focus-ring": {
+              "width": {
+                "$value": "{base.size.border.thick}",
+                "$type": "dimension"
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "packages/tokens/src/semantic/space.json",
+        "tier": "semantic",
+        "category": "space",
+        "tokens": {
+          "semantic": {
+            "space": {
+              "inset": {
+                "none": {
+                  "$value": "{base.space.0}",
+                  "$type": "dimension"
+                },
+                "sm": {
+                  "$value": "{base.space.2}",
+                  "$type": "dimension"
+                },
+                "md": {
+                  "$value": "{base.space.3}",
+                  "$type": "dimension"
+                },
+                "lg": {
+                  "$value": "{base.space.4}",
+                  "$type": "dimension"
+                }
+              },
+              "stack": {
+                "none": {
+                  "$value": "{base.space.0}",
+                  "$type": "dimension"
+                },
+                "sm": {
+                  "$value": "{base.space.1}",
+                  "$type": "dimension"
+                },
+                "md": {
+                  "$value": "{base.space.2}",
+                  "$type": "dimension"
+                },
+                "lg": {
+                  "$value": "{base.space.4}",
+                  "$type": "dimension"
+                }
+              },
+              "gap": {
+                "none": {
+                  "$value": "{base.space.0}",
+                  "$type": "dimension"
+                },
+                "sm": {
+                  "$value": "{base.space.2}",
+                  "$type": "dimension"
+                },
+                "md": {
+                  "$value": "{base.space.3}",
+                  "$type": "dimension"
+                },
+                "lg": {
+                  "$value": "{base.space.4}",
+                  "$type": "dimension"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "packages/tokens/src/semantic/typography.json",
+        "tier": "semantic",
+        "category": "typography",
+        "tokens": {
+          "semantic": {
+            "font": {
+              "body": {
+                "family": {
+                  "$value": "{base.font.family.sans}",
+                  "$type": "fontFamily"
+                },
+                "size": {
+                  "$value": "{base.font.size.md}",
+                  "$type": "dimension"
+                },
+                "weight": {
+                  "$value": "{base.font.weight.regular}",
+                  "$type": "fontWeight"
+                },
+                "line-height": {
+                  "$value": "{base.font.lineHeight.normal}",
+                  "$type": "number"
+                }
+              },
+              "label": {
+                "size": {
+                  "$value": "{base.font.size.sm}",
+                  "$type": "dimension"
+                },
+                "weight": {
+                  "$value": "{base.font.weight.medium}",
+                  "$type": "fontWeight"
+                }
+              },
+              "size": {
+                "xs": {
+                  "$value": "{base.font.size.xs}",
+                  "$type": "dimension"
+                },
+                "sm": {
+                  "$value": "{base.font.size.sm}",
+                  "$type": "dimension"
+                },
+                "md": {
+                  "$value": "{base.font.size.md}",
+                  "$type": "dimension"
+                },
+                "lg": {
+                  "$value": "{base.font.size.lg}",
+                  "$type": "dimension"
+                },
+                "xl": {
+                  "$value": "{base.font.size.xl}",
+                  "$type": "dimension"
+                },
+                "2xl": {
+                  "$value": "{base.font.size.2xl}",
+                  "$type": "dimension"
+                }
+              },
+              "weight": {
+                "regular": {
+                  "$value": "{base.font.weight.regular}",
+                  "$type": "fontWeight"
+                },
+                "medium": {
+                  "$value": "{base.font.weight.medium}",
+                  "$type": "fontWeight"
+                },
+                "semibold": {
+                  "$value": "{base.font.weight.semibold}",
+                  "$type": "fontWeight"
+                }
+              },
+              "line-height": {
+                "tight": {
+                  "$value": "{base.font.lineHeight.tight}",
+                  "$type": "number"
+                },
+                "normal": {
+                  "$value": "{base.font.lineHeight.normal}",
+                  "$type": "number"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "packages/tokens/src/themes/cedar/color.json",
+        "tier": "themes",
+        "theme": "cedar",
+        "category": "color",
+        "tokens": {
+          "semantic": {
+            "color": {
+              "text": {
+                "accent": {
+                  "$value": "{base.color.amber.600}",
+                  "$type": "color"
+                }
+              },
+              "action": {
+                "rest": {
+                  "$value": "{base.color.amber.600}",
+                  "$type": "color"
+                },
+                "hover": {
+                  "$value": "{base.color.amber.700}",
+                  "$type": "color"
+                },
+                "active": {
+                  "$value": "{base.color.amber.700}",
+                  "$type": "color"
+                },
+                "subtle": {
+                  "$value": "{base.color.amber.50}",
+                  "$type": "color"
+                }
+              },
+              "focus-ring": {
+                "$value": "{base.color.amber.500}",
+                "$type": "color"
+              }
+            }
+          }
+        }
+      },
+      {
+        "path": "packages/tokens/src/themes/dark/color.json",
+        "tier": "themes",
+        "theme": "dark",
+        "category": "color",
+        "tokens": {
+          "semantic": {
+            "color": {
+              "text": {
+                "default": {
+                  "$value": "{base.color.gray.50}",
+                  "$type": "color"
+                },
+                "muted": {
+                  "$value": "{base.color.gray.400}",
+                  "$type": "color"
+                },
+                "accent": {
+                  "$value": "{base.color.blue.500}",
+                  "$type": "color"
+                },
+                "danger": {
+                  "$value": "{base.color.red.500}",
+                  "$type": "color"
+                }
+              },
+              "surface": {
+                "page": {
+                  "$value": "{base.color.gray.900}",
+                  "$type": "color"
+                },
+                "raised": {
+                  "$value": "{base.color.gray.800}",
+                  "$type": "color"
+                },
+                "sunken": {
+                  "$value": "{base.color.gray.900}",
+                  "$type": "color"
+                }
+              },
+              "border": {
+                "default": {
+                  "$value": "{base.color.gray.700}",
+                  "$type": "color"
+                },
+                "strong": {
+                  "$value": "{base.color.gray.600}",
+                  "$type": "color"
+                }
+              },
+              "action": {
+                "rest": {
+                  "$value": "{base.color.blue.500}",
+                  "$type": "color"
+                },
+                "hover": {
+                  "$value": "{base.color.blue.600}",
+                  "$type": "color"
+                },
+                "active": {
+                  "$value": "{base.color.blue.600}",
+                  "$type": "color"
+                },
+                "subtle": {
+                  "$value": "{base.color.blue.700}",
+                  "$type": "color"
+                }
+              },
+              "danger": {
+                "rest": {
+                  "$value": "{base.color.red.500}",
+                  "$type": "color"
+                }
+              },
+              "focus-ring": {
+                "$value": "{base.color.blue.500}",
+                "$type": "color"
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}
