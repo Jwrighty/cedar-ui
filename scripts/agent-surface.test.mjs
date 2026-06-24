@@ -1,6 +1,11 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { buildComponentCatalog, renderLlmsTxt } from "./agent-surface.mjs";
+import {
+  buildComponentCatalog,
+  renderLlmsTxt,
+  renderManifest,
+  renderManifestSchema,
+} from "./agent-surface.mjs";
 
 test("renders llms.txt from component metadata", () => {
   const rendered = renderLlmsTxt([
@@ -100,4 +105,88 @@ test("fails when a public component export is missing from the catalog", () => {
       }),
     /Agent component catalog is missing public exports: UnlistedComponent/,
   );
+});
+
+test("renders a manifest from component metadata, props, variants, and tokens", () => {
+  const manifest = renderManifest({
+    componentCatalog: [
+      {
+        name: "Button",
+        exports: ["Button"],
+        meta: {
+          summary: "Triggers an action.",
+          useWhen: ["A user confirms something."],
+          avoidWhen: [
+            { situation: "Navigating somewhere", useInstead: "Link" },
+          ],
+          a11yNotes: ["Keyboard activation is supported."],
+          relatedComponents: ["Link"],
+          status: "experimental",
+        },
+      },
+    ],
+    componentDocs: {
+      Button: {
+        source: "packages/react/src/Button.tsx",
+        props: [
+          {
+            typeName: "ButtonProps",
+            kind: "interface",
+            exported: true,
+            extends: ["AriaButtonProps"],
+            properties: [
+              {
+                name: "variant",
+                type: 'ButtonVariants["variant"]',
+                required: false,
+                default: '"primary"',
+                description: "Visual emphasis.",
+              },
+            ],
+          },
+        ],
+        variants: [{ name: "variant", options: ["primary", "secondary"] }],
+      },
+    },
+    tokenSources: [
+      {
+        path: "packages/tokens/src/base/color.json",
+        tier: "base",
+        category: "color",
+        tokens: { blue: { 500: { $value: "#006adc" } } },
+      },
+    ],
+    packages: {
+      react: { name: "@jwrighty/cedar-react", version: "0.2.0" },
+      tokens: { name: "@jwrighty/cedar-tokens", version: "0.2.0" },
+    },
+  });
+
+  assert.equal(manifest.schemaVersion, 1);
+  assert.equal(manifest.components[0].name, "Button");
+  assert.deepEqual(manifest.components[0].variants[0].options, [
+    "primary",
+    "secondary",
+  ]);
+  assert.equal(
+    manifest.components[0].props[0].properties[0].default,
+    '"primary"',
+  );
+  assert.equal(manifest.tokens.sources[0].tier, "base");
+});
+
+test("renders a schema for the manifest contract", () => {
+  const schema = renderManifestSchema();
+
+  assert.equal(schema.title, "Cedar agent manifest");
+  assert.deepEqual(schema.required, [
+    "schemaVersion",
+    "name",
+    "packages",
+    "generatedFrom",
+    "components",
+    "tokens",
+  ]);
+  assert.ok(schema.$defs.component);
+  assert.ok(schema.$defs.prop);
 });

@@ -32,9 +32,13 @@
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
+    "./cedar.manifest.json": "./cedar.manifest.json",
+    "./cedar.manifest.schema.json": "./cedar.manifest.schema.json",
     "./styles.css": "./dist/styles.css"
   },
   "files": [
+    "cedar.manifest.json",
+    "cedar.manifest.schema.json",
     "dist"
   ],
   "publishConfig": {
