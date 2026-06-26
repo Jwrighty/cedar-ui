@@ -7,9 +7,14 @@ import {
 } from "./catalog.js";
 import type { CedarManifest } from "./types.js";
 
+/**
+ * Build the Cedar MCP server over a loaded {@link CedarManifest}, registering
+ * the `list_components`, `get_component_usage`, and `get_tokens` tools. The
+ * caller is responsible for connecting it to a transport (see `cli.ts`).
+ */
 export function createCedarMcpServer(manifest: CedarManifest): McpServer {
   const server = new McpServer({
-    name: "@cedar-ui/mcp",
+    name: "@jwrighty/cedar-mcp",
     version: packageVersion(manifest),
   });
 

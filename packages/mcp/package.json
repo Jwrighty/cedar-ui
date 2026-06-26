@@ -1,5 +1,5 @@
 {
-  "name": "@cedar-ui/mcp",
+  "name": "@jwrighty/cedar-mcp",
   "version": "0.2.0",
   "description": "MCP server exposing Cedar's agent-consumable component manifest and token reference.",
   "license": "MIT",
@@ -39,7 +39,7 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.json && chmod +x dist/cli.js",
-    "test": "pnpm build && node --test test/*.test.mjs",
+    "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
@@ -48,6 +48,7 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@types/node": "^22.10.5"
+    "@types/node": "^22.10.5",
+    "vitest": "^4.1.9"
   }
 }

@@ -7,7 +7,7 @@ export { loadManifest } from "./manifest.js";
 export { createCedarMcpServer } from "./server.js";
 export type {
   CedarManifest,
-  ComponentMeta,
   ComponentSummary,
+  ManifestComponent,
   TokenReference,
 } from "./types.js";

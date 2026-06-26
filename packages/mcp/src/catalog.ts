@@ -1,13 +1,17 @@
 import type {
   CedarManifest,
-  ComponentMeta,
   ComponentSummary,
+  ManifestComponent,
   TokenMatch,
   TokenNode,
   TokenReference,
   TokenSource,
 } from "./types.js";
 
+/**
+ * Condense every component in the manifest to its name, summary, status, and
+ * public exports — the catalogue an agent scans before drilling into one.
+ */
 export function listComponents(manifest: CedarManifest): ComponentSummary[] {
   return manifest.components.map((component) => ({
     name: component.name,
@@ -17,10 +21,15 @@ export function listComponents(manifest: CedarManifest): ComponentSummary[] {
   }));
 }
 
+/**
+ * Look up the full {@link ManifestComponent} for a component by its name or any
+ * of its public exports (case-insensitive). Throws — listing the available
+ * components — when nothing matches, so the agent gets an actionable error.
+ */
 export function getComponentUsage(
   manifest: CedarManifest,
   name: string,
-): ComponentMeta {
+): ManifestComponent {
   const normalizedName = normalize(name);
   const component = manifest.components.find(
     (candidate) =>
@@ -36,6 +45,12 @@ export function getComponentUsage(
   return component;
 }
 
+/**
+ * Return Cedar's token reference. With no query, returns every token source
+ * untouched; with a query, returns the sources that match plus the individual
+ * token hits, searching path, tier, category, theme, type, value, and
+ * description (all case-insensitive).
+ */
 export function getTokens(
   manifest: CedarManifest,
   query?: string,

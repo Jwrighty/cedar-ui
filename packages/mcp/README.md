@@ -1,4 +1,4 @@
-# @cedar-ui/mcp
+# @jwrighty/cedar-mcp
 
 MCP server for Cedar's agent-consumable surface. It exposes the generated
 `cedar.manifest.json` as tools an MCP client can call while coding, so component
@@ -8,14 +8,14 @@ the same source of truth as `llms.txt`.
 ## Install
 
 ```sh
-pnpm add @cedar-ui/mcp
+pnpm add @jwrighty/cedar-mcp
 ```
 
 For local development in this repo:
 
 ```sh
-pnpm --filter @cedar-ui/mcp build
-pnpm --filter @cedar-ui/mcp test
+pnpm --filter @jwrighty/cedar-mcp build
+pnpm --filter @jwrighty/cedar-mcp test
 ```
 
 The server reads `@jwrighty/cedar-react/cedar.manifest.json` by default. To test
