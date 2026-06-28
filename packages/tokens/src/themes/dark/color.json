@@ -2,29 +2,29 @@
   "semantic": {
     "color": {
       "text": {
-        "default": { "$value": "{base.color.warm.50}", "$type": "color" },
-        "muted": { "$value": "{base.color.warm.400}", "$type": "color" },
-        "on-action": { "$value": "{base.color.warm.900}", "$type": "color" },
-        "accent": { "$value": "{base.color.teal.400}", "$type": "color" },
-        "danger": { "$value": "{base.color.red.500}", "$type": "color" }
+        "default": { "$value": "{base.color.neutral.100}", "$type": "color" },
+        "muted": { "$value": "{base.color.neutral.400}", "$type": "color" },
+        "on-action": { "$value": "{base.color.teal.900}", "$type": "color" },
+        "accent": { "$value": "{base.color.teal.300}", "$type": "color" },
+        "danger": { "$value": "{base.color.red.400}", "$type": "color" }
       },
       "surface": {
-        "page": { "$value": "{base.color.warm.900}", "$type": "color" },
-        "raised": { "$value": "{base.color.warm.800}", "$type": "color" },
-        "sunken": { "$value": "{base.color.warm.900}", "$type": "color" }
+        "page": { "$value": "{base.color.neutral.950}", "$type": "color" },
+        "raised": { "$value": "{base.color.neutral.900}", "$type": "color" },
+        "sunken": { "$value": "{base.color.neutral.850}", "$type": "color" }
       },
       "border": {
-        "default": { "$value": "{base.color.warm.700}", "$type": "color" },
-        "strong": { "$value": "{base.color.warm.600}", "$type": "color" }
+        "default": { "$value": "{base.color.neutral.800}", "$type": "color" },
+        "strong": { "$value": "{base.color.neutral.700}", "$type": "color" }
       },
       "action": {
-        "rest": { "$value": "{base.color.teal.400}", "$type": "color" },
-        "hover": { "$value": "{base.color.teal.300}", "$type": "color" },
-        "active": { "$value": "{base.color.teal.300}", "$type": "color" },
-        "subtle": { "$value": "{base.color.teal.800}", "$type": "color" }
+        "rest": { "$value": "{base.color.teal.300}", "$type": "color" },
+        "hover": { "$value": "{base.color.teal.200}", "$type": "color" },
+        "active": { "$value": "{base.color.teal.400}", "$type": "color" },
+        "subtle": { "$value": "{base.color.neutral.800}", "$type": "color" }
       },
       "danger": {
-        "rest": { "$value": "{base.color.red.500}", "$type": "color" }
+        "rest": { "$value": "{base.color.red.400}", "$type": "color" }
       },
       "status": {
         "running": {
@@ -32,7 +32,7 @@
             "$value": "{base.color.amber.400}",
             "$type": "color"
           },
-          "surface": { "$value": "{base.color.warm.800}", "$type": "color" },
+          "surface": { "$value": "{base.color.neutral.850}", "$type": "color" },
           "border": { "$value": "{base.color.amber.500}", "$type": "color" }
         },
         "success": {
@@ -40,26 +40,26 @@
             "$value": "{base.color.green.400}",
             "$type": "color"
           },
-          "surface": { "$value": "{base.color.warm.800}", "$type": "color" },
+          "surface": { "$value": "{base.color.neutral.850}", "$type": "color" },
           "border": { "$value": "{base.color.green.500}", "$type": "color" }
         },
         "error": {
           "foreground": { "$value": "{base.color.red.400}", "$type": "color" },
-          "surface": { "$value": "{base.color.warm.800}", "$type": "color" },
+          "surface": { "$value": "{base.color.neutral.850}", "$type": "color" },
           "border": { "$value": "{base.color.red.500}", "$type": "color" }
         }
       },
       "chart": {
         "categorical": {
-          "one": { "$value": "{base.color.teal.400}", "$type": "color" },
+          "one": { "$value": "{base.color.teal.300}", "$type": "color" },
           "two": { "$value": "{base.color.blue.500}", "$type": "color" },
           "three": { "$value": "{base.color.violet.500}", "$type": "color" },
-          "four": { "$value": "{base.color.amber.500}", "$type": "color" },
-          "five": { "$value": "{base.color.red.500}", "$type": "color" },
+          "four": { "$value": "{base.color.amber.400}", "$type": "color" },
+          "five": { "$value": "{base.color.green.400}", "$type": "color" },
           "six": { "$value": "{base.color.cyan.500}", "$type": "color" }
         },
-        "axis": { "$value": "{base.color.warm.500}", "$type": "color" },
-        "grid": { "$value": "{base.color.warm.700}", "$type": "color" }
+        "axis": { "$value": "{base.color.neutral.500}", "$type": "color" },
+        "grid": { "$value": "{base.color.neutral.800}", "$type": "color" }
       },
       "focus-ring": { "$value": "{base.color.teal.400}", "$type": "color" }
     }

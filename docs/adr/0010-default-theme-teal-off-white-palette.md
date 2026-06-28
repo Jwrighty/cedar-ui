@@ -1,5 +1,11 @@
 # Default theme palette: teal accent on warm off-white neutrals
 
+> **Superseded by [ADR 0011](0011-default-theme-mint-neutral-palette.md).** The warm
+> off-white surfaces read with a brown/green tint and the dark-teal accent looked like
+> deep green as text; the default themes were re-pointed to a mint fill on pure-neutral
+> surfaces. Kept for history; the AA methodology and the dark-status-pill fix carried
+> forward.
+
 Cedar's default `light` and `dark` themes adopt the **observe** visual identity: a
 Helicone-adjacent system of warm off-white surfaces on a slightly-greyed page, with a
 single **teal** primary accent. The palette lives entirely in `@jwrighty/cedar-tokens`

@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 
 /**
  * Foundational palette reference. Renders the default `light` and `dark` themes
- * side by side so the off-white/teal identity and its WCAG-AA status + chart
+ * side by side so the mint-on-neutral identity and its WCAG-AA status + chart
  * colours can be compared at a glance. Every swatch resolves through a semantic
  * token — there are no hardcoded hexes here — so this page tracks the tokens
  * automatically. The `themeCompare` parameter tells the global decorator to step
@@ -160,7 +160,7 @@ function Panel({ title, theme }: { title: string; theme?: "dark" }) {
           <ChipRow items={TEXT} />
         </section>
         <section>
-          <p style={groupLabel}>Action (teal accent)</p>
+          <p style={groupLabel}>Action (mint accent)</p>
           <ChipRow items={ACTION} />
         </section>
         <section>

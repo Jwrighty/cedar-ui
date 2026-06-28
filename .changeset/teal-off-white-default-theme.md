@@ -2,9 +2,9 @@
 "@jwrighty/cedar-tokens": minor
 ---
 
-Redefine the default light and dark themes around the observe identity: warm
-off-white surfaces on a greyed page with a single teal accent. Adds `teal` and
-`warm` base colour ramps (plus lighter `400` steps for amber/red/green),
-re-points the `light` and `dark` semantic colour tokens, makes the categorical
-chart palette teal-led, and re-models the dark status pills to a subtle neutral
-tint so status foregrounds clear WCAG AA in both themes.
+Redefine the default light and dark themes: a bright mint accent (`#72e3ad` fill
+with near-black label) on pure-neutral surfaces — near-white in light, near-black
+(`#121212`) in dark. Adds a `neutral` base ramp, re-points the `teal` ramp
+mint-forward, removes the `warm` ramp, makes `text.on-action` dark, keeps the
+chart palette mint-led (visible 600 steps on light, bright on dark), and keeps
+status/danger AA in both themes. See ADR 0011.

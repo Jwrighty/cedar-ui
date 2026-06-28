@@ -26,10 +26,10 @@ test("observe motion tokens are exposed as semantic CSS variables and typed expo
 });
 
 test("observe status and chart colour tokens are themeable and exported", () => {
-  // Status keeps its green identity, distinct from the teal accent.
+  // Status keeps its green identity, distinct from the mint accent.
   assert.equal(tokens.semantic.color.status.success.foreground, "#047857");
-  // Chart palette is teal-led after the default-theme palette change.
-  assert.equal(tokens.semantic.color.chart.categorical.one, "#168a64");
+  // Chart palette is teal/mint-led; on light it uses the visible 600 step.
+  assert.equal(tokens.semantic.color.chart.categorical.one, "#0f9466");
 
   assert.match(css, /--semantic-color-status-running-foreground:/);
   assert.match(css, /--semantic-color-chart-categorical-six:/);
@@ -43,51 +43,61 @@ test("observe status and chart colour tokens are themeable and exported", () => 
   );
 });
 
-test("teal accent and warm neutral base ramps exist", () => {
-  // Brand anchor and the steps the semantic layer leans on.
-  assert.equal(tokens.base.color.teal["500"], "#1d9e75");
-  assert.equal(tokens.base.color.teal["700"], "#15795a");
-  assert.equal(tokens.base.color.teal["400"], "#38bd93");
-  assert.equal(tokens.base.color.warm["50"], "#fbfaf8");
-  assert.equal(tokens.base.color.warm["100"], "#f5f3ef");
-  assert.equal(tokens.base.color.warm["900"], "#1c1a17");
+test("mint accent and neutral base ramps exist", () => {
+  // Mint-forward accent ramp: 300 is the bright fill, 900 the on-fill text.
+  assert.equal(tokens.base.color.teal["300"], "#72e3ad");
+  assert.equal(tokens.base.color.teal["700"], "#147a54");
+  assert.equal(tokens.base.color.teal["900"], "#1e2723");
+  // Pure-neutral surfaces ramp (no warm tint); the warm ramp is gone.
+  assert.equal(tokens.base.color.neutral["50"], "#fcfcfc");
+  assert.equal(tokens.base.color.neutral["900"], "#171717");
+  assert.equal(tokens.base.color.neutral["950"], "#121212");
+  assert.equal(tokens.base.color.warm, undefined);
 
-  assert.match(css, /--base-color-teal-500:\s*#1d9e75/);
-  assert.match(css, /--base-color-warm-100:\s*#f5f3ef/);
+  assert.match(css, /--base-color-teal-300:\s*#72e3ad/);
+  assert.match(css, /--base-color-neutral-50:\s*#fcfcfc/);
+  assert.doesNotMatch(css, /--base-color-warm-/);
 });
 
-test("default light theme is warm off-white surfaces with a teal accent", () => {
+test("default light theme is near-white neutral surfaces with a mint fill", () => {
   // outputReferences keeps the base<-semantic relationship in the CSS.
   assert.match(
     css,
-    /--semantic-color-surface-page:\s*var\(--base-color-warm-100\)/,
+    /--semantic-color-surface-page:\s*var\(--base-color-neutral-50\)/,
   );
   assert.match(
     css,
-    /--semantic-color-surface-raised:\s*var\(--base-color-warm-50\)/,
+    /--semantic-color-surface-raised:\s*var\(--base-color-white\)/,
+  );
+  // The accent reads as a bright mint fill with near-black label, not deep-green text.
+  assert.match(
+    css,
+    /--semantic-color-action-rest:\s*var\(--base-color-teal-300\)/,
   );
   assert.match(
     css,
-    /--semantic-color-action-rest:\s*var\(--base-color-teal-700\)/,
+    /--semantic-color-text-on-action:\s*var\(--base-color-teal-900\)/,
   );
+  // Link/accent text stays AA on near-white via the darker 700 step.
   assert.match(
     css,
     /--semantic-color-text-accent:\s*var\(--base-color-teal-700\)/,
   );
   // Typed exports reflect the light/default theme.
-  assert.equal(tokens.semantic.color.action.rest, "#15795a");
-  assert.equal(tokens.semantic.color.surface.page, "#f5f3ef");
+  assert.equal(tokens.semantic.color.action.rest, "#72e3ad");
+  assert.equal(tokens.semantic.color.text["on-action"], "#1e2723");
+  assert.equal(tokens.semantic.color.surface.page, "#fcfcfc");
 });
 
-test("dark theme keeps the teal identity, lightened for dark surfaces", () => {
+test("dark theme keeps the bright mint accent on near-black surfaces", () => {
+  const dark = css.match(/\[data-theme="dark"\][\s\S]*$/)[0];
   assert.match(
-    css,
-    /\[data-theme="dark"\][\s\S]*--semantic-color-surface-page:\s*var\(--base-color-warm-900\)/,
+    dark,
+    /--semantic-color-surface-page:\s*var\(--base-color-neutral-950\)/,
   );
-  assert.match(
-    css,
-    /\[data-theme="dark"\][\s\S]*--semantic-color-action-rest:\s*var\(--base-color-teal-400\)/,
-  );
+  // Same bright mint fill as light (not a dull dark green).
+  assert.match(dark, /--semantic-color-action-rest:\s*var\(--base-color-teal-300\)/);
+  assert.match(dark, /--semantic-color-text-accent:\s*var\(--base-color-teal-300\)/);
 });
 
 test("dark status pills use a subtle neutral tint with AA foregrounds", () => {
@@ -96,21 +106,25 @@ test("dark status pills use a subtle neutral tint with AA foregrounds", () => {
   assert.equal(tokens.base.color.amber["400"], "#f59e0b");
   assert.equal(tokens.base.color.red["400"], "#f87171");
   // Dark status surfaces are the neutral card tint, not a same-hue fill,
-  // so the bright foreground clears AA (the cedar/01 dark pills did not).
-  const darkStatus = css.match(/\[data-theme="dark"\][\s\S]*$/)[0];
+  // so the bright foreground clears AA.
+  const dark = css.match(/\[data-theme="dark"\][\s\S]*$/)[0];
   assert.match(
-    darkStatus,
+    dark,
     /--semantic-color-status-success-foreground:\s*var\(--base-color-green-400\)/,
   );
   assert.match(
-    darkStatus,
-    /--semantic-color-status-success-surface:\s*var\(--base-color-warm-800\)/,
+    dark,
+    /--semantic-color-status-success-surface:\s*var\(--base-color-neutral-850\)/,
   );
 });
 
-test("chart palette is teal-led and drops green", () => {
-  const categorical = Object.values(tokens.semantic.color.chart.categorical);
-  // green.600 (#059669) must not appear — green is reserved for success status.
-  assert.ok(!categorical.includes("#059669"));
-  assert.equal(tokens.semantic.color.chart.categorical.one, "#168a64"); // teal
+test("chart palette is mint-led; visible 600 steps on light, bright on dark", () => {
+  assert.equal(tokens.semantic.color.chart.categorical.one, "#0f9466"); // mint 600
+  assert.equal(tokens.semantic.color.chart.categorical.five, "#059669"); // green
+  // Dark charts switch to the bright mint 300 lead.
+  const dark = css.match(/\[data-theme="dark"\][\s\S]*$/)[0];
+  assert.match(
+    dark,
+    /--semantic-color-chart-categorical-one:\s*var\(--base-color-teal-300\)/,
+  );
 });
