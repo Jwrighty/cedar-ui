@@ -41,6 +41,7 @@
   },
   "scripts": {
     "build": "node build.js && tsc -p tsconfig.json",
+    "test": "node --test test/*.test.mjs",
     "typecheck": "node build.js && tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {

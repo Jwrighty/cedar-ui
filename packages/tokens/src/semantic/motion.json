@@ -1,0 +1,29 @@
+{
+  "semantic": {
+    "motion": {
+      "duration": {
+        "instant": { "$value": "{base.motion.duration.snap}", "$type": "duration" },
+        "feedback": { "$value": "{base.motion.duration.fast}", "$type": "duration" },
+        "settle": { "$value": "{base.motion.duration.base}", "$type": "duration" },
+        "draw": { "$value": "{base.motion.duration.slow}", "$type": "duration" }
+      },
+      "easing": {
+        "settle": { "$value": "{base.motion.easing.out}" },
+        "enter": { "$value": "{base.motion.easing.snap}" },
+        "emphasized": { "$value": "{base.motion.easing.overshoot}" }
+      },
+      "spring": {
+        "overlay": {
+          "stiffness": { "$value": "{base.motion.spring.gentle.stiffness}" },
+          "damping": { "$value": "{base.motion.spring.gentle.damping}" },
+          "mass": { "$value": "{base.motion.spring.gentle.mass}" }
+        },
+        "live-update": {
+          "stiffness": { "$value": "{base.motion.spring.snappy.stiffness}" },
+          "damping": { "$value": "{base.motion.spring.snappy.damping}" },
+          "mass": { "$value": "{base.motion.spring.snappy.mass}" }
+        }
+      }
+    }
+  }
+}

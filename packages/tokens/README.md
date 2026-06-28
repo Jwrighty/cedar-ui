@@ -12,6 +12,33 @@ into two outputs from one source of truth:
 Theming is a runtime `[data-theme]` attribute swap over the CSS custom
 properties (light / dark / brand), so no rebuild is needed to re-skin.
 
+## Motion and reduced motion
+
+Motion tokens live in the same base -> semantic pipeline as colour and spacing.
+Consumers should read the semantic duration/easing tokens for animated moments,
+then override semantic durations inside `prefers-reduced-motion` instead of
+hard-coding alternate values:
+
+```css
+.panel {
+  transition:
+    opacity var(--semantic-motion-duration-settle)
+      var(--semantic-motion-easing-settle),
+    background-color var(--semantic-motion-duration-feedback)
+      var(--semantic-motion-easing-enter);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    transition-duration: var(--semantic-motion-duration-instant);
+  }
+}
+```
+
+For JS animation libraries such as Framer Motion, use the typed token exports
+for normal motion and branch to cross-fades or instant transitions when
+`prefers-reduced-motion` matches.
+
 ## Install
 
 ```sh

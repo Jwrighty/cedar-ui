@@ -28,6 +28,35 @@
         "hover": { "$value": "{base.color.red.700}", "$type": "color" },
         "subtle": { "$value": "{base.color.red.50}", "$type": "color" }
       },
+      "status": {
+        "running": {
+          "foreground": { "$value": "{base.color.amber.700}", "$type": "color" },
+          "surface": { "$value": "{base.color.amber.50}", "$type": "color" },
+          "border": { "$value": "{base.color.amber.500}", "$type": "color" }
+        },
+        "success": {
+          "foreground": { "$value": "{base.color.green.700}", "$type": "color" },
+          "surface": { "$value": "{base.color.green.50}", "$type": "color" },
+          "border": { "$value": "{base.color.green.500}", "$type": "color" }
+        },
+        "error": {
+          "foreground": { "$value": "{base.color.red.700}", "$type": "color" },
+          "surface": { "$value": "{base.color.red.50}", "$type": "color" },
+          "border": { "$value": "{base.color.red.500}", "$type": "color" }
+        }
+      },
+      "chart": {
+        "categorical": {
+          "one": { "$value": "{base.color.blue.600}", "$type": "color" },
+          "two": { "$value": "{base.color.green.600}", "$type": "color" },
+          "three": { "$value": "{base.color.amber.600}", "$type": "color" },
+          "four": { "$value": "{base.color.violet.600}", "$type": "color" },
+          "five": { "$value": "{base.color.cyan.600}", "$type": "color" },
+          "six": { "$value": "{base.color.red.600}", "$type": "color" }
+        },
+        "axis": { "$value": "{base.color.gray.400}", "$type": "color" },
+        "grid": { "$value": "{base.color.gray.200}", "$type": "color" }
+      },
       "focus-ring": { "$value": "{base.color.blue.500}", "$type": "color" },
       "overlay-scrim": { "$value": "{base.color.scrim}", "$type": "color" }
     }

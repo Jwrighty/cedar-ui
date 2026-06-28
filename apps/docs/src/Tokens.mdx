@@ -1,0 +1,45 @@
+import { Meta } from "@storybook/blocks";
+
+<Meta title="Tokens/Observe Foundation" />
+
+# Observe Foundation Tokens
+
+The observe dashboard adds the first Cedar motion tier plus status and chart
+colour semantics. These tokens are authored in `@jwrighty/cedar-tokens` and
+compile to CSS custom properties and typed TypeScript exports.
+
+## Motion
+
+Use semantic motion tokens for product moments:
+
+- `--semantic-motion-duration-feedback`
+- `--semantic-motion-duration-settle`
+- `--semantic-motion-duration-draw`
+- `--semantic-motion-easing-settle`
+- `--semantic-motion-easing-enter`
+- `--semantic-motion-easing-emphasized`
+
+Respect reduced motion by swapping animated moments to instant transitions or
+calm cross-fades under `prefers-reduced-motion`.
+
+## Status
+
+The status palette is theme-repointable for running, success, and error states:
+
+- `--semantic-color-status-running-foreground`
+- `--semantic-color-status-success-foreground`
+- `--semantic-color-status-error-foreground`
+- matching `surface` and `border` tokens for each status
+
+## Charts
+
+Charts use the categorical palette and supporting axis/grid tokens:
+
+- `--semantic-color-chart-categorical-one`
+- `--semantic-color-chart-categorical-two`
+- `--semantic-color-chart-categorical-three`
+- `--semantic-color-chart-categorical-four`
+- `--semantic-color-chart-categorical-five`
+- `--semantic-color-chart-categorical-six`
+- `--semantic-color-chart-axis`
+- `--semantic-color-chart-grid`
