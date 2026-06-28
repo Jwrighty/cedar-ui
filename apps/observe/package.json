@@ -1,0 +1,32 @@
+{
+  "name": "observe",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@jwrighty/cedar-react": "workspace:*",
+    "@jwrighty/cedar-tokens": "workspace:*",
+    "@tanstack/react-query": "^5.90.12",
+    "framer-motion": "^12.23.26",
+    "next": "^15.1.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.51.1",
+    "@types/node": "^22.10.5",
+    "@types/react": "^19.0.7",
+    "@types/react-dom": "^19.0.3",
+    "msw": "^2.12.4",
+    "typescript": "^5.7.3",
+    "vitest": "^4.1.9"
+  }
+}
