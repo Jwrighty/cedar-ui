@@ -3,15 +3,16 @@ import "@jwrighty/cedar-tokens/tokens.css";
 import "@jwrighty/cedar-react/styles.css";
 
 /**
- * The three Cedar themes, exposed as a Storybook toolbar control. `light` is the
- * default and carries no `[data-theme]` attribute; `dark` and `cedar` opt in.
- * This is the highest-leverage demo (PRD): re-skin every story live without any
- * component or story code changing.
+ * The Cedar themes, exposed as a Storybook toolbar control. `light` is the
+ * default and carries no `[data-theme]` attribute; `dark` and the two `cedar-*`
+ * brand themes opt in. This is the highest-leverage demo (PRD): re-skin every
+ * story live without any component or story code changing.
  */
 const THEMES = [
   { value: "light", title: "Light", icon: "sun" },
   { value: "dark", title: "Dark", icon: "moon" },
-  { value: "cedar", title: "Cedar (brand)", icon: "paintbrush" },
+  { value: "cedar-light", title: "Cedar Light (brand)", icon: "paintbrush" },
+  { value: "cedar-dark", title: "Cedar Dark (brand)", icon: "paintbrush" },
 ] as const;
 
 const preview: Preview = {

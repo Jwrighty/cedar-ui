@@ -39,7 +39,48 @@ test("observe status and chart colour tokens are themeable and exported", () => 
   );
   assert.match(
     css,
-    /\[data-theme="cedar"\][\s\S]*--semantic-color-status-running-foreground:/,
+    /\[data-theme="cedar-light"\][\s\S]*--semantic-color-status-running-foreground:/,
+  );
+});
+
+test("cedar brand themes express a bright amber fill on light and dark surfaces", () => {
+  // Amber ramp gained a bright 300 (dark accent/link) and a deep 800 step.
+  assert.equal(tokens.base.color.amber["300"], "#fbbf24");
+  assert.equal(tokens.base.color.amber["400"], "#f59e0b");
+  assert.equal(tokens.base.color.amber["800"], "#78350f");
+  assert.match(css, /--base-color-amber-300:\s*#fbbf24/);
+  assert.match(css, /--base-color-amber-800:\s*#78350f/);
+
+  // cedar-light: bright amber.400 fill with a near-black label, on the inherited
+  // neutral light surfaces; AA accent/link text via amber.700.
+  const cedarLight = css.match(/\[data-theme="cedar-light"\][\s\S]*?\}/)[0];
+  assert.match(
+    cedarLight,
+    /--semantic-color-action-rest:\s*var\(--base-color-amber-400\)/,
+  );
+  assert.match(
+    cedarLight,
+    /--semantic-color-text-on-action:\s*var\(--base-color-neutral-900\)/,
+  );
+  assert.match(
+    cedarLight,
+    /--semantic-color-text-accent:\s*var\(--base-color-amber-700\)/,
+  );
+
+  // cedar-dark: a full theme block — dark neutral surfaces with the same bright
+  // amber fill and a bright amber link.
+  const cedarDark = css.match(/\[data-theme="cedar-dark"\][\s\S]*?\}/)[0];
+  assert.match(
+    cedarDark,
+    /--semantic-color-surface-page:\s*var\(--base-color-neutral-950\)/,
+  );
+  assert.match(
+    cedarDark,
+    /--semantic-color-action-rest:\s*var\(--base-color-amber-400\)/,
+  );
+  assert.match(
+    cedarDark,
+    /--semantic-color-text-accent:\s*var\(--base-color-amber-300\)/,
   );
 });
 

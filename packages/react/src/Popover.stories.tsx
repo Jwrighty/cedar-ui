@@ -134,7 +134,7 @@ export const Themes: Story = {
         background: "var(--semantic-color-surface-page)",
       }}
     >
-      {(["light", "dark", "cedar"] as const).map((theme) => (
+      {(["light", "dark", "cedar-light", "cedar-dark"] as const).map((theme) => (
         <div key={theme} data-theme={theme === "light" ? undefined : theme}>
           <Popover.Root isOpen>
             <Popover.Trigger variant="secondary">{theme}</Popover.Trigger>

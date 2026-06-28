@@ -127,7 +127,13 @@ function StatusPills() {
   );
 }
 
-function Panel({ title, theme }: { title: string; theme?: "dark" }) {
+function Panel({
+  title,
+  theme,
+}: {
+  title: string;
+  theme?: "dark" | "cedar-light" | "cedar-dark";
+}) {
   return (
     <div
       data-theme={theme}
@@ -160,7 +166,7 @@ function Panel({ title, theme }: { title: string; theme?: "dark" }) {
           <ChipRow items={TEXT} />
         </section>
         <section>
-          <p style={groupLabel}>Action (mint accent)</p>
+          <p style={groupLabel}>Action (accent)</p>
           <ChipRow items={ACTION} />
         </section>
         <section>
@@ -181,6 +187,20 @@ export const LightAndDark: Story = {
     <div style={{ display: "flex", flexWrap: "wrap", minHeight: "100vh" }}>
       <Panel title="Light (default)" />
       <Panel title="Dark" theme="dark" />
+    </div>
+  ),
+};
+
+/**
+ * The Cedar brand theme — a bright amber accent on the same neutral surfaces —
+ * shown in its light and dark variants. Proves the re-theming demo: identical
+ * tokens, only `[data-theme]` changes.
+ */
+export const CedarBrand: Story = {
+  render: () => (
+    <div style={{ display: "flex", flexWrap: "wrap", minHeight: "100vh" }}>
+      <Panel title="Cedar Light" theme="cedar-light" />
+      <Panel title="Cedar Dark" theme="cedar-dark" />
     </div>
   ),
 };

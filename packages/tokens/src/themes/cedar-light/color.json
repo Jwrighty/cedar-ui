@@ -2,12 +2,13 @@
   "semantic": {
     "color": {
       "text": {
-        "accent": { "$value": "{base.color.amber.600}", "$type": "color" }
+        "on-action": { "$value": "{base.color.neutral.900}", "$type": "color" },
+        "accent": { "$value": "{base.color.amber.700}", "$type": "color" }
       },
       "action": {
-        "rest": { "$value": "{base.color.amber.600}", "$type": "color" },
-        "hover": { "$value": "{base.color.amber.700}", "$type": "color" },
-        "active": { "$value": "{base.color.amber.700}", "$type": "color" },
+        "rest": { "$value": "{base.color.amber.400}", "$type": "color" },
+        "hover": { "$value": "{base.color.amber.500}", "$type": "color" },
+        "active": { "$value": "{base.color.amber.600}", "$type": "color" },
         "subtle": { "$value": "{base.color.amber.50}", "$type": "color" }
       },
       "status": {

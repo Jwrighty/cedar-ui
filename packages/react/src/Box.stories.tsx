@@ -57,7 +57,7 @@ export const Padding: Story = {
 export const Themes: Story = {
   render: () => (
     <div style={{ display: "flex", gap: "var(--semantic-space-gap-md)" }}>
-      {(["light", "dark", "cedar"] as const).map((theme) => (
+      {(["light", "dark", "cedar-light", "cedar-dark"] as const).map((theme) => (
         <Box
           key={theme}
           data-theme={theme === "light" ? undefined : theme}

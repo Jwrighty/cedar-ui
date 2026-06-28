@@ -66,7 +66,7 @@ const DEFAULT_SOURCES = [
   `${SRC}/semantic/**/*.json`,
   `${SRC}/component/**/*.json`,
 ];
-const THEMES = ["dark", "cedar"]; // alternate themes; default/light lives in :root
+const THEMES = ["dark", "cedar-light", "cedar-dark"]; // alternate themes; default/light lives in :root
 
 const header = (lines) => () => lines;
 

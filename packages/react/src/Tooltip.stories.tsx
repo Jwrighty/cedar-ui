@@ -87,7 +87,7 @@ export const Themes: Story = {
   tags: ["!autodocs"],
   render: (args) => (
     <div style={{ display: "flex", gap: 112, padding: 80 }}>
-      {(["light", "dark", "cedar"] as const).map((theme) => (
+      {(["light", "dark", "cedar-light", "cedar-dark"] as const).map((theme) => (
         <div
           key={theme}
           data-theme={theme === "light" ? undefined : theme}

@@ -52,7 +52,7 @@ const field = { width: 260 } as const;
 export const Themes: Story = {
   render: (args) => (
     <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-      {(["light", "dark", "cedar"] as const).map((theme) => (
+      {(["light", "dark", "cedar-light", "cedar-dark"] as const).map((theme) => (
         <div
           key={theme}
           data-theme={theme === "light" ? undefined : theme}
