@@ -1,0 +1,50 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-inline-size: 0;
+  border: var(--semantic-border-width) solid transparent;
+  border-radius: 999px;
+  font-family: var(--semantic-font-body-family);
+  font-size: var(--base-font-size-xs);
+  font-weight: var(--semantic-font-label-weight);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.sm {
+  min-block-size: calc(
+    var(--base-size-control-sm) - var(--semantic-space-inset-sm)
+  );
+  padding-inline: var(--semantic-space-inset-sm);
+}
+
+.md {
+  min-block-size: var(--base-size-control-sm);
+  padding-inline: var(--semantic-space-inset-md);
+}
+
+.neutral {
+  color: var(--semantic-color-text-muted);
+  background: var(--semantic-color-surface-sunken);
+  border-color: var(--semantic-color-border-default);
+}
+
+.running {
+  color: var(--semantic-color-status-running-foreground);
+  background: var(--semantic-color-status-running-surface);
+  border-color: var(--semantic-color-status-running-border);
+}
+
+.success {
+  color: var(--semantic-color-status-success-foreground);
+  background: var(--semantic-color-status-success-surface);
+  border-color: var(--semantic-color-status-success-border);
+}
+
+.error {
+  color: var(--semantic-color-status-error-foreground);
+  background: var(--semantic-color-status-error-surface);
+  border-color: var(--semantic-color-status-error-border);
+}

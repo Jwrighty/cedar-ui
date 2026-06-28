@@ -1,0 +1,52 @@
+.card {
+  box-sizing: border-box;
+  overflow: hidden;
+  color: var(--semantic-color-text-default);
+  background: var(--semantic-color-surface-raised);
+  border: var(--semantic-border-width) solid
+    var(--semantic-color-border-default);
+  border-radius: var(--semantic-radius-overlay);
+}
+
+.paddingNone {
+  padding: 0;
+}
+
+.paddingSm {
+  padding: var(--semantic-space-inset-sm);
+}
+
+.paddingMd {
+  padding: var(--semantic-space-inset-md);
+}
+
+.paddingLg {
+  padding: var(--semantic-space-inset-lg);
+}
+
+.section {
+  box-sizing: border-box;
+}
+
+.section + .section {
+  border-block-start: var(--semantic-border-width) solid
+    var(--semantic-color-border-default);
+}
+
+.header,
+.body,
+.footer {
+  padding: var(--semantic-space-inset-md);
+}
+
+.header {
+  background: var(--semantic-color-surface-raised);
+}
+
+.body {
+  background: var(--semantic-color-surface-raised);
+}
+
+.footer {
+  background: var(--semantic-color-surface-sunken);
+}

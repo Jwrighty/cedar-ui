@@ -79,12 +79,14 @@ const header = (lines) => () => lines;
 // into the CSS and themes re-point through it.
 async function buildCssBlock(theme) {
   const isRoot = theme === null;
-  // Theme blocks load only base (so {base.*} references resolve) plus their own
-  // overrides — NOT the semantic defaults. Loading the defaults just to redefine
-  // them is what produces Style Dictionary's "token collision" warnings.
+  // Theme blocks load the full default graph plus their own overrides. This lets
+  // component tokens re-emit aliases such as `--component-text-color-default:
+  // var(--semantic-color-text-default)` inside the theme selector; otherwise CSS
+  // custom properties inherit the root-computed component value and do not
+  // repoint when only the semantic token is overridden lower in the tree.
   const source = isRoot
     ? DEFAULT_SOURCES
-    : [`${SRC}/base/**/*.json`, `${SRC}/themes/${theme}/**/*.json`];
+    : [...DEFAULT_SOURCES, `${SRC}/themes/${theme}/**/*.json`];
   const destination = isRoot ? ".root.css" : `.${theme}.css`;
 
   const sd = new StyleDictionary({
@@ -106,7 +108,9 @@ async function buildCssBlock(theme) {
             format: "css/variables",
             filter: isRoot
               ? undefined
-              : (token) => token.filePath.includes(`themes/${theme}`),
+              : (token) =>
+                  token.filePath.includes(`themes/${theme}`) ||
+                  token.filePath.includes(`${SRC}/component/`),
             options: {
               outputReferences: true,
               selector: isRoot ? ":root" : `[data-theme="${theme}"]`,

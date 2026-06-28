@@ -20,8 +20,111 @@
   },
   "components": [
     {
+      "name": "Badge",
+      "exports": [
+        "Badge",
+        "StatusPill"
+      ],
+      "status": "experimental",
+      "summary": "A compact token-backed label for neutral or status information.",
+      "useWhen": [
+        "Labelling an item's status as running, success, error, or neutral.",
+        "Showing short categorical metadata inside dense product UI.",
+        "Keeping status colour semantics consistent across Themes."
+      ],
+      "avoidWhen": [
+        {
+          "situation": "Triggering a user action",
+          "useInstead": "Button"
+        },
+        {
+          "situation": "Displaying long prose or helper text",
+          "useInstead": "Text"
+        }
+      ],
+      "a11yNotes": [
+        "Badge is rendered as text, so do not rely on colour alone; include readable label text.",
+        "Use aria-label only when the visible label is abbreviated."
+      ],
+      "relatedComponents": [
+        "Text",
+        "Button"
+      ],
+      "source": "packages/react/src/Badge.tsx",
+      "props": [
+        {
+          "typeName": "BadgeProps",
+          "kind": "interface",
+          "exported": true,
+          "description": "Props for status and categorical badges.",
+          "extends": [
+            "HTMLAttributes<HTMLSpanElement>"
+          ],
+          "properties": [
+            {
+              "name": "status",
+              "type": "\"neutral\" | \"running\" | \"success\" | \"error\" | undefined",
+              "required": false,
+              "default": "\"neutral\"",
+              "description": "Semantic status colour treatment."
+            },
+            {
+              "name": "size",
+              "type": "\"sm\" | \"md\" | undefined",
+              "required": false,
+              "default": "\"md\"",
+              "description": "Compact or standard badge sizing."
+            }
+          ]
+        },
+        {
+          "typeName": "StatusPillProps",
+          "kind": "type",
+          "exported": true,
+          "extends": [],
+          "type": "BadgeProps",
+          "properties": [
+            {
+              "name": "status",
+              "type": "\"neutral\" | \"running\" | \"success\" | \"error\" | undefined",
+              "required": false,
+              "default": "\"neutral\"",
+              "description": "Semantic status colour treatment."
+            },
+            {
+              "name": "size",
+              "type": "\"sm\" | \"md\" | undefined",
+              "required": false,
+              "default": "\"md\"",
+              "description": "Compact or standard badge sizing."
+            }
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "name": "status",
+          "options": [
+            "neutral",
+            "running",
+            "success",
+            "error"
+          ]
+        },
+        {
+          "name": "size",
+          "options": [
+            "sm",
+            "md"
+          ]
+        }
+      ]
+    },
+    {
       "name": "Box",
-      "exports": ["Box"],
+      "exports": [
+        "Box"
+      ],
       "status": "experimental",
       "summary": "A polymorphic layout primitive for token-backed inset spacing.",
       "useWhen": [
@@ -43,7 +146,10 @@
         "Box adds no role or interactive behaviour; choose an `as` element that matches the content semantics.",
         "Native ARIA attributes and refs pass through to the selected element."
       ],
-      "relatedComponents": ["Stack", "Inline"],
+      "relatedComponents": [
+        "Stack",
+        "Inline"
+      ],
       "source": "packages/react/src/Box.tsx",
       "props": [
         {
@@ -63,7 +169,7 @@
             },
             {
               "name": "padding",
-              "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | undefined",
+              "type": "\"sm\" | \"md\" | \"none\" | \"lg\" | undefined",
               "required": false,
               "default": "\"none\"",
               "description": "Semantic inset applied on every side."
@@ -80,13 +186,20 @@
       "variants": [
         {
           "name": "padding",
-          "options": ["none", "sm", "md", "lg"]
+          "options": [
+            "none",
+            "sm",
+            "md",
+            "lg"
+          ]
         }
       ]
     },
     {
       "name": "Button",
-      "exports": ["Button"],
+      "exports": [
+        "Button"
+      ],
       "status": "experimental",
       "summary": "A pressable button that triggers an action in the current view.",
       "useWhen": [
@@ -114,7 +227,10 @@
         "Disable with isDisabled; focus is managed by React Aria.",
         "Focus-visible ring is driven by [data-focus-visible], shown only for keyboard focus."
       ],
-      "relatedComponents": ["Link", "ToggleButton"],
+      "relatedComponents": [
+        "Link",
+        "ToggleButton"
+      ],
       "source": "packages/react/src/Button.tsx",
       "props": [
         {
@@ -122,7 +238,9 @@
           "kind": "interface",
           "exported": true,
           "description": "A pressable button built on React Aria Components.\n\nInteraction state is exposed through `data-*` attributes (`data-hovered`,\n`data-pressed`, `data-focus-visible`) and styled against Cedar's design\ntokens, so it re-themes via `[data-theme]` with no code change.\n\nFollows React Aria's prop conventions: use `isDisabled` (not `disabled`) and\n`onPress` (not `onClick`) — `onPress` unifies pointer, keyboard and touch.",
-          "extends": ["AriaButtonProps"],
+          "extends": [
+            "AriaButtonProps"
+          ],
           "properties": [
             {
               "name": "variant",
@@ -150,17 +268,103 @@
       "variants": [
         {
           "name": "variant",
-          "options": ["primary", "secondary", "ghost"]
+          "options": [
+            "primary",
+            "secondary",
+            "ghost"
+          ]
         },
         {
           "name": "size",
-          "options": ["sm", "md", "lg"]
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Card",
+      "exports": [
+        "Card",
+        "CardHeader",
+        "CardBody",
+        "CardFooter"
+      ],
+      "status": "experimental",
+      "summary": "An outlined surface for grouping related content.",
+      "useWhen": [
+        "Separating a self-contained panel from the page surface.",
+        "Composing dashboard widgets with optional header, body, and footer regions.",
+        "Framing dense information that should remain visually connected."
+      ],
+      "avoidWhen": [
+        {
+          "situation": "Only spacing children in a layout",
+          "useInstead": "Stack, Inline, or Box"
+        },
+        {
+          "situation": "Creating a modal or popover surface",
+          "useInstead": "Dialog or Popover"
+        }
+      ],
+      "a11yNotes": [
+        "Card has no default landmark role; choose section/article and an accessible name when the group needs navigation semantics.",
+        "Header, body, and footer slots are structural only and do not change reading order."
+      ],
+      "relatedComponents": [
+        "Box",
+        "Stack",
+        "Dialog",
+        "Popover"
+      ],
+      "source": "packages/react/src/Card.tsx",
+      "props": [
+        {
+          "typeName": "CardProps",
+          "kind": "interface",
+          "exported": true,
+          "description": "Props for the Card surface primitive.",
+          "extends": [
+            "HTMLAttributes<HTMLDivElement>"
+          ],
+          "properties": [
+            {
+              "name": "padding",
+              "type": "\"sm\" | \"md\" | \"none\" | \"lg\" | undefined",
+              "required": false,
+              "default": "\"none\"",
+              "description": "Inset applied to direct card content. Use \"none\" with Card slots."
+            }
+          ]
+        },
+        {
+          "typeName": "CardSectionProps",
+          "kind": "type",
+          "exported": true,
+          "extends": [],
+          "type": "HTMLAttributes<HTMLDivElement>",
+          "properties": []
+        }
+      ],
+      "variants": [
+        {
+          "name": "padding",
+          "options": [
+            "none",
+            "sm",
+            "md",
+            "lg"
+          ]
         }
       ]
     },
     {
       "name": "Checkbox",
-      "exports": ["Checkbox"],
+      "exports": [
+        "Checkbox"
+      ],
       "status": "experimental",
       "summary": "A labelled binary form control for selecting one or more independent options.",
       "useWhen": [
@@ -184,7 +388,10 @@
         "Indeterminate is a visual mixed state and does not replace the selected value submitted by a form.",
         "Use isInvalid and isDisabled so React Aria exposes the corresponding accessible state."
       ],
-      "relatedComponents": ["Switch", "RadioGroup"],
+      "relatedComponents": [
+        "Switch",
+        "RadioGroup"
+      ],
       "source": "packages/react/src/Checkbox.tsx",
       "props": [
         {
@@ -215,7 +422,9 @@
     },
     {
       "name": "Dialog",
-      "exports": ["Dialog"],
+      "exports": [
+        "Dialog"
+      ],
       "status": "experimental",
       "summary": "A modal dialog that interrupts the user to confirm, warn, or collect focused input.",
       "useWhen": [
@@ -243,7 +452,11 @@
         "Always include a Dialog.Title — React Aria uses it for aria-labelledby.",
         "Scroll on the page behind the dialog is locked while it is open."
       ],
-      "relatedComponents": ["Popover", "Tooltip", "Button"],
+      "relatedComponents": [
+        "Popover",
+        "Tooltip",
+        "Button"
+      ],
       "source": "packages/react/src/Dialog.tsx",
       "props": [
         {
@@ -309,7 +522,9 @@
     },
     {
       "name": "Heading",
-      "exports": ["Heading"],
+      "exports": [
+        "Heading"
+      ],
       "status": "experimental",
       "summary": "A themeable semantic heading primitive with document level decoupled from visual scale.",
       "useWhen": [
@@ -336,7 +551,11 @@
         "Visual `size` does not change the semantic level exposed to assistive technology.",
         "Do not skip heading levels just to get a smaller or larger visual style."
       ],
-      "relatedComponents": ["Text", "Dialog", "Button"],
+      "relatedComponents": [
+        "Text",
+        "Dialog",
+        "Button"
+      ],
       "source": "packages/react/src/Heading.tsx",
       "props": [
         {
@@ -400,21 +619,39 @@
       "variants": [
         {
           "name": "size",
-          "options": ["xs", "sm", "md", "lg", "xl", "2xl"]
+          "options": [
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ]
         },
         {
           "name": "weight",
-          "options": ["regular", "medium", "semibold"]
+          "options": [
+            "regular",
+            "medium",
+            "semibold"
+          ]
         },
         {
           "name": "tone",
-          "options": ["default", "muted", "accent", "danger"]
+          "options": [
+            "default",
+            "muted",
+            "accent",
+            "danger"
+          ]
         }
       ]
     },
     {
       "name": "Inline",
-      "exports": ["Inline"],
+      "exports": [
+        "Inline"
+      ],
       "status": "experimental",
       "summary": "A polymorphic layout primitive for token-spaced wrapping rows.",
       "useWhen": [
@@ -436,7 +673,10 @@
         "Inline adds no role or interaction; choose `as` and ARIA attributes for the content's semantics.",
         "Wrapping does not alter DOM or keyboard focus order."
       ],
-      "relatedComponents": ["Box", "Stack"],
+      "relatedComponents": [
+        "Box",
+        "Stack"
+      ],
       "source": "packages/react/src/Inline.tsx",
       "props": [
         {
@@ -456,7 +696,7 @@
             },
             {
               "name": "gap",
-              "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | undefined",
+              "type": "\"sm\" | \"md\" | \"none\" | \"lg\" | undefined",
               "required": false,
               "default": "\"md\"",
               "description": "Semantic spacing between children."
@@ -473,13 +713,20 @@
       "variants": [
         {
           "name": "gap",
-          "options": ["none", "sm", "md", "lg"]
+          "options": [
+            "none",
+            "sm",
+            "md",
+            "lg"
+          ]
         }
       ]
     },
     {
       "name": "Popover",
-      "exports": ["Popover"],
+      "exports": [
+        "Popover"
+      ],
       "status": "experimental",
       "summary": "An anchored overlay for interactive content that dismisses without interrupting the page.",
       "useWhen": [
@@ -511,7 +758,12 @@
         "Keep interactive content keyboard operable and use a concise trigger label that also names the popover.",
         "Positioning and collision avoidance are delegated to React Aria and adapt to the available viewport space."
       ],
-      "relatedComponents": ["Tooltip", "Dialog", "Menu", "Select"],
+      "relatedComponents": [
+        "Tooltip",
+        "Dialog",
+        "Menu",
+        "Select"
+      ],
       "source": "packages/react/src/Popover.tsx",
       "props": [
         {
@@ -519,7 +771,9 @@
           "kind": "interface",
           "exported": true,
           "description": "Props for {@link Popover.Root}.",
-          "extends": ["DialogTriggerProps"],
+          "extends": [
+            "DialogTriggerProps"
+          ],
           "properties": [
             {
               "name": "isOpen",
@@ -546,7 +800,9 @@
           "kind": "interface",
           "exported": true,
           "description": "Props for {@link Popover.Trigger}.",
-          "extends": ["ButtonProps"],
+          "extends": [
+            "ButtonProps"
+          ],
           "properties": [
             {
               "name": "children",
@@ -610,13 +866,20 @@
       "variants": [
         {
           "name": "size",
-          "options": ["sm", "md", "lg"]
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ]
         }
       ]
     },
     {
       "name": "RadioGroup",
-      "exports": ["RadioGroup", "Radio"],
+      "exports": [
+        "RadioGroup",
+        "Radio"
+      ],
       "status": "experimental",
       "summary": "A labelled group for selecting exactly one value from a visible set of options.",
       "useWhen": [
@@ -644,7 +907,11 @@
         "Description and error text are associated with the group automatically.",
         "Use isDisabled on the group or an individual Radio, and isInvalid on the group."
       ],
-      "relatedComponents": ["Checkbox", "Select", "Switch"],
+      "relatedComponents": [
+        "Checkbox",
+        "Select",
+        "Switch"
+      ],
       "source": "packages/react/src/RadioGroup.tsx",
       "props": [
         {
@@ -728,13 +995,82 @@
       "variants": [
         {
           "name": "orientation",
-          "options": ["vertical", "horizontal"]
+          "options": [
+            "vertical",
+            "horizontal"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Skeleton",
+      "exports": [
+        "Skeleton"
+      ],
+      "status": "experimental",
+      "summary": "A motion-token loading placeholder sized by the caller.",
+      "useWhen": [
+        "Reserving the exact dimensions of content that is loading.",
+        "Showing independent Suspense or async widget loading states.",
+        "Pairing with a later cross-fade where layout shift would be distracting."
+      ],
+      "avoidWhen": [
+        {
+          "situation": "Communicating progress or completion percentage",
+          "useInstead": "A labelled progress indicator"
+        },
+        {
+          "situation": "Representing absent or empty data",
+          "useInstead": "A designed empty state"
+        }
+      ],
+      "a11yNotes": [
+        "Skeleton is aria-hidden by default so assistive technology does not announce decorative placeholders.",
+        "Use nearby text or live regions when the loading state itself needs to be announced.",
+        "Shimmer animation is removed under prefers-reduced-motion."
+      ],
+      "relatedComponents": [
+        "Card",
+        "Stat"
+      ],
+      "source": "packages/react/src/Skeleton.tsx",
+      "props": [
+        {
+          "typeName": "SkeletonProps",
+          "kind": "interface",
+          "exported": true,
+          "description": "Props for the Skeleton loading placeholder.",
+          "extends": [
+            "HTMLAttributes<HTMLDivElement>"
+          ],
+          "properties": [
+            {
+              "name": "shape",
+              "type": "\"circle\" | \"text\" | \"rectangle\" | \"rounded\" | undefined",
+              "required": false,
+              "default": "\"rounded\"",
+              "description": "Placeholder silhouette. The caller controls concrete dimensions."
+            }
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "name": "shape",
+          "options": [
+            "rectangle",
+            "rounded",
+            "circle",
+            "text"
+          ]
         }
       ]
     },
     {
       "name": "Stack",
-      "exports": ["Stack"],
+      "exports": [
+        "Stack"
+      ],
       "status": "experimental",
       "summary": "A polymorphic layout primitive for token-spaced vertical flow.",
       "useWhen": [
@@ -756,7 +1092,10 @@
         "Stack adds no role; use `as` to preserve list, section, or other document semantics.",
         "Visual order follows DOM order and should not replace meaningful semantic structure."
       ],
-      "relatedComponents": ["Box", "Inline"],
+      "relatedComponents": [
+        "Box",
+        "Inline"
+      ],
       "source": "packages/react/src/Stack.tsx",
       "props": [
         {
@@ -776,7 +1115,7 @@
             },
             {
               "name": "gap",
-              "type": "\"none\" | \"sm\" | \"md\" | \"lg\" | undefined",
+              "type": "\"sm\" | \"md\" | \"none\" | \"lg\" | undefined",
               "required": false,
               "default": "\"md\"",
               "description": "Semantic spacing between children."
@@ -793,13 +1132,153 @@
       "variants": [
         {
           "name": "gap",
-          "options": ["none", "sm", "md", "lg"]
+          "options": [
+            "none",
+            "sm",
+            "md",
+            "lg"
+          ]
         }
       ]
     },
     {
+      "name": "Stat",
+      "exports": [
+        "Stat",
+        "MetricCard"
+      ],
+      "status": "experimental",
+      "summary": "A composed Card for one headline metric, delta, and visual slot.",
+      "useWhen": [
+        "Showing a dashboard KPI with label, value, and trend delta.",
+        "Pairing a headline number with a sparkline or loading placeholder.",
+        "Keeping metric-card composition consistent while reusing Card behaviour."
+      ],
+      "avoidWhen": [
+        {
+          "situation": "Displaying arbitrary content without metric hierarchy",
+          "useInstead": "Card"
+        },
+        {
+          "situation": "Rendering a table of many metrics",
+          "useInstead": "Table primitives with Text"
+        }
+      ],
+      "a11yNotes": [
+        "Stat does not add a landmark role; give the card a label when it should be navigable as a region.",
+        "Delta direction is expressed with text plus semantic colour, not colour alone."
+      ],
+      "relatedComponents": [
+        "Card",
+        "Skeleton",
+        "Text"
+      ],
+      "source": "packages/react/src/Stat.tsx",
+      "props": [
+        {
+          "typeName": "StatProps",
+          "kind": "interface",
+          "exported": true,
+          "description": "Props for a composed metric card.",
+          "extends": [
+            "HTMLAttributes<HTMLDivElement>"
+          ],
+          "properties": [
+            {
+              "name": "label",
+              "type": "ReactNode",
+              "required": true,
+              "description": "Short muted label for the metric."
+            },
+            {
+              "name": "value",
+              "type": "ReactNode",
+              "required": true,
+              "description": "Main metric value."
+            },
+            {
+              "name": "delta",
+              "type": "StatDelta | undefined",
+              "required": false,
+              "description": "Optional directional delta."
+            },
+            {
+              "name": "visual",
+              "type": "ReactNode",
+              "required": false,
+              "description": "Optional chart, sparkline, or loading placeholder slot."
+            }
+          ]
+        },
+        {
+          "typeName": "StatDelta",
+          "kind": "interface",
+          "exported": true,
+          "extends": [],
+          "properties": [
+            {
+              "name": "direction",
+              "type": "StatDeltaDirection",
+              "required": true,
+              "description": "Directional semantic treatment for the delta."
+            },
+            {
+              "name": "value",
+              "type": "ReactNode",
+              "required": true,
+              "description": "Text displayed next to the value."
+            }
+          ]
+        },
+        {
+          "typeName": "StatDeltaDirection",
+          "kind": "type",
+          "exported": true,
+          "extends": [],
+          "type": "\"positive\" | \"negative\" | \"neutral\"",
+          "properties": []
+        },
+        {
+          "typeName": "MetricCardProps",
+          "kind": "type",
+          "exported": true,
+          "extends": [],
+          "type": "StatProps",
+          "properties": [
+            {
+              "name": "label",
+              "type": "ReactNode",
+              "required": true,
+              "description": "Short muted label for the metric."
+            },
+            {
+              "name": "value",
+              "type": "ReactNode",
+              "required": true,
+              "description": "Main metric value."
+            },
+            {
+              "name": "delta",
+              "type": "StatDelta | undefined",
+              "required": false,
+              "description": "Optional directional delta."
+            },
+            {
+              "name": "visual",
+              "type": "ReactNode",
+              "required": false,
+              "description": "Optional chart, sparkline, or loading placeholder slot."
+            }
+          ]
+        }
+      ],
+      "variants": []
+    },
+    {
       "name": "Switch",
-      "exports": ["Switch"],
+      "exports": [
+        "Switch"
+      ],
       "status": "experimental",
       "summary": "A labelled control that turns an immediate setting on or off.",
       "useWhen": [
@@ -822,7 +1301,9 @@
         "Use isSelected/onChange for controlled state or defaultSelected for uncontrolled state.",
         "Focus-visible styling is shown for keyboard focus through [data-focus-visible]."
       ],
-      "relatedComponents": ["Checkbox"],
+      "relatedComponents": [
+        "Checkbox"
+      ],
       "source": "packages/react/src/Switch.tsx",
       "props": [
         {
@@ -830,7 +1311,9 @@
           "kind": "interface",
           "exported": true,
           "description": "Props for the Cedar {@link Switch} primitive.\n\nControlled and uncontrolled state use React Aria's names: pass `isSelected`\nwith `onChange` for controlled state, or `defaultSelected` for uncontrolled\nstate. Disable interaction with `isDisabled`.",
-          "extends": ["AriaSwitchProps"],
+          "extends": [
+            "AriaSwitchProps"
+          ],
           "properties": [
             {
               "name": "children",
@@ -857,13 +1340,196 @@
       "variants": [
         {
           "name": "size",
-          "options": ["sm", "md", "lg"]
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Table",
+      "exports": [
+        "Table",
+        "TableRow",
+        "TableHeaderCell",
+        "TableCell"
+      ],
+      "status": "experimental",
+      "summary": "Styled native table elements for app-owned data grids.",
+      "useWhen": [
+        "Rendering dense rows from TanStack Table or another app-owned row model.",
+        "Applying Cedar table spacing, typography, and tabular numerals.",
+        "Keeping table presentation consistent without adopting a grid abstraction."
+      ],
+      "avoidWhen": [
+        {
+          "situation": "Needing sorting, filtering, selection, or virtualisation",
+          "useInstead": "TanStack Table in the consuming app"
+        },
+        {
+          "situation": "Laying out non-tabular content",
+          "useInstead": "Stack, Inline, or Box"
+        }
+      ],
+      "a11yNotes": [
+        "These primitives render native table elements and preserve browser table semantics.",
+        "Sorting and interactive row behaviour must be implemented by the app with appropriate labels and keyboard support.",
+        "Use isNumeric for numeric columns so tabular numerals line up across rows."
+      ],
+      "relatedComponents": [
+        "Text",
+        "Badge"
+      ],
+      "source": "packages/react/src/Table.tsx",
+      "props": [
+        {
+          "typeName": "TableProps",
+          "kind": "interface",
+          "exported": true,
+          "description": "Props for the presentational table element.",
+          "extends": [
+            "HTMLAttributes<HTMLTableElement>"
+          ],
+          "properties": [
+            {
+              "name": "density",
+              "type": "\"compact\" | \"comfortable\" | undefined",
+              "required": false,
+              "default": "\"comfortable\"",
+              "description": "Density applied to descendant Cedar table cells."
+            }
+          ]
+        },
+        {
+          "typeName": "TableRowProps",
+          "kind": "interface",
+          "exported": true,
+          "description": "Props for a presentational table row.",
+          "extends": [
+            "HTMLAttributes<HTMLTableRowElement>"
+          ],
+          "properties": [
+            {
+              "name": "isInteractive",
+              "type": "boolean | undefined",
+              "required": false,
+              "default": "false",
+              "description": "Enables hover treatment for app-controlled clickable rows."
+            }
+          ]
+        },
+        {
+          "typeName": "TableHeaderCellProps",
+          "kind": "interface",
+          "exported": true,
+          "description": "Header cell props.",
+          "extends": [
+            "Omit<\n  ThHTMLAttributes<HTMLTableCellElement>,\n  \"align\"\n>"
+          ],
+          "properties": [
+            {
+              "name": "align",
+              "type": "\"center\" | \"start\" | \"end\" | undefined",
+              "required": false,
+              "default": "\"start\"",
+              "description": "Horizontal alignment."
+            },
+            {
+              "name": "density",
+              "type": "\"compact\" | \"comfortable\" | undefined",
+              "required": false,
+              "default": "\"comfortable\"",
+              "description": "Cell density when not inheriting from Table."
+            },
+            {
+              "name": "isNumeric",
+              "type": "boolean | undefined",
+              "required": false,
+              "default": "false",
+              "description": "Enables tabular-numeral typography."
+            }
+          ]
+        },
+        {
+          "typeName": "TableCellProps",
+          "kind": "interface",
+          "exported": true,
+          "description": "Shared cell props for body and header cells.",
+          "extends": [
+            "Omit<\n  TdHTMLAttributes<HTMLTableCellElement>,\n  \"align\"\n>"
+          ],
+          "properties": [
+            {
+              "name": "align",
+              "type": "\"center\" | \"start\" | \"end\" | undefined",
+              "required": false,
+              "default": "\"start\"",
+              "description": "Horizontal alignment."
+            },
+            {
+              "name": "density",
+              "type": "\"compact\" | \"comfortable\" | undefined",
+              "required": false,
+              "default": "\"comfortable\"",
+              "description": "Cell density when not inheriting from Table."
+            },
+            {
+              "name": "isNumeric",
+              "type": "boolean | undefined",
+              "required": false,
+              "default": "false",
+              "description": "Enables tabular-numeral typography."
+            }
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "name": "density",
+          "options": [
+            "compact",
+            "comfortable"
+          ]
+        },
+        {
+          "name": "align",
+          "options": [
+            "start",
+            "center",
+            "end"
+          ]
+        },
+        {
+          "name": "density",
+          "options": [
+            "compact",
+            "comfortable"
+          ]
+        },
+        {
+          "name": "align",
+          "options": [
+            "start",
+            "center",
+            "end"
+          ]
+        },
+        {
+          "name": "density",
+          "options": [
+            "compact",
+            "comfortable"
+          ]
         }
       ]
     },
     {
       "name": "Tabs",
-      "exports": ["Tabs"],
+      "exports": [
+        "Tabs"
+      ],
       "status": "experimental",
       "summary": "A tabbed interface for switching between related panels without leaving the current page.",
       "useWhen": [
@@ -891,7 +1557,11 @@
         "Provide an aria-label or aria-labelledby on Tabs.List to name the tab strip.",
         "Arrow-key navigation and disabled tabs are handled by React Aria; style focus with [data-focus-visible]."
       ],
-      "relatedComponents": ["RadioGroup", "Select", "Disclosure"],
+      "relatedComponents": [
+        "RadioGroup",
+        "Select",
+        "Disclosure"
+      ],
       "source": "packages/react/src/Tabs.tsx",
       "props": [
         {
@@ -935,7 +1605,9 @@
     },
     {
       "name": "Text",
-      "exports": ["Text"],
+      "exports": [
+        "Text"
+      ],
       "status": "experimental",
       "summary": "A themeable typography primitive for body copy and inline non-heading text.",
       "useWhen": [
@@ -962,7 +1634,11 @@
         "Do not use Text to fake headings visually — use Heading so assistive technology gets the document outline.",
         "Tone changes colour only; do not rely on colour alone to communicate required or error state."
       ],
-      "relatedComponents": ["Heading", "TextField", "Button"],
+      "relatedComponents": [
+        "Heading",
+        "TextField",
+        "Button"
+      ],
       "source": "packages/react/src/Text.tsx",
       "props": [
         {
@@ -1026,21 +1702,39 @@
       "variants": [
         {
           "name": "size",
-          "options": ["xs", "sm", "md", "lg", "xl", "2xl"]
+          "options": [
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ]
         },
         {
           "name": "weight",
-          "options": ["regular", "medium", "semibold"]
+          "options": [
+            "regular",
+            "medium",
+            "semibold"
+          ]
         },
         {
           "name": "tone",
-          "options": ["default", "muted", "accent", "danger"]
+          "options": [
+            "default",
+            "muted",
+            "accent",
+            "danger"
+          ]
         }
       ]
     },
     {
       "name": "TextField",
-      "exports": ["TextField"],
+      "exports": [
+        "TextField"
+      ],
       "status": "experimental",
       "summary": "A labelled single-line text input with description and error support.",
       "useWhen": [
@@ -1068,7 +1762,11 @@
         "Mark invalid state with isInvalid + errorMessage; the input gets aria-invalid.",
         "Focus ring is driven by [data-focused]; styling reflects keyboard and pointer focus."
       ],
-      "relatedComponents": ["TextArea", "SearchField", "Select"],
+      "relatedComponents": [
+        "TextArea",
+        "SearchField",
+        "Select"
+      ],
       "source": "packages/react/src/TextField.tsx",
       "props": [
         {
@@ -1076,7 +1774,9 @@
           "kind": "interface",
           "exported": true,
           "description": "A labelled single-line text input built on React Aria Components.\n\nComposes RAC's `Label`, `Input`, `Text` (description) and `FieldError` parts\ninto one field, wiring up the label/input/description/error associations for\nyou. Controlled (`value`) and uncontrolled (`defaultValue`) both work.\n\nState is exposed through `data-*` attributes (`data-hovered`, `data-focused`,\n`data-invalid`, `data-disabled`) and styled against Cedar's design tokens, so\nit re-themes via `[data-theme]` with no code change.\n\nFollows React Aria's prop conventions: `isDisabled`/`isInvalid`/`isRequired`\n(not the bare DOM attributes). Pass `errorMessage` to show validation state.",
-          "extends": ["AriaTextFieldProps"],
+          "extends": [
+            "AriaTextFieldProps"
+          ],
           "properties": [
             {
               "name": "label",
@@ -1115,7 +1815,9 @@
     },
     {
       "name": "Tooltip",
-      "exports": ["Tooltip"],
+      "exports": [
+        "Tooltip"
+      ],
       "status": "experimental",
       "summary": "A short, supplementary description that appears beside a focusable trigger on hover or keyboard focus.",
       "useWhen": [
@@ -1143,7 +1845,11 @@
         "Escape, blur, pointer exit, and trigger press dismiss the tooltip as appropriate.",
         "Tooltip content must remain non-interactive; use Popover when users need to act inside the overlay."
       ],
-      "relatedComponents": ["Popover", "Button", "Dialog"],
+      "relatedComponents": [
+        "Popover",
+        "Button",
+        "Dialog"
+      ],
       "source": "packages/react/src/Tooltip.tsx",
       "props": [
         {
@@ -1151,7 +1857,9 @@
           "kind": "interface",
           "exported": true,
           "description": "Props for {@link Tooltip.Trigger}.",
-          "extends": ["AriaTooltipTriggerProps"],
+          "extends": [
+            "AriaTooltipTriggerProps"
+          ],
           "properties": [
             {
               "name": "children",
@@ -1194,7 +1902,12 @@
       "variants": [
         {
           "name": "side",
-          "options": ["top", "right", "bottom", "left"]
+          "options": [
+            "top",
+            "right",
+            "bottom",
+            "left"
+          ]
         }
       ]
     }

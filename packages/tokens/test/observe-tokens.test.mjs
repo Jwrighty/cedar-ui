@@ -131,14 +131,32 @@ test("default light theme is near-white neutral surfaces with a mint fill", () =
 });
 
 test("dark theme keeps the bright mint accent on near-black surfaces", () => {
-  const dark = css.match(/\[data-theme="dark"\][\s\S]*$/)[0];
+  const dark = css.match(
+    /\[data-theme="dark"\][\s\S]*?(?=\n\n\[data-theme="cedar"\]|$)/,
+  )[0];
   assert.match(
     dark,
     /--semantic-color-surface-page:\s*var\(--base-color-neutral-950\)/,
   );
   // Same bright mint fill as light (not a dull dark green).
-  assert.match(dark, /--semantic-color-action-rest:\s*var\(--base-color-teal-300\)/);
-  assert.match(dark, /--semantic-color-text-accent:\s*var\(--base-color-teal-300\)/);
+  assert.match(
+    dark,
+    /--semantic-color-action-rest:\s*var\(--base-color-teal-300\)/,
+  );
+  assert.match(
+    dark,
+    /--semantic-color-text-accent:\s*var\(--base-color-teal-300\)/,
+  );
+  // Component aliases are re-declared inside the theme so Text/Heading variants
+  // resolve against the local semantic theme, not the inherited :root value.
+  assert.match(
+    dark,
+    /--component-text-color-default:\s*var\(--semantic-color-text-default\)/,
+  );
+  assert.match(
+    dark,
+    /--component-heading-color-default:\s*var\(--semantic-color-text-default\)/,
+  );
 });
 
 test("dark status pills use a subtle neutral tint with AA foregrounds", () => {
@@ -148,7 +166,9 @@ test("dark status pills use a subtle neutral tint with AA foregrounds", () => {
   assert.equal(tokens.base.color.red["400"], "#f87171");
   // Dark status surfaces are the neutral card tint, not a same-hue fill,
   // so the bright foreground clears AA.
-  const dark = css.match(/\[data-theme="dark"\][\s\S]*$/)[0];
+  const dark = css.match(
+    /\[data-theme="dark"\][\s\S]*?(?=\n\n\[data-theme="cedar"\]|$)/,
+  )[0];
   assert.match(
     dark,
     /--semantic-color-status-success-foreground:\s*var\(--base-color-green-400\)/,
@@ -163,7 +183,9 @@ test("chart palette is mint-led; visible 600 steps on light, bright on dark", ()
   assert.equal(tokens.semantic.color.chart.categorical.one, "#0f9466"); // mint 600
   assert.equal(tokens.semantic.color.chart.categorical.five, "#059669"); // green
   // Dark charts switch to the bright mint 300 lead.
-  const dark = css.match(/\[data-theme="dark"\][\s\S]*$/)[0];
+  const dark = css.match(
+    /\[data-theme="dark"\][\s\S]*?(?=\n\n\[data-theme="cedar"\]|$)/,
+  )[0];
   assert.match(
     dark,
     /--semantic-color-chart-categorical-one:\s*var\(--base-color-teal-300\)/,

@@ -13,6 +13,16 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 
 ## Public Components
 
+### Badge
+
+- **Exports:** `Badge, StatusPill`
+- **Status:** `experimental`
+- **Summary:** A compact token-backed label for neutral or status information.
+- **Use when:** Labelling an item's status as running, success, error, or neutral. Showing short categorical metadata inside dense product UI. Keeping status colour semantics consistent across Themes.
+- **Avoid when:** Triggering a user action; use Button instead. Displaying long prose or helper text; use Text instead.
+- **Accessibility:** Badge is rendered as text, so do not rely on colour alone; include readable label text. Use aria-label only when the visible label is abbreviated.
+- **Related:** Text, Button
+
 ### Box
 
 - **Exports:** `Box`
@@ -32,6 +42,16 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Avoid when:** Navigating to a URL or route; use Link instead. (Link not currently listed in Cedar public components.) Toggling a binary on/off state; use Switch or ToggleButton instead. (ToggleButton not currently listed in Cedar public components.) Choosing one of several options; use RadioGroup or Select instead. (Select not currently listed in Cedar public components.)
 - **Accessibility:** Renders a native <button>; keyboard- and screen-reader-operable by default. Use onPress (not onClick) so pointer, keyboard, and touch are unified. Disable with isDisabled; focus is managed by React Aria. Focus-visible ring is driven by [data-focus-visible], shown only for keyboard focus.
 - **Related:** Link, ToggleButton
+
+### Card
+
+- **Exports:** `Card, CardHeader, CardBody, CardFooter`
+- **Status:** `experimental`
+- **Summary:** An outlined surface for grouping related content.
+- **Use when:** Separating a self-contained panel from the page surface. Composing dashboard widgets with optional header, body, and footer regions. Framing dense information that should remain visually connected.
+- **Avoid when:** Only spacing children in a layout; use Stack, Inline, or Box instead. Creating a modal or popover surface; use Dialog or Popover instead.
+- **Accessibility:** Card has no default landmark role; choose section/article and an accessible name when the group needs navigation semantics. Header, body, and footer slots are structural only and do not change reading order.
+- **Related:** Box, Stack, Dialog, Popover
 
 ### Checkbox
 
@@ -93,6 +113,16 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Accessibility:** Always provide a visible group label; React Aria associates it with the radiogroup. Arrow keys move roving focus and selection between enabled options. Description and error text are associated with the group automatically. Use isDisabled on the group or an individual Radio, and isInvalid on the group.
 - **Related:** Checkbox, Select, Switch
 
+### Skeleton
+
+- **Exports:** `Skeleton`
+- **Status:** `experimental`
+- **Summary:** A motion-token loading placeholder sized by the caller.
+- **Use when:** Reserving the exact dimensions of content that is loading. Showing independent Suspense or async widget loading states. Pairing with a later cross-fade where layout shift would be distracting.
+- **Avoid when:** Communicating progress or completion percentage; use A labelled progress indicator instead. Representing absent or empty data; use A designed empty state instead.
+- **Accessibility:** Skeleton is aria-hidden by default so assistive technology does not announce decorative placeholders. Use nearby text or live regions when the loading state itself needs to be announced. Shimmer animation is removed under prefers-reduced-motion.
+- **Related:** Card, Stat
+
 ### Stack
 
 - **Exports:** `Stack`
@@ -103,6 +133,16 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Accessibility:** Stack adds no role; use `as` to preserve list, section, or other document semantics. Visual order follows DOM order and should not replace meaningful semantic structure.
 - **Related:** Box, Inline
 
+### Stat
+
+- **Exports:** `Stat, MetricCard`
+- **Status:** `experimental`
+- **Summary:** A composed Card for one headline metric, delta, and visual slot.
+- **Use when:** Showing a dashboard KPI with label, value, and trend delta. Pairing a headline number with a sparkline or loading placeholder. Keeping metric-card composition consistent while reusing Card behaviour.
+- **Avoid when:** Displaying arbitrary content without metric hierarchy; use Card instead. Rendering a table of many metrics; use Table primitives with Text instead.
+- **Accessibility:** Stat does not add a landmark role; give the card a label when it should be navigable as a region. Delta direction is expressed with text plus semantic colour, not colour alone.
+- **Related:** Card, Skeleton, Text
+
 ### Switch
 
 - **Exports:** `Switch`
@@ -112,6 +152,16 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Avoid when:** Selecting an option for later form submission or agreement; use Checkbox instead. Choosing exactly one option from a group; use RadioGroup or Select instead. (Select not currently listed in Cedar public components.)
 - **Accessibility:** Renders a labelled switch input with pointer and keyboard support from React Aria. Provide a concise visible label through children; it becomes the accessible name. Use isSelected/onChange for controlled state or defaultSelected for uncontrolled state. Focus-visible styling is shown for keyboard focus through [data-focus-visible].
 - **Related:** Checkbox
+
+### Table
+
+- **Exports:** `Table, TableRow, TableHeaderCell, TableCell`
+- **Status:** `experimental`
+- **Summary:** Styled native table elements for app-owned data grids.
+- **Use when:** Rendering dense rows from TanStack Table or another app-owned row model. Applying Cedar table spacing, typography, and tabular numerals. Keeping table presentation consistent without adopting a grid abstraction.
+- **Avoid when:** Needing sorting, filtering, selection, or virtualisation; use TanStack Table in the consuming app instead. Laying out non-tabular content; use Stack, Inline, or Box instead.
+- **Accessibility:** These primitives render native table elements and preserve browser table semantics. Sorting and interactive row behaviour must be implemented by the app with appropriate labels and keyboard support. Use isNumeric for numeric columns so tabular numerals line up across rows.
+- **Related:** Text, Badge
 
 ### Tabs
 

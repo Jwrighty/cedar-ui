@@ -21,6 +21,13 @@ const tokenSourceDir = path.join(repoRoot, "packages/tokens/src");
 
 const componentBindings = [
   {
+    name: "Badge",
+    exports: ["Badge", "StatusPill"],
+    metaExport: "badgeMeta",
+    sourceFile: "Badge.tsx",
+    propTypeNames: ["BadgeProps", "StatusPillProps"],
+  },
+  {
     name: "Box",
     exports: ["Box"],
     metaExport: "boxMeta",
@@ -33,6 +40,13 @@ const componentBindings = [
     metaExport: "buttonMeta",
     sourceFile: "Button.tsx",
     propTypeNames: ["ButtonProps"],
+  },
+  {
+    name: "Card",
+    exports: ["Card", "CardHeader", "CardBody", "CardFooter"],
+    metaExport: "cardMeta",
+    sourceFile: "Card.tsx",
+    propTypeNames: ["CardProps", "CardSectionProps"],
   },
   {
     name: "Checkbox",
@@ -81,11 +95,30 @@ const componentBindings = [
     propTypeNames: ["RadioGroupProps", "RadioProps"],
   },
   {
+    name: "Skeleton",
+    exports: ["Skeleton"],
+    metaExport: "skeletonMeta",
+    sourceFile: "Skeleton.tsx",
+    propTypeNames: ["SkeletonProps"],
+  },
+  {
     name: "Stack",
     exports: ["Stack"],
     metaExport: "stackMeta",
     sourceFile: "Stack.tsx",
     propTypeNames: ["StackProps"],
+  },
+  {
+    name: "Stat",
+    exports: ["Stat", "MetricCard"],
+    metaExport: "statMeta",
+    sourceFile: "Stat.tsx",
+    propTypeNames: [
+      "StatProps",
+      "StatDelta",
+      "StatDeltaDirection",
+      "MetricCardProps",
+    ],
   },
   {
     name: "Switch",
@@ -104,6 +137,18 @@ const componentBindings = [
       "TabsListProps",
       "TabsTabProps",
       "TabsPanelProps",
+    ],
+  },
+  {
+    name: "Table",
+    exports: ["Table", "TableRow", "TableHeaderCell", "TableCell"],
+    metaExport: "tableMeta",
+    sourceFile: "Table.tsx",
+    propTypeNames: [
+      "TableProps",
+      "TableRowProps",
+      "TableHeaderCellProps",
+      "TableCellProps",
     ],
   },
   {

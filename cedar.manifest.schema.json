@@ -26,7 +26,10 @@
     },
     "packages": {
       "type": "object",
-      "required": ["react", "tokens"],
+      "required": [
+        "react",
+        "tokens"
+      ],
       "additionalProperties": false,
       "properties": {
         "react": {
@@ -39,7 +42,11 @@
     },
     "generatedFrom": {
       "type": "object",
-      "required": ["components", "props", "tokens"],
+      "required": [
+        "components",
+        "props",
+        "tokens"
+      ],
       "additionalProperties": {
         "type": "string"
       }
@@ -52,7 +59,9 @@
     },
     "tokens": {
       "type": "object",
-      "required": ["sources"],
+      "required": [
+        "sources"
+      ],
       "properties": {
         "sources": {
           "type": "array",
@@ -66,7 +75,10 @@
   "$defs": {
     "package": {
       "type": "object",
-      "required": ["name", "version"],
+      "required": [
+        "name",
+        "version"
+      ],
       "properties": {
         "name": {
           "type": "string"
@@ -101,7 +113,11 @@
           }
         },
         "status": {
-          "enum": ["experimental", "stable", "deprecated"]
+          "enum": [
+            "experimental",
+            "stable",
+            "deprecated"
+          ]
         },
         "summary": {
           "type": "string"
@@ -116,7 +132,10 @@
           "type": "array",
           "items": {
             "type": "object",
-            "required": ["situation", "useInstead"],
+            "required": [
+              "situation",
+              "useInstead"
+            ],
             "properties": {
               "situation": {
                 "type": "string"
@@ -158,13 +177,21 @@
     },
     "propSignature": {
       "type": "object",
-      "required": ["typeName", "kind", "exported", "properties"],
+      "required": [
+        "typeName",
+        "kind",
+        "exported",
+        "properties"
+      ],
       "properties": {
         "typeName": {
           "type": "string"
         },
         "kind": {
-          "enum": ["interface", "type"]
+          "enum": [
+            "interface",
+            "type"
+          ]
         },
         "exported": {
           "type": "boolean"
@@ -191,7 +218,11 @@
     },
     "prop": {
       "type": "object",
-      "required": ["name", "type", "required"],
+      "required": [
+        "name",
+        "type",
+        "required"
+      ],
       "properties": {
         "name": {
           "type": "string"
@@ -212,7 +243,10 @@
     },
     "variant": {
       "type": "object",
-      "required": ["name", "options"],
+      "required": [
+        "name",
+        "options"
+      ],
       "properties": {
         "name": {
           "type": "string"
@@ -227,7 +261,12 @@
     },
     "tokenSource": {
       "type": "object",
-      "required": ["path", "tier", "category", "tokens"],
+      "required": [
+        "path",
+        "tier",
+        "category",
+        "tokens"
+      ],
       "properties": {
         "path": {
           "type": "string"

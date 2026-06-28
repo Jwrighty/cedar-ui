@@ -1,0 +1,65 @@
+.stat {
+  min-inline-size: 0;
+}
+
+.body {
+  display: grid;
+  gap: var(--semantic-space-stack-md);
+}
+
+.content {
+  display: grid;
+  gap: var(--semantic-space-stack-md);
+}
+
+.label {
+  margin: 0;
+  color: var(--semantic-color-text-muted);
+  font-family: var(--semantic-font-body-family);
+  font-size: var(--base-font-size-sm);
+  font-weight: var(--semantic-font-label-weight);
+  line-height: var(--base-font-line-height-normal);
+}
+
+.valueRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  min-inline-size: 0;
+  gap: var(--semantic-space-gap-md);
+}
+
+.value {
+  min-inline-size: 0;
+  color: var(--semantic-color-text-default);
+  font-family: var(--semantic-font-body-family);
+  font-size: var(--base-font-size-2xl);
+  font-weight: var(--base-font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--base-font-line-height-tight);
+}
+
+.delta {
+  flex: 0 0 auto;
+  font-family: var(--semantic-font-body-family);
+  font-size: var(--base-font-size-sm);
+  font-weight: var(--semantic-font-label-weight);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--base-font-line-height-normal);
+}
+
+.positive {
+  color: var(--semantic-color-status-success-foreground);
+}
+
+.negative {
+  color: var(--semantic-color-status-error-foreground);
+}
+
+.neutral {
+  color: var(--semantic-color-text-muted);
+}
+
+.visual {
+  min-block-size: 40px;
+}

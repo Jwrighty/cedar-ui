@@ -1,0 +1,56 @@
+.skeleton {
+  display: block;
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-block-size: 1em;
+  overflow: hidden;
+  background-color: var(--semantic-color-surface-sunken);
+  background: linear-gradient(
+    90deg,
+    var(--semantic-color-surface-sunken) 0%,
+    color-mix(
+        in srgb,
+        var(--semantic-color-surface-sunken),
+        var(--semantic-color-surface-raised) 58%
+      )
+      50%,
+    var(--semantic-color-surface-sunken) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1200ms linear infinite;
+}
+
+.rectangle {
+  border-radius: 0;
+}
+
+.rounded {
+  border-radius: var(--semantic-radius-control);
+}
+
+.circle {
+  aspect-ratio: 1;
+  border-radius: 999px;
+}
+
+.text {
+  min-block-size: 1lh;
+  border-radius: 999px;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 100% 0;
+  }
+
+  to {
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    background: var(--semantic-color-surface-sunken);
+    animation: none;
+  }
+}
