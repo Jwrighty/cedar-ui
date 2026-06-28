@@ -2,9 +2,18 @@
   "semantic": {
     "motion": {
       "duration": {
-        "instant": { "$value": "{base.motion.duration.snap}", "$type": "duration" },
-        "feedback": { "$value": "{base.motion.duration.fast}", "$type": "duration" },
-        "settle": { "$value": "{base.motion.duration.base}", "$type": "duration" },
+        "instant": {
+          "$value": "{base.motion.duration.snap}",
+          "$type": "duration"
+        },
+        "feedback": {
+          "$value": "{base.motion.duration.fast}",
+          "$type": "duration"
+        },
+        "settle": {
+          "$value": "{base.motion.duration.base}",
+          "$type": "duration"
+        },
         "draw": { "$value": "{base.motion.duration.slow}", "$type": "duration" }
       },
       "easing": {

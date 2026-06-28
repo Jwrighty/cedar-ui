@@ -1,6 +1,11 @@
 "use client";
 
-import { forwardRef, useContext, type ReactNode, type CSSProperties } from "react";
+import {
+  forwardRef,
+  useContext,
+  type ReactNode,
+  type CSSProperties,
+} from "react";
 import {
   DialogTrigger,
   ModalOverlay,
@@ -49,15 +54,14 @@ const Trigger = forwardRef<HTMLButtonElement, ButtonProps>(
 );
 
 /** Props for {@link Dialog.Content}. */
-export interface DialogContentProps
-  extends Pick<
-    ModalOverlayProps,
-    | "isDismissable"
-    | "isKeyboardDismissDisabled"
-    | "isOpen"
-    | "defaultOpen"
-    | "onOpenChange"
-  > {
+export interface DialogContentProps extends Pick<
+  ModalOverlayProps,
+  | "isDismissable"
+  | "isKeyboardDismissDisabled"
+  | "isOpen"
+  | "defaultOpen"
+  | "onOpenChange"
+> {
   children: ReactNode;
   /** Dialog ARIA role. @default "dialog" */
   role?: AriaDialogProps["role"];
@@ -143,22 +147,23 @@ function Title({ children, className, style }: DialogTitleProps) {
  * default) and calls the dialog's close action on press, after any `onPress` you
  * pass. Accepts all Button props.
  */
-const Close = forwardRef<HTMLButtonElement, ButtonProps>(
-  function Close({ variant = "secondary", onPress, ...props }, ref) {
-    const state = useContext(OverlayTriggerStateContext);
-    return (
-      <Button
-        ref={ref}
-        variant={variant}
-        onPress={(e) => {
-          onPress?.(e);
-          state?.close();
-        }}
-        {...props}
-      />
-    );
-  },
-);
+const Close = forwardRef<HTMLButtonElement, ButtonProps>(function Close(
+  { variant = "secondary", onPress, ...props },
+  ref,
+) {
+  const state = useContext(OverlayTriggerStateContext);
+  return (
+    <Button
+      ref={ref}
+      variant={variant}
+      onPress={(e) => {
+        onPress?.(e);
+        state?.close();
+      }}
+      {...props}
+    />
+  );
+});
 
 /**
  * Compound modal dialog. See {@link Root} for the full example.

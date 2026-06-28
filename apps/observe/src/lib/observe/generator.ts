@@ -14,8 +14,18 @@ const BASE_TIME_MS = Date.parse("2026-02-24T12:00:00.000Z");
 
 const STATUSES = ["success", "success", "success", "running", "error"] as const;
 const ENVIRONMENTS = ["production", "production", "staging"] as const;
-const MODELS = ["gpt-5-mini", "gpt-5.1", "o4-mini", "claude-sonnet-4.5"] as const;
-const AGENTS = ["Support triage", "Invoice analyst", "Deploy copilot", "QA scout"] as const;
+const MODELS = [
+  "gpt-5-mini",
+  "gpt-5.1",
+  "o4-mini",
+  "claude-sonnet-4.5",
+] as const;
+const AGENTS = [
+  "Support triage",
+  "Invoice analyst",
+  "Deploy copilot",
+  "QA scout",
+] as const;
 const SPAN_TYPES = [
   "retrieval",
   "llm_call",
@@ -47,8 +57,11 @@ export function createObserveCorpus(
     const spanCount = 3 + Math.floor(random() * 5);
     const tokensIn = 600 + Math.floor(random() * 3400);
     const tokensOut = 180 + Math.floor(random() * 1800);
-    const durationMs = status === "running" ? null : 900 + Math.floor(random() * 9000);
-    const startedAt = new Date(BASE_TIME_MS - index * 5 * 60 * 1000).toISOString();
+    const durationMs =
+      status === "running" ? null : 900 + Math.floor(random() * 9000);
+    const startedAt = new Date(
+      BASE_TIME_MS - index * 5 * 60 * 1000,
+    ).toISOString();
     const run: Run = {
       id,
       label: `${agentName} #${String(4000 + index)}`,
@@ -60,7 +73,9 @@ export function createObserveCorpus(
       durationMs,
       tokensIn,
       tokensOut,
-      costUsd: roundCurrency((tokensIn * 0.0000008 + tokensOut * 0.0000024) * (1 + random())),
+      costUsd: roundCurrency(
+        (tokensIn * 0.0000008 + tokensOut * 0.0000024) * (1 + random()),
+      ),
       spanCount,
       sessionId: `session_${Math.floor(index / 4) + 1}`,
     };
@@ -83,7 +98,8 @@ export function createObserveCorpus(
         status: spanIndex === spanCount - 1 ? status : "success",
         tokensIn: type === "llm_call" ? Math.floor(tokensIn / spanCount) : 0,
         tokensOut: type === "llm_call" ? Math.floor(tokensOut / spanCount) : 0,
-        costUsd: type === "llm_call" ? roundCurrency(run.costUsd / spanCount) : 0,
+        costUsd:
+          type === "llm_call" ? roundCurrency(run.costUsd / spanCount) : 0,
         model: type === "llm_call" ? model : null,
       };
 

@@ -30,9 +30,9 @@ describe("Tabs", () => {
       "aria-selected",
       "true",
     );
-    expect(screen.getByRole("tabpanel", { name: "Overview" })).toHaveTextContent(
-      "Overview panel",
-    );
+    expect(
+      screen.getByRole("tabpanel", { name: "Overview" }),
+    ).toHaveTextContent("Overview panel");
 
     await user.click(screen.getByRole("tab", { name: "Activity" }));
 
@@ -40,9 +40,9 @@ describe("Tabs", () => {
       "aria-selected",
       "true",
     );
-    expect(screen.getByRole("tabpanel", { name: "Activity" })).toHaveTextContent(
-      "Activity panel",
-    );
+    expect(
+      screen.getByRole("tabpanel", { name: "Activity" }),
+    ).toHaveTextContent("Activity panel");
   });
 
   it("moves selection with keyboard arrows", async () => {
@@ -56,9 +56,9 @@ describe("Tabs", () => {
       "aria-selected",
       "true",
     );
-    expect(screen.getByRole("tabpanel", { name: "Activity" })).toHaveTextContent(
-      "Activity panel",
-    );
+    expect(
+      screen.getByRole("tabpanel", { name: "Activity" }),
+    ).toHaveTextContent("Activity panel");
   });
 
   it("supports controlled selection", async () => {
@@ -91,9 +91,9 @@ describe("Tabs", () => {
     await user.click(screen.getByRole("tab", { name: "Activity" }));
 
     expect(onSelectionChange).toHaveBeenCalledWith("activity");
-    expect(screen.getByRole("tabpanel", { name: "Activity" })).toHaveTextContent(
-      "Activity panel",
-    );
+    expect(
+      screen.getByRole("tabpanel", { name: "Activity" }),
+    ).toHaveTextContent("Activity panel");
   });
 
   it("delegates tab to panel ARIA association to React Aria", () => {
@@ -127,9 +127,9 @@ describe("Tabs", () => {
       "aria-selected",
       "true",
     );
-    expect(screen.getByRole("tabpanel", { name: "Overview" })).toHaveTextContent(
-      "Overview panel",
-    );
+    expect(
+      screen.getByRole("tabpanel", { name: "Overview" }),
+    ).toHaveTextContent("Overview panel");
   });
 
   it("has no axe violations", async () => {

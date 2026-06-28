@@ -14,7 +14,10 @@ describe("listRunsPayload", () => {
   });
 
   it("falls back to the default page size when limit input is invalid", async () => {
-    const payload = await listRunsPayload({ limit: Number.NaN, testMode: true });
+    const payload = await listRunsPayload({
+      limit: Number.NaN,
+      testMode: true,
+    });
 
     expect(payload.runs).toHaveLength(10);
     expect(payload.nextCursor).toBe("10");

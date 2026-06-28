@@ -79,11 +79,11 @@ export const Themes: Story = {
         <div key={theme} data-theme={theme === "light" ? undefined : theme}>
           <Dialog.Root>
             <Dialog.Trigger>{`Open (${theme})`}</Dialog.Trigger>
-            <Dialog.Content
-              data-theme={theme === "light" ? undefined : theme}
-            >
+            <Dialog.Content data-theme={theme === "light" ? undefined : theme}>
               <Dialog.Title>{`${theme} theme`}</Dialog.Title>
-              <p style={{ margin: 0, color: "var(--semantic-color-text-muted)" }}>
+              <p
+                style={{ margin: 0, color: "var(--semantic-color-text-muted)" }}
+              >
                 Overlay, panel, and buttons all re-point through the semantic
                 tokens for this theme.
               </p>

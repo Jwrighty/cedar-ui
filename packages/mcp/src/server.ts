@@ -1,10 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import {
-  getComponentUsage,
-  getTokens,
-  listComponents,
-} from "./catalog.js";
+import { getComponentUsage, getTokens, listComponents } from "./catalog.js";
 import type { CedarManifest } from "./types.js";
 
 /**
@@ -22,7 +18,8 @@ export function createCedarMcpServer(manifest: CedarManifest): McpServer {
     "list_components",
     {
       title: "List Cedar components",
-      description: "Return public Cedar component names, summaries, status, and exports.",
+      description:
+        "Return public Cedar component names, summaries, status, and exports.",
       inputSchema: {},
     },
     async () => jsonResult(listComponents(manifest)),
@@ -37,7 +34,9 @@ export function createCedarMcpServer(manifest: CedarManifest): McpServer {
       inputSchema: {
         name: z
           .string()
-          .describe("Component name or public export, for example Button or Dialog."),
+          .describe(
+            "Component name or public export, for example Button or Dialog.",
+          ),
       },
     },
     async ({ name }) => jsonResult(getComponentUsage(manifest, name)),

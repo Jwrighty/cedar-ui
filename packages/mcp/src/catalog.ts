@@ -34,12 +34,18 @@ export function getComponentUsage(
   const component = manifest.components.find(
     (candidate) =>
       normalize(candidate.name) === normalizedName ||
-      candidate.exports.some((exportName) => normalize(exportName) === normalizedName),
+      candidate.exports.some(
+        (exportName) => normalize(exportName) === normalizedName,
+      ),
   );
 
   if (!component) {
-    const available = manifest.components.map((candidate) => candidate.name).join(", ");
-    throw new Error(`Unknown Cedar component "${name}". Available components: ${available}.`);
+    const available = manifest.components
+      .map((candidate) => candidate.name)
+      .join(", ");
+    throw new Error(
+      `Unknown Cedar component "${name}". Available components: ${available}.`,
+    );
   }
 
   return component;
@@ -129,12 +135,10 @@ function visitTokenNode(
   }
 }
 
-function isToken(node: TokenNode): node is Extract<TokenNode, { $value: unknown }> {
-  return (
-    typeof node === "object" &&
-    node !== null &&
-    "$value" in node
-  );
+function isToken(
+  node: TokenNode,
+): node is Extract<TokenNode, { $value: unknown }> {
+  return typeof node === "object" && node !== null && "$value" in node;
 }
 
 function tokenMatchMatches(match: TokenMatch, query: string): boolean {

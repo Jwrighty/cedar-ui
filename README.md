@@ -13,8 +13,8 @@ component live across light, dark, and the Cedar brand theme.
 
 Cedar is published to npm as two packages:
 
-| Package                               | What it is                                                                                                                                                            |
-| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Package                                     | What it is                                                                                                                                                            |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [`@jwrighty/cedar-tokens`](packages/tokens) | The neutral [DTCG](https://design-tokens.github.io/community-group/format/) token source, compiled by Style Dictionary into CSS custom properties + typed TS exports. |
 | [`@jwrighty/cedar-react`](packages/react)   | React components (Button, TextField, Dialog) built on [React Aria](https://react-spectrum.adobe.com/react-aria/), styled with CSS Modules against the tokens.         |
 

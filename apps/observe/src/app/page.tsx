@@ -58,12 +58,16 @@ export default async function Page() {
             </div>
             <div>
               <dt>Latency</dt>
-              <dd>{run.durationMs === null ? "running" : `${run.durationMs}ms`}</dd>
+              <dd>
+                {run.durationMs === null ? "running" : `${run.durationMs}ms`}
+              </dd>
             </div>
           </dl>
         </article>
 
-        <MotionStatus>Rendered from `/api/runs` with deterministic seed data.</MotionStatus>
+        <MotionStatus>
+          Rendered from `/api/runs` with deterministic seed data.
+        </MotionStatus>
       </section>
     </main>
   );

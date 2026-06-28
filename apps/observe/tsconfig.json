@@ -10,9 +10,7 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     },
     "jsx": "preserve"
   },
@@ -23,7 +21,5 @@
     ".next/types/**/*.ts",
     "playwright.config.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

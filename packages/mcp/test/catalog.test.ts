@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { getComponentUsage, getTokens, listComponents } from "../src/catalog.js";
+import {
+  getComponentUsage,
+  getTokens,
+  listComponents,
+} from "../src/catalog.js";
 import type { CedarManifest } from "../src/types.js";
 
 const manifest: CedarManifest = {

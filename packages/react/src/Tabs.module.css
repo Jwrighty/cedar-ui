@@ -93,7 +93,8 @@
   justify-content: flex-start;
   margin-right: calc(-1 * var(--semantic-border-width));
   margin-bottom: 0;
-  border-radius: var(--semantic-radius-control) 0 0 var(--semantic-radius-control);
+  border-radius: var(--semantic-radius-control) 0 0
+    var(--semantic-radius-control);
   border-bottom-color: transparent;
   border-right-color: transparent;
 }

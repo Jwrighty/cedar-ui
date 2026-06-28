@@ -83,7 +83,9 @@ describe("Dialog", () => {
 
     // The dialog must sit inside an element carrying the theme, so semantic
     // tokens re-point even though the overlay is portalled out of the wrapper.
-    expect(screen.getByRole("dialog").closest("[data-theme='dark']")).not.toBeNull();
+    expect(
+      screen.getByRole("dialog").closest("[data-theme='dark']"),
+    ).not.toBeNull();
   });
 
   it("has no axe violations when open", async () => {

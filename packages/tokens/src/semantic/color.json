@@ -30,12 +30,18 @@
       },
       "status": {
         "running": {
-          "foreground": { "$value": "{base.color.amber.700}", "$type": "color" },
+          "foreground": {
+            "$value": "{base.color.amber.700}",
+            "$type": "color"
+          },
           "surface": { "$value": "{base.color.amber.50}", "$type": "color" },
           "border": { "$value": "{base.color.amber.500}", "$type": "color" }
         },
         "success": {
-          "foreground": { "$value": "{base.color.green.700}", "$type": "color" },
+          "foreground": {
+            "$value": "{base.color.green.700}",
+            "$type": "color"
+          },
           "surface": { "$value": "{base.color.green.50}", "$type": "color" },
           "border": { "$value": "{base.color.green.500}", "$type": "color" }
         },
