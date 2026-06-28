@@ -19,6 +19,7 @@
     "format:check": "prettier --check .",
     "typecheck": "pnpm -r run typecheck",
     "changeset": "changeset",
+    "changeset:check": "node scripts/check-changeset.mjs",
     "version-packages": "changeset version",
     "release": "pnpm build && changeset publish"
   },

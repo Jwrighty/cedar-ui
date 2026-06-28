@@ -15,6 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -27,6 +29,9 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Check published package changesets
+        run: pnpm changeset:check --since=origin/main
 
       # Build first: @jwrighty/cedar-react typechecks and tests against the
       # compiled @jwrighty/cedar-tokens output, so the packages must be built

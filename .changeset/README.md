@@ -15,6 +15,18 @@ Pick the affected packages, choose `patch` / `minor` / `major`, and write a
 one-line summary. This drops a markdown file in `.changeset/` — commit it with
 your change.
 
+## Agent and CI check
+
+Any diff that touches `packages/tokens/**` or `packages/react/**` must include a
+new `.changeset/*.md` file. Before handing off that work, run:
+
+```sh
+pnpm changeset:check --since=origin/main
+```
+
+That command verifies the diff includes a changeset for published package
+changes, then runs `pnpm changeset status --since=origin/main`.
+
 ## How it ships
 
 On merge to `main`, the release workflow (`.github/workflows/release.yml`) runs
