@@ -31,6 +31,11 @@ const preview: Preview = {
   },
   decorators: [
     (Story, context) => {
+      // Side-by-side palette stories manage their own per-panel themes, so the
+      // global toolbar theme must not wrap (and tint) them. They render on the
+      // default light :root and opt each panel into [data-theme] explicitly.
+      if (context.parameters.themeCompare) return <Story />;
+
       const theme = context.globals.theme ?? "light";
       return (
         <div
