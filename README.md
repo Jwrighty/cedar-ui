@@ -49,6 +49,16 @@ Re-skin the entire UI by swapping one attribute — no component code changes:
 `light`, `dark`, and an alternate brand theme are driven entirely by CSS custom
 properties, and a theme can be scoped to any subtree.
 
+## For AI agents
+
+Cedar treats AI coding agents as a first-class consumer. Every component ships
+co-located usage metadata that generates a curated [`llms.txt`](llms.txt), a
+machine-readable [`cedar.manifest.json`](cedar.manifest.json), and an
+[MCP server](packages/mcp/README.md) an agent can query live while coding.
+
+The case study — what was built, what it cost, and what I'd change — is
+[**Designing a Design System for AI Agents**](docs/essays/designing-a-design-system-for-ai-agents.md).
+
 ## Development
 
 This is a [pnpm-workspace](https://pnpm.io/workspaces) monorepo.
