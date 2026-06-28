@@ -1,0 +1,69 @@
+.region {
+  position: fixed;
+  inset-block-start: var(--semantic-space-inset-lg);
+  inset-inline-end: var(--semantic-space-inset-lg);
+  z-index: 110;
+  display: grid;
+  width: min(calc(100vw - (var(--semantic-space-inset-lg) * 2)), 400px);
+  margin: 0;
+  padding: 0;
+  gap: var(--semantic-space-stack-sm);
+  list-style: none;
+  pointer-events: none;
+}
+
+.item {
+  min-inline-size: 0;
+  pointer-events: auto;
+}
+
+.toast {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  box-sizing: border-box;
+  min-inline-size: 0;
+  gap: var(--semantic-space-gap-md);
+  padding: var(--semantic-space-inset-md);
+  color: var(--semantic-color-text-default);
+  background: var(--semantic-color-surface-raised);
+  border: var(--semantic-border-width) solid
+    var(--semantic-color-border-default);
+  border-radius: var(--semantic-radius-overlay);
+  box-shadow: 0 10px 30px -16px rgb(0 0 0 / 35%);
+  font-family: var(--semantic-font-body-family);
+}
+
+.success .title {
+  color: var(--semantic-color-status-success-foreground);
+}
+
+.error .title {
+  color: var(--semantic-color-status-error-foreground);
+}
+
+.content {
+  display: grid;
+  min-inline-size: 0;
+  gap: var(--semantic-space-stack-xs);
+}
+
+.title {
+  color: var(--semantic-color-text-default);
+  font-size: var(--semantic-font-body-size);
+  font-weight: var(--semantic-font-label-weight);
+  line-height: var(--semantic-font-body-line-height);
+}
+
+.description {
+  color: var(--semantic-color-text-muted);
+  font-size: var(--base-font-size-sm);
+  line-height: var(--base-font-line-height-normal);
+}
+
+.dismiss {
+  inline-size: var(--base-size-control-sm);
+  padding-inline: 0;
+  color: var(--semantic-color-text-muted);
+  font-size: var(--base-font-size-lg);
+}

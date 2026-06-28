@@ -10,6 +10,7 @@ export default tseslint.config(
       "**/build/**",
       "**/.next/**",
       "**/storybook-static/**",
+      ".worktrees/**",
       ".scratch/**",
       "**/next-env.d.ts",
     ],

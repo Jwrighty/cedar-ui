@@ -1814,6 +1814,233 @@
       "variants": []
     },
     {
+      "name": "Toast",
+      "exports": [
+        "Toast",
+        "useToast"
+      ],
+      "status": "experimental",
+      "summary": "Transient success or error feedback that stacks, auto-dismisses, and can be manually dismissed.",
+      "useWhen": [
+        "Confirming a background mutation succeeded without moving focus away from the current workflow.",
+        "Reporting a recoverable error after an inline action, such as saving tags.",
+        "Showing short-lived feedback that should be announced politely and then leave the interface."
+      ],
+      "avoidWhen": [
+        {
+          "situation": "The message requires a decision, destructive confirmation, or blocking acknowledgement",
+          "useInstead": "Dialog"
+        },
+        {
+          "situation": "The feedback belongs to a specific form field or control",
+          "useInstead": "Inline validation or visible helper text"
+        },
+        {
+          "situation": "The information must remain available for later review",
+          "useInstead": "Persistent page content or an activity log"
+        }
+      ],
+      "a11yNotes": [
+        "Toast items use polite live-region semantics (`role=status`) so announcements do not interrupt the user's current task.",
+        "Every toast includes a keyboard-accessible manual dismiss button.",
+        "Do not move focus into the toast for routine success or recoverable error feedback.",
+        "Keep copy concise; use persistent content when users need to inspect details after dismissal."
+      ],
+      "relatedComponents": [
+        "Button",
+        "Dialog",
+        "Popover"
+      ],
+      "source": "packages/react/src/Toast.tsx",
+      "props": [
+        {
+          "typeName": "ToastProviderProps",
+          "kind": "interface",
+          "exported": true,
+          "extends": [],
+          "properties": [
+            {
+              "name": "children",
+              "type": "ReactNode",
+              "required": true
+            },
+            {
+              "name": "defaultDuration",
+              "type": "number | undefined",
+              "required": false,
+              "default": "5000",
+              "description": "Default auto-dismiss delay for toasts that do not specify one."
+            },
+            {
+              "name": "defaultToasts",
+              "type": "ToastMessage[] | undefined",
+              "required": false,
+              "description": "Initial toasts, useful for deterministic visual fixtures."
+            }
+          ]
+        },
+        {
+          "typeName": "ToastRegionProps",
+          "kind": "interface",
+          "exported": true,
+          "extends": [
+            "HTMLAttributes<HTMLOListElement>"
+          ],
+          "properties": [
+            {
+              "name": "aria-label",
+              "type": "string | undefined",
+              "required": false,
+              "default": "\"Notifications\"",
+              "description": "Accessible label for the notification stack."
+            }
+          ]
+        },
+        {
+          "typeName": "ToastMessage",
+          "kind": "interface",
+          "exported": true,
+          "extends": [],
+          "properties": [
+            {
+              "name": "id",
+              "type": "string",
+              "required": true,
+              "description": "Stable identifier used for updates, dismissal, and tests."
+            },
+            {
+              "name": "variant",
+              "type": "ToastVariant",
+              "required": true,
+              "description": "Semantic feedback treatment."
+            },
+            {
+              "name": "title",
+              "type": "ReactNode",
+              "required": true,
+              "description": "Primary feedback text."
+            },
+            {
+              "name": "description",
+              "type": "ReactNode",
+              "required": false,
+              "description": "Optional supporting text."
+            },
+            {
+              "name": "duration",
+              "type": "number | null | undefined",
+              "required": false,
+              "description": "Auto-dismiss delay in milliseconds. Set to `null` to keep it open."
+            },
+            {
+              "name": "dismissLabel",
+              "type": "string | undefined",
+              "required": false,
+              "default": "\"Dismiss notification\"",
+              "description": "Accessible label for the manual dismiss button."
+            }
+          ]
+        },
+        {
+          "typeName": "ToastOptions",
+          "kind": "interface",
+          "exported": true,
+          "extends": [
+            "Omit<ToastMessage, \"id\">"
+          ],
+          "properties": [
+            {
+              "name": "id",
+              "type": "string | undefined",
+              "required": false,
+              "description": "Optional caller-owned id. Generated when omitted."
+            },
+            {
+              "name": "title",
+              "type": "ReactNode",
+              "required": true,
+              "description": "Primary feedback text."
+            },
+            {
+              "name": "variant",
+              "type": "ToastVariant",
+              "required": true,
+              "description": "Semantic feedback treatment."
+            },
+            {
+              "name": "description",
+              "type": "ReactNode",
+              "required": false,
+              "description": "Optional supporting text."
+            },
+            {
+              "name": "duration",
+              "type": "number | null | undefined",
+              "required": false,
+              "description": "Auto-dismiss delay in milliseconds. Set to `null` to keep it open."
+            },
+            {
+              "name": "dismissLabel",
+              "type": "string | undefined",
+              "required": false,
+              "default": "\"Dismiss notification\"",
+              "description": "Accessible label for the manual dismiss button."
+            }
+          ]
+        },
+        {
+          "typeName": "ToastApi",
+          "kind": "interface",
+          "exported": true,
+          "extends": [],
+          "properties": [
+            {
+              "name": "show",
+              "type": "(toast: ToastOptions) => string",
+              "required": true
+            },
+            {
+              "name": "success",
+              "type": "(toast: Omit<ToastOptions, \"variant\">) => string",
+              "required": true
+            },
+            {
+              "name": "error",
+              "type": "(toast: Omit<ToastOptions, \"variant\">) => string",
+              "required": true
+            },
+            {
+              "name": "dismiss",
+              "type": "(id: string) => void",
+              "required": true
+            },
+            {
+              "name": "clear",
+              "type": "() => void",
+              "required": true
+            }
+          ]
+        },
+        {
+          "typeName": "ToastVariant",
+          "kind": "type",
+          "exported": true,
+          "extends": [],
+          "type": "NonNullable<ToastVariants[\"variant\"]>",
+          "properties": []
+        }
+      ],
+      "variants": [
+        {
+          "name": "variant",
+          "options": [
+            "success",
+            "error"
+          ]
+        }
+      ]
+    },
+    {
       "name": "Tooltip",
       "exports": [
         "Tooltip"

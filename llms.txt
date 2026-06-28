@@ -69,7 +69,7 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Status:** `experimental`
 - **Summary:** A modal dialog that interrupts the user to confirm, warn, or collect focused input.
 - **Use when:** Confirming a destructive or irreversible action before it runs. Collecting a small, focused set of input without leaving the page. Showing content that must be acknowledged or dismissed before continuing.
-- **Avoid when:** Showing a brief, non-blocking notification; use Toast instead. (Toast not currently listed in Cedar public components.) Anchored, dismissible content next to a trigger; use Popover instead. Non-essential supplementary info on hover/focus; use Tooltip instead.
+- **Avoid when:** Showing a brief, non-blocking notification; use Toast instead. Anchored, dismissible content next to a trigger; use Popover instead. Non-essential supplementary info on hover/focus; use Tooltip instead.
 - **Accessibility:** Focus is trapped while open and returns to the trigger on close (React Aria). Escape and outside-click dismiss by default; set isDismissable={false} to block. Always include a Dialog.Title — React Aria uses it for aria-labelledby. Scroll on the page behind the dialog is locked while it is open.
 - **Related:** Popover, Tooltip, Button
 
@@ -192,6 +192,16 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Avoid when:** Capturing multiple lines of text; use TextArea instead. (TextArea not currently listed in Cedar public components.) Choosing from a fixed set of options; use Select or RadioGroup instead. (Select not currently listed in Cedar public components.) Toggling a single boolean; use Checkbox or Switch instead.
 - **Accessibility:** Label is associated with the input automatically — always pass `label`. Description and error are linked via aria-describedby by React Aria. Mark invalid state with isInvalid + errorMessage; the input gets aria-invalid. Focus ring is driven by [data-focused]; styling reflects keyboard and pointer focus.
 - **Related:** TextArea, SearchField, Select
+
+### Toast
+
+- **Exports:** `Toast, useToast`
+- **Status:** `experimental`
+- **Summary:** Transient success or error feedback that stacks, auto-dismisses, and can be manually dismissed.
+- **Use when:** Confirming a background mutation succeeded without moving focus away from the current workflow. Reporting a recoverable error after an inline action, such as saving tags. Showing short-lived feedback that should be announced politely and then leave the interface.
+- **Avoid when:** The message requires a decision, destructive confirmation, or blocking acknowledgement; use Dialog instead. The feedback belongs to a specific form field or control; use Inline validation or visible helper text instead. The information must remain available for later review; use Persistent page content or an activity log instead.
+- **Accessibility:** Toast items use polite live-region semantics (`role=status`) so announcements do not interrupt the user's current task. Every toast includes a keyboard-accessible manual dismiss button. Do not move focus into the toast for routine success or recoverable error feedback. Keep copy concise; use persistent content when users need to inspect details after dismissal.
+- **Related:** Button, Dialog, Popover
 
 ### Tooltip
 

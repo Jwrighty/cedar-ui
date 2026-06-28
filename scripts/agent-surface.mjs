@@ -172,6 +172,20 @@ const componentBindings = [
     sourceFile: "Tooltip.tsx",
     propTypeNames: ["TooltipTriggerProps", "TooltipProps"],
   },
+  {
+    name: "Toast",
+    exports: ["Toast", "useToast"],
+    metaExport: "toastMeta",
+    sourceFile: "Toast.tsx",
+    propTypeNames: [
+      "ToastProviderProps",
+      "ToastRegionProps",
+      "ToastMessage",
+      "ToastOptions",
+      "ToastApi",
+      "ToastVariant",
+    ],
+  },
 ];
 
 const knownUnshippedAlternatives = new Set([
@@ -182,7 +196,6 @@ const knownUnshippedAlternatives = new Set([
   "SearchField",
   "Select",
   "TextArea",
-  "Toast",
   "ToggleButton",
 ]);
 
