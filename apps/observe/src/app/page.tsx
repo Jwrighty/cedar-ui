@@ -2,8 +2,11 @@ import { headers } from "next/headers";
 
 import { Heading, Text } from "@jwrighty/cedar-react";
 
+import type { OverviewMetricKey } from "@/lib/observe/domain";
+
 import { DashboardShell } from "./dashboard-shell";
 import { MotionStatus } from "./motion-status";
+import { OverviewMetricsRow } from "./overview-metrics";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +21,20 @@ interface RunsResponse {
   }>;
 }
 
-export default async function Page() {
+interface PageProps {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+}
+
+const metricKeys = new Set<OverviewMetricKey>([
+  "runs",
+  "successRate",
+  "totalCost",
+  "p95Latency",
+]);
+
+export default async function Page({ searchParams }: PageProps) {
+  const resolvedSearchParams = await searchParams;
+  const failMetric = asOverviewMetricKey(resolvedSearchParams?.metricError);
   const run = await fetchFirstRun();
 
   return (
@@ -34,6 +50,8 @@ export default async function Page() {
           Seeded data is flowing through the mock backend and into a server
           component.
         </Text>
+
+        <OverviewMetricsRow failMetric={failMetric} />
 
         <article className="run-card" data-status={run.status}>
           <div>
@@ -72,6 +90,13 @@ export default async function Page() {
       </section>
     </DashboardShell>
   );
+}
+
+function asOverviewMetricKey(value: string | string[] | undefined) {
+  const firstValue = Array.isArray(value) ? value[0] : value;
+  return firstValue && metricKeys.has(firstValue as OverviewMetricKey)
+    ? (firstValue as OverviewMetricKey)
+    : null;
 }
 
 async function fetchFirstRun() {

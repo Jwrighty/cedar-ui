@@ -49,3 +49,21 @@ export interface ObserveCorpus {
   spans: Span[];
   messages: Message[];
 }
+
+export type OverviewMetricKey =
+  | "runs"
+  | "successRate"
+  | "totalCost"
+  | "p95Latency";
+
+export interface OverviewMetric {
+  key: OverviewMetricKey;
+  label: string;
+  value: number;
+  delta: {
+    direction: "positive" | "negative" | "neutral";
+    value: number;
+    unit: "percent";
+  };
+  sparkline: number[];
+}

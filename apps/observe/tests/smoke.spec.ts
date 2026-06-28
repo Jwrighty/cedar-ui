@@ -14,6 +14,53 @@ test("renders the dashboard shell around seeded observe data", async ({
   await expect(page.getByRole("navigation", { name: "Primary" })).toBeVisible();
   await expect(page.getByText("Latest run")).toBeVisible();
   await expect(page.getByText(/Rendered from `\/api\/runs`/)).toBeVisible();
+  await expect(page.getByTestId("overview-metric-runs")).toBeVisible();
+});
+
+test("streams overview metrics from skeletons in deterministic order", async ({
+  page,
+}) => {
+  await page.goto("/", { waitUntil: "commit" });
+
+  await expect(page.getByTestId("overview-metric-skeleton-runs")).toBeVisible();
+  await expect(
+    page.getByTestId("overview-metric-skeleton-p95Latency"),
+  ).toBeVisible();
+
+  await expect(page.getByTestId("overview-metric-runs")).toBeVisible();
+  await expect(
+    page.getByTestId("overview-metric-skeleton-successRate"),
+  ).toBeVisible();
+
+  await expect(page.getByTestId("overview-metric-successRate")).toBeVisible();
+  await expect(
+    page.getByTestId("overview-metric-skeleton-totalCost"),
+  ).toBeVisible();
+
+  await expect(page.getByTestId("overview-metric-totalCost")).toBeVisible();
+  await expect(
+    page.getByTestId("overview-metric-skeleton-p95Latency"),
+  ).toBeVisible();
+
+  await expect(page.getByTestId("overview-metric-p95Latency")).toBeVisible();
+});
+
+test("shows an isolated metric error with a working retry", async ({
+  page,
+}) => {
+  await page.goto("/?metricError=totalCost");
+
+  await expect(page.getByTestId("overview-metric-runs")).toBeVisible();
+  await expect(page.getByTestId("overview-metric-successRate")).toBeVisible();
+  await expect(page.getByRole("group", { name: "Total cost" })).toContainText(
+    "Unable to load",
+  );
+  await expect(page.getByTestId("overview-metric-p95Latency")).toBeVisible();
+
+  await page.getByRole("button", { name: "Retry" }).click();
+
+  await expect(page).toHaveURL("/");
+  await expect(page.getByTestId("overview-metric-totalCost")).toBeVisible();
 });
 
 test("collapses the sidebar from the keyboard and persists the rail", async ({

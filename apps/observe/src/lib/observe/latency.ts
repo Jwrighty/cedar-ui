@@ -1,10 +1,21 @@
 export const endpointLatencies = {
+  overviewMetricRuns: 40,
+  overviewMetricSuccessRate: 70,
+  overviewMetricTotalCost: 100,
+  overviewMetricP95Latency: 130,
   runs: 180,
   runDetail: 260,
   liveFeed: 400,
 } as const;
 
 export type ObserveEndpoint = keyof typeof endpointLatencies;
+
+const testEndpointLatencies: Partial<Record<ObserveEndpoint, number>> = {
+  overviewMetricRuns: 500,
+  overviewMetricSuccessRate: 1000,
+  overviewMetricTotalCost: 1500,
+  overviewMetricP95Latency: 2000,
+};
 
 export interface LatencyOptions {
   endpoint: ObserveEndpoint;
@@ -15,7 +26,9 @@ export async function waitForEndpointLatency({
   endpoint,
   testMode = isObserveTestMode(),
 }: LatencyOptions) {
-  const delay = testMode ? 1 : endpointLatencies[endpoint];
+  const delay = testMode
+    ? (testEndpointLatencies[endpoint] ?? 1)
+    : endpointLatencies[endpoint];
   await new Promise((resolve) => setTimeout(resolve, delay));
 }
 

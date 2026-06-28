@@ -224,6 +224,89 @@ a {
   gap: var(--semantic-space-stack-lg);
 }
 
+.overview-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--semantic-space-gap-md);
+}
+
+.metric-card {
+  min-block-size: 10.5rem;
+}
+
+.metric-card--loaded {
+  animation: metric-settle var(--semantic-motion-duration-settle)
+    var(--semantic-motion-easing-settle) both;
+}
+
+.metric-card--skeleton,
+.metric-card--error {
+  display: grid;
+  gap: var(--semantic-space-stack-md);
+  padding: var(--semantic-space-inset-md);
+  border: var(--semantic-border-width) solid
+    var(--semantic-color-border-default);
+  border-radius: var(--semantic-radius-overlay);
+  background: var(--semantic-color-surface-raised);
+}
+
+.metric-card--error {
+  align-content: start;
+  border-color: var(--semantic-color-status-error-border);
+}
+
+.metric-card--error p {
+  margin: 0;
+}
+
+.metric-card__label-skeleton {
+  inline-size: 42%;
+}
+
+.metric-card__value-row-skeleton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--semantic-space-gap-md);
+}
+
+.metric-card__value-skeleton {
+  inline-size: 48%;
+  min-block-size: 2.4rem;
+}
+
+.metric-card__delta-skeleton {
+  inline-size: 28%;
+}
+
+.metric-card__sparkline-skeleton {
+  min-block-size: 2.5rem;
+}
+
+.metric-sparkline {
+  block-size: 2.5rem;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  align-items: end;
+  gap: 0.25rem;
+}
+
+.metric-sparkline span {
+  min-block-size: 0.25rem;
+  border-radius: 999px 999px 0 0;
+  background: var(--semantic-color-chart-categorical-one);
+}
+
+@keyframes metric-settle {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 .run-card {
   display: grid;
   gap: var(--semantic-space-stack-md);
@@ -280,8 +363,18 @@ a {
     justify-content: flex-start;
   }
 
+  .overview-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .run-facts {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 34rem) {
+  .overview-metrics {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -291,5 +384,9 @@ a {
   *::after {
     animation-duration: 1ms !important;
     transition-duration: var(--semantic-motion-duration-instant) !important;
+  }
+
+  .metric-card--loaded {
+    animation: none;
   }
 }
