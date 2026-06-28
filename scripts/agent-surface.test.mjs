@@ -110,6 +110,7 @@ test("fails when a public component export is missing from the catalog", () => {
         Text() {},
         TextField() {},
         Tooltip() {},
+        Toast() {},
         UnlistedComponent() {},
         badgeMeta: meta,
         boxMeta: meta,
@@ -130,6 +131,7 @@ test("fails when a public component export is missing from the catalog", () => {
         textMeta: meta,
         textFieldMeta: meta,
         tooltipMeta: meta,
+        toastMeta: meta,
       }),
     /Agent component catalog is missing public exports: UnlistedComponent/,
   );

@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 
 import { Heading, Text } from "@jwrighty/cedar-react";
 
+import { DashboardShell } from "./dashboard-shell";
 import { MotionStatus } from "./motion-status";
 
 export const dynamic = "force-dynamic";
@@ -21,13 +22,13 @@ export default async function Page() {
   const run = await fetchFirstRun();
 
   return (
-    <main className="observe-page">
+    <DashboardShell>
       <section className="observe-panel" aria-labelledby="observe-title">
         <Text className="observe-kicker" size="sm" tone="muted">
-          Cedar observe
+          Overview
         </Text>
-        <Heading id="observe-title" level={1} size="xl">
-          Agent run telemetry
+        <Heading id="observe-title" level={2} size="xl">
+          Live run health
         </Heading>
         <Text tone="muted">
           Seeded data is flowing through the mock backend and into a server
@@ -69,7 +70,7 @@ export default async function Page() {
           Rendered from `/api/runs` with deterministic seed data.
         </MotionStatus>
       </section>
-    </main>
+    </DashboardShell>
   );
 }
 
