@@ -2,8 +2,6 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  margin: var(--semantic-space-stack-none);
-  padding: var(--semantic-space-stack-none);
 }
 
 .gapNone {

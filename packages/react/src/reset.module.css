@@ -1,0 +1,12 @@
+/*
+ * Normalizes the native spacing browsers apply to list elements (ul, ol, menu)
+ * so a polymorphic layout primitive rendered as a list reads as a clean flex
+ * flow. Scoped via :where() to keep zero specificity, so any consumer style
+ * overrides it without a cascade fight. Mirrors Radix Themes' opt-in `.rt-reset`
+ * and Every Layout's "stay within your remit" principle: layout primitives own
+ * flow + gap, never a blanket box-model opinion.
+ */
+:where(.reset) {
+  margin-block: 0;
+  padding-inline-start: 0;
+}
