@@ -71,29 +71,76 @@ test("swaps light shell backgrounds while keeping dark surfaces", async ({
 test("streams overview metrics from skeletons in deterministic order", async ({
   page,
 }) => {
-  await page.goto("/", { waitUntil: "commit" });
+  const metricKeys = ["runs", "successRate", "totalCost", "p95Latency"];
+
+  // Record the moment each skeleton and each loaded metric first lands in the
+  // DOM. Asserting against this in-page history — rather than Playwright's
+  // `toBeVisible`, whose polling is throttled while the document is still
+  // streaming — keeps the ordering checks from racing the reveal.
+  await page.addInitScript((keys) => {
+    const firstSeen: Record<string, number> = {};
+    const start = performance.now();
+    const capture = () => {
+      for (const key of keys) {
+        const skeleton = `skeleton-${key}`;
+        if (
+          firstSeen[skeleton] === undefined &&
+          document.querySelector(`[data-testid="overview-metric-skeleton-${key}"]`)
+        ) {
+          firstSeen[skeleton] = performance.now() - start;
+        }
+        if (
+          firstSeen[key] === undefined &&
+          document.querySelector(`[data-testid="overview-metric-${key}"]`)
+        ) {
+          firstSeen[key] = performance.now() - start;
+        }
+      }
+    };
+    const interval = setInterval(() => {
+      capture();
+      if (keys.every((key) => firstSeen[key] !== undefined)) {
+        clearInterval(interval);
+      }
+    }, 10);
+    capture();
+    (window as unknown as { __observeStream: typeof firstSeen }).__observeStream =
+      firstSeen;
+  }, metricKeys);
+
+  // `?testMode=1` forces the staggered server latencies regardless of whether
+  // the dev server under test was started with OBSERVE_TEST_MODE=1, so a reused
+  // local dev server can't collapse the streaming window.
+  await page.goto("/?testMode=1", { waitUntil: "commit" });
 
   await expect(page.getByTestId("overview-metric-skeleton-runs")).toBeVisible();
   await expect(
     page.getByTestId("overview-metric-skeleton-p95Latency"),
   ).toBeVisible();
 
-  await expect(page.getByTestId("overview-metric-runs")).toBeVisible();
-  await expect(
-    page.getByTestId("overview-metric-skeleton-successRate"),
-  ).toBeVisible();
-
-  await expect(page.getByTestId("overview-metric-successRate")).toBeVisible();
-  await expect(
-    page.getByTestId("overview-metric-skeleton-totalCost"),
-  ).toBeVisible();
-
-  await expect(page.getByTestId("overview-metric-totalCost")).toBeVisible();
-  await expect(
-    page.getByTestId("overview-metric-skeleton-p95Latency"),
-  ).toBeVisible();
-
+  // Wait until every metric has streamed in before reading the history.
   await expect(page.getByTestId("overview-metric-p95Latency")).toBeVisible();
+
+  const firstSeen = await page.evaluate(
+    () =>
+      (window as unknown as { __observeStream: Record<string, number> })
+        .__observeStream,
+  );
+
+  // Every metric rendered as a skeleton before its data replaced it.
+  for (const key of metricKeys) {
+    const skeletonAt = firstSeen[`skeleton-${key}`];
+    const metricAt = firstSeen[key];
+    expect(skeletonAt, `skeleton for ${key} should render`).toBeDefined();
+    expect(metricAt, `metric ${key} should render`).toBeDefined();
+    expect(skeletonAt ?? Infinity).toBeLessThan(metricAt ?? -Infinity);
+  }
+
+  // Metrics resolved in deterministic streaming order.
+  const loadOrder = [...metricKeys].sort(
+    (a, b) => (firstSeen[a] ?? 0) - (firstSeen[b] ?? 0),
+  );
+  expect(loadOrder).toEqual(metricKeys);
 });
 
 test("keeps Stat values and deltas from overlapping at narrow card widths", async ({
