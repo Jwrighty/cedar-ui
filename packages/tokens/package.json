@@ -1,6 +1,6 @@
 {
   "name": "@jwrighty/cedar-tokens",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Cedar design tokens — a neutral DTCG source compiled to CSS custom properties and typed TS exports.",
   "license": "MIT",
   "author": "Jason Wright <jason.wrighty@gmail.com>",
