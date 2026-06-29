@@ -183,7 +183,6 @@ a {
   background: var(--observe-color-header-background);
 }
 
-.dashboard-header__kicker,
 .observe-kicker {
   text-transform: uppercase;
 }
@@ -629,9 +628,14 @@ a {
   margin: 0;
 }
 
-.recent-runs-feed-link,
-.recent-runs-link {
+.recent-runs-feed-link {
   color: var(--semantic-color-text-accent);
+  font-weight: var(--semantic-font-label-weight);
+  text-decoration: none;
+}
+
+.recent-runs-link {
+  color: var(--semantic-color-text-default);
   font-weight: var(--semantic-font-label-weight);
   text-decoration: none;
 }

@@ -10,7 +10,6 @@ import {
   Heading,
   Inline,
   Stack,
-  Text,
   Tooltip,
 } from "@jwrighty/cedar-react";
 
@@ -121,14 +120,9 @@ export function DashboardShell({ children }: { children: ReactNode }) {
 
       <div className="dashboard-main">
         <header className="dashboard-header">
-          <Stack gap="sm">
-            <Text className="dashboard-header__kicker" size="sm" tone="muted">
-              Observe
-            </Text>
-            <Heading level={1} size="lg">
-              Agent run telemetry
-            </Heading>
-          </Stack>
+          <Heading level={1} size="lg">
+            Agent run telemetry
+          </Heading>
 
           <Inline className="dashboard-header__actions" gap="sm">
             <span className="dashboard-env-pill">Production</span>

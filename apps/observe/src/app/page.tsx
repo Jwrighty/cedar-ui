@@ -29,9 +29,6 @@ export default async function Page({ searchParams }: PageProps) {
     <DashboardShell>
       <section className="observe-panel" aria-labelledby="observe-title">
         <header className="observe-panel__intro">
-          <Text className="observe-kicker" size="sm" tone="muted">
-            Overview
-          </Text>
           <Heading id="observe-title" level={2} size="xl">
             Live run health
           </Heading>

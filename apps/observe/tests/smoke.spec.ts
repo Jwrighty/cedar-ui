@@ -118,6 +118,22 @@ test("renders recent runs with status pills and trace links", async ({
   await expect(
     recentRuns.getByText(/Running|Success|Error/).first(),
   ).toBeVisible();
+  await expect
+    .poll(() =>
+      page.evaluate(() => {
+        const runLink = document.querySelector(".recent-runs-link");
+
+        if (!(runLink instanceof HTMLElement)) {
+          return false;
+        }
+
+        return (
+          window.getComputedStyle(runLink).color ===
+          window.getComputedStyle(document.body).color
+        );
+      }),
+    )
+    .toBe(true);
   await page.addScriptTag({
     content: await readFile(
       new URL(

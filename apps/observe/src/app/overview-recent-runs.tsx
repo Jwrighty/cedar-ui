@@ -9,7 +9,6 @@ import {
   TableCell,
   TableHeaderCell,
   TableRow,
-  Text,
 } from "@jwrighty/cedar-react";
 
 import { overviewRecentRunsPayload } from "@/lib/observe/api";
@@ -142,14 +141,9 @@ function OverviewRecentRunsSkeleton() {
 function RecentRunsHeader() {
   return (
     <div className="recent-runs-card__header">
-      <div>
-        <Text className="observe-kicker" size="sm" tone="muted">
-          Recent activity
-        </Text>
-        <Heading id="recent-runs-title" level={3} size="sm">
-          Recent runs
-        </Heading>
-      </div>
+      <Heading id="recent-runs-title" level={3} size="sm">
+        Recent runs
+      </Heading>
 
       <Link className="recent-runs-feed-link" href="/runs">
         View feed
