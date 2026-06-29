@@ -22,6 +22,35 @@ test("renders the dashboard shell around seeded observe data", async ({
   await expect(page.getByTestId("overview-metric-runs")).toBeVisible();
 });
 
+test("uses xl padding for overview dashboard cards and stats", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 500, height: 900 });
+  await page.goto("/");
+
+  const overviewSurfaceTestIds = [
+    "overview-metric-runs",
+    "overview-metric-successRate",
+    "overview-metric-totalCost",
+    "overview-metric-p95Latency",
+    "overview-chart-runs-over-time",
+    "overview-chart-cost-by-model",
+    "overview-chart-latency-distribution",
+    "overview-recent-runs",
+  ];
+
+  for (const testId of overviewSurfaceTestIds) {
+    await expect(page.getByTestId(testId)).toHaveCSS("padding", "24px");
+  }
+
+  await page.goto("/?metricError=totalCost");
+
+  await expect(page.getByRole("group", { name: "Total cost" })).toHaveCSS(
+    "padding",
+    "24px",
+  );
+});
+
 test("applies global and Cedar styles on first load", async ({ page }) => {
   for (let attempt = 0; attempt < 3; attempt += 1) {
     if (attempt === 0) {

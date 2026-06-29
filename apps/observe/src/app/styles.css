@@ -280,7 +280,7 @@ a {
 .metric-card--error {
   display: grid;
   gap: var(--semantic-space-stack-md);
-  padding: var(--semantic-space-inset-md);
+  padding: var(--semantic-space-inset-xl);
   border: var(--semantic-border-width) solid
     var(--semantic-color-border-default);
   border-radius: var(--semantic-radius-overlay);
@@ -364,7 +364,7 @@ a {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   gap: var(--semantic-space-stack-md);
-  padding: var(--semantic-space-inset-lg);
+  padding: var(--semantic-space-inset-xl);
   border: var(--semantic-border-width) solid
     var(--semantic-color-border-default);
   border-radius: var(--semantic-radius-overlay);
@@ -604,7 +604,7 @@ a {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   gap: var(--semantic-space-stack-md);
-  padding: var(--semantic-space-inset-lg);
+  padding: var(--semantic-space-inset-xl);
   border: var(--semantic-border-width) solid
     var(--semantic-color-border-default);
   border-radius: var(--semantic-radius-overlay);
@@ -1019,14 +1019,6 @@ a {
 @media (max-width: 34rem) {
   .overview-metrics {
     grid-template-columns: 1fr;
-  }
-
-  .overview-chart-card {
-    padding: var(--semantic-space-inset-md);
-  }
-
-  .recent-runs-card {
-    padding: var(--semantic-space-inset-md);
   }
 
   .recent-runs-card__header {
