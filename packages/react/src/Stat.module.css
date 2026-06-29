@@ -24,13 +24,17 @@
 .valueRow {
   display: flex;
   align-items: baseline;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  justify-content: flex-start;
   min-inline-size: 0;
-  gap: var(--semantic-space-gap-md);
+  column-gap: var(--semantic-space-gap-md);
+  row-gap: var(--semantic-space-stack-sm, var(--semantic-space-stack-md));
 }
 
 .value {
   min-inline-size: 0;
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
   color: var(--semantic-color-text-default);
   font-family: var(--semantic-font-body-family);
   font-size: var(--base-font-size-2xl);

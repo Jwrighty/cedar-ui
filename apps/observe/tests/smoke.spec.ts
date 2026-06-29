@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { readFile } from "node:fs/promises";
 
 test("renders the dashboard shell around seeded observe data", async ({
   page,
@@ -93,6 +94,81 @@ test("streams overview metrics from skeletons in deterministic order", async ({
   ).toBeVisible();
 
   await expect(page.getByTestId("overview-metric-p95Latency")).toBeVisible();
+});
+
+test("keeps Stat values and deltas from overlapping at narrow card widths", async ({
+  page,
+}) => {
+  const statCss = await readFile(
+    new URL("../../../packages/react/src/Stat.module.css", import.meta.url),
+    "utf8",
+  );
+
+  await page.setContent(`
+    <!doctype html>
+    <style>
+      :root {
+        --semantic-space-stack-md: 16px;
+        --semantic-space-gap-md: 16px;
+        --semantic-color-text-muted: #555;
+        --semantic-font-body-family: Arial, sans-serif;
+        --base-font-size-sm: 24px;
+        --semantic-font-label-weight: 700;
+        --base-font-line-height-normal: 1.2;
+        --semantic-color-text-default: #111;
+        --base-font-size-2xl: 64px;
+        --base-font-weight-semibold: 700;
+        --base-font-line-height-tight: 1;
+        --semantic-color-status-success-foreground: #087a55;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 24px;
+      }
+
+      .card {
+        width: 336px;
+        padding: 24px;
+        border: 1px solid #ddd;
+        border-radius: 22px;
+        overflow: hidden;
+      }
+
+      ${statCss}
+    </style>
+    <div class="card stat">
+      <div class="body">
+        <div class="content">
+          <p class="label">P95 latency</p>
+          <div class="valueRow">
+            <div class="value">9,336ms</div>
+            <div class="delta positive">-4%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `);
+
+  const collisionRisk = await page.evaluate(() => {
+    const value = document.querySelector(".value");
+    const delta = document.querySelector(".delta");
+
+    if (!(value instanceof HTMLElement) || !(delta instanceof HTMLElement)) {
+      return true;
+    }
+
+    const valueBox = value.getBoundingClientRect();
+    const deltaBox = delta.getBoundingClientRect();
+
+    return value.scrollWidth > value.clientWidth && deltaBox.y < valueBox.bottom;
+  });
+
+  expect(collisionRisk).toBe(false);
 });
 
 test("shows an isolated metric error with a working retry", async ({
