@@ -1,9 +1,14 @@
 import { createObserveCorpus } from "./generator";
 import { waitForEndpointLatency } from "./latency";
 import type {
+  CostByModelChart,
+  LatencyDistributionChart,
+  OverviewChart,
+  OverviewChartKey,
   OverviewMetric,
   OverviewMetricKey,
   Run,
+  RunsOverTimeChart,
   RunTrace,
   TraceStreamEvent,
 } from "./domain";
@@ -17,6 +22,11 @@ export interface ListRunsOptions {
 export interface OverviewMetricOptions {
   metric: OverviewMetricKey;
   failMetric?: OverviewMetricKey | null;
+  testMode?: boolean;
+}
+
+export interface OverviewChartOptions {
+  chart: OverviewChartKey;
   testMode?: boolean;
 }
 
@@ -65,6 +75,18 @@ export async function overviewMetricPayload({
   }
 
   return createOverviewMetrics().find((item) => item.key === metric)!;
+}
+
+export async function overviewChartPayload({
+  chart,
+  testMode,
+}: OverviewChartOptions): Promise<OverviewChart> {
+  await waitForEndpointLatency({
+    endpoint: endpointForChart(chart),
+    testMode,
+  });
+
+  return createOverviewCharts().find((item) => item.key === chart)!;
 }
 
 export async function runTracePayload({
@@ -190,6 +212,20 @@ export function createOverviewMetrics(): OverviewMetric[] {
   ];
 }
 
+export function createOverviewCharts(): OverviewChart[] {
+  const { runs } = createObserveCorpus();
+  const currentRuns = runs.slice(0, 144);
+  const completedRuns = currentRuns.filter(
+    (run): run is Run & { durationMs: number } => run.durationMs !== null,
+  );
+
+  return [
+    createRunsOverTimeChart(currentRuns),
+    createCostByModelChart(currentRuns),
+    createLatencyDistributionChart(completedRuns),
+  ];
+}
+
 function endpointForMetric(metric: OverviewMetricKey) {
   switch (metric) {
     case "runs":
@@ -201,6 +237,87 @@ function endpointForMetric(metric: OverviewMetricKey) {
     case "p95Latency":
       return "overviewMetricP95Latency";
   }
+}
+
+function endpointForChart(chart: OverviewChartKey) {
+  switch (chart) {
+    case "runs-over-time":
+      return "overviewChartRunsOverTime";
+    case "cost-by-model":
+      return "overviewChartCostByModel";
+    case "latency-distribution":
+      return "overviewChartLatencyDistribution";
+  }
+}
+
+function createRunsOverTimeChart(runs: Run[]): RunsOverTimeChart {
+  return {
+    key: "runs-over-time",
+    title: "Runs over time",
+    summary: "Run volume across the current 12-hour operating window.",
+    points: bucketSeries(runs, "count", 12).map((value, index) => ({
+      label: `${String(index * 2).padStart(2, "0")}:00`,
+      value,
+    })),
+  };
+}
+
+function createCostByModelChart(runs: Run[]): CostByModelChart {
+  const byModel = new Map<string, { costUsd: number; runCount: number }>();
+
+  for (const run of runs) {
+    const current = byModel.get(run.model) ?? { costUsd: 0, runCount: 0 };
+    current.costUsd += run.costUsd;
+    current.runCount += 1;
+    byModel.set(run.model, current);
+  }
+
+  return {
+    key: "cost-by-model",
+    title: "Cost by model",
+    summary: "Spend distribution across the active model mix.",
+    rows: Array.from(byModel, ([model, value]) => ({
+      model,
+      costUsd: roundCurrency(value.costUsd),
+      runCount: value.runCount,
+    })).sort((a, b) => b.costUsd - a.costUsd),
+  };
+}
+
+function createLatencyDistributionChart(
+  runs: Array<Run & { durationMs: number }>,
+): LatencyDistributionChart {
+  const bucketSizeMs = 2000;
+  const bucketCount = 5;
+  const buckets = Array.from({ length: bucketCount }, (_, index) => {
+    const minMs = index * bucketSizeMs;
+    const maxMs = (index + 1) * bucketSizeMs;
+
+    return {
+      label:
+        index === bucketCount - 1
+          ? `${minMs / 1000}s+`
+          : `${minMs / 1000}-${maxMs / 1000}s`,
+      minMs,
+      maxMs,
+      count: 0,
+    };
+  });
+
+  for (const run of runs) {
+    const index = Math.min(
+      bucketCount - 1,
+      Math.floor(run.durationMs / bucketSizeMs),
+    );
+    buckets[index]!.count += 1;
+  }
+
+  return {
+    key: "latency-distribution",
+    title: "Latency distribution",
+    summary: "Completed run latency clustered into response-time bands.",
+    buckets,
+  };
 }
 
 function deltaPercent(

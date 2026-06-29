@@ -6,6 +6,7 @@ import type { OverviewMetricKey } from "@/lib/observe/domain";
 
 import { DashboardShell } from "./dashboard-shell";
 import { MotionStatus } from "./motion-status";
+import { OverviewCharts } from "./overview-charts";
 import { OverviewMetricsRow } from "./overview-metrics";
 
 export const dynamic = "force-dynamic";
@@ -52,6 +53,7 @@ export default async function Page({ searchParams }: PageProps) {
         </Text>
 
         <OverviewMetricsRow failMetric={failMetric} />
+        <OverviewCharts />
 
         <article className="run-card" data-status={run.status}>
           <div>

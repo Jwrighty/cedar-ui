@@ -77,6 +77,11 @@ export type OverviewMetricKey =
   | "totalCost"
   | "p95Latency";
 
+export type OverviewChartKey =
+  | "runs-over-time"
+  | "cost-by-model"
+  | "latency-distribution";
+
 export interface OverviewMetric {
   key: OverviewMetricKey;
   label: string;
@@ -88,3 +93,41 @@ export interface OverviewMetric {
   };
   sparkline: number[];
 }
+
+export interface RunsOverTimeChart {
+  key: "runs-over-time";
+  title: string;
+  summary: string;
+  points: Array<{
+    label: string;
+    value: number;
+  }>;
+}
+
+export interface CostByModelChart {
+  key: "cost-by-model";
+  title: string;
+  summary: string;
+  rows: Array<{
+    model: string;
+    costUsd: number;
+    runCount: number;
+  }>;
+}
+
+export interface LatencyDistributionChart {
+  key: "latency-distribution";
+  title: string;
+  summary: string;
+  buckets: Array<{
+    label: string;
+    minMs: number;
+    maxMs: number;
+    count: number;
+  }>;
+}
+
+export type OverviewChart =
+  | RunsOverTimeChart
+  | CostByModelChart
+  | LatencyDistributionChart;

@@ -2,9 +2,11 @@ import { describe, expect, it } from "vitest";
 
 import {
   bucketSeries,
+  createOverviewCharts,
   createTraceStreamEvents,
   createOverviewMetrics,
   listRunsPayload,
+  overviewChartPayload,
   overviewMetricPayload,
   runTracePayload,
 } from "./api";
@@ -100,6 +102,58 @@ describe("createOverviewMetrics", () => {
       value: 72,
     });
     expect(metrics.every((metric) => metric.sparkline.length === 8)).toBe(true);
+  });
+});
+
+describe("createOverviewCharts", () => {
+  it("returns the three overview charts in display order", () => {
+    const charts = createOverviewCharts();
+
+    expect(charts.map((chart) => chart.key)).toEqual([
+      "runs-over-time",
+      "cost-by-model",
+      "latency-distribution",
+    ]);
+    expect(charts[0]).toMatchObject({
+      key: "runs-over-time",
+      title: "Runs over time",
+    });
+    expect(
+      charts[0]?.key === "runs-over-time" && charts[0].points,
+    ).toHaveLength(12);
+  });
+
+  it("sorts model cost bars by descending spend", () => {
+    const chart = createOverviewCharts().find(
+      (item) => item.key === "cost-by-model",
+    );
+
+    expect(chart?.key).toBe("cost-by-model");
+    if (chart?.key !== "cost-by-model") return;
+
+    expect(chart.rows.length).toBeGreaterThan(1);
+    expect(chart.rows[0]!.costUsd).toBeGreaterThanOrEqual(
+      chart.rows.at(-1)!.costUsd,
+    );
+  });
+});
+
+describe("overviewChartPayload", () => {
+  it("serves an individual chart through the latency-aware payload", async () => {
+    const startedAt = performance.now();
+    const chart = await overviewChartPayload({
+      chart: "latency-distribution",
+      testMode: true,
+    });
+
+    expect(performance.now() - startedAt).toBeLessThan(3500);
+    expect(chart).toMatchObject({
+      key: "latency-distribution",
+      title: "Latency distribution",
+    });
+    expect(chart.key === "latency-distribution" && chart.buckets).toHaveLength(
+      5,
+    );
   });
 });
 
