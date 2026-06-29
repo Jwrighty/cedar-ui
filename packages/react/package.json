@@ -47,7 +47,7 @@
   "scripts": {
     "build": "vite build && tsc -p tsconfig.build.json --emitDeclarationOnly",
     "prepack": "node ../../scripts/agent-surface.mjs generate",
-    "dev": "vite build --watch",
+    "dev": "vite build --watch & tsc -p tsconfig.build.json --emitDeclarationOnly --watch --preserveWatchOutput",
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
