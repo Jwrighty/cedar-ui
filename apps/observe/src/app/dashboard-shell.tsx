@@ -22,7 +22,7 @@ type Theme = "light" | "dark";
 const navigationItems = [
   { href: "/", label: "Overview", icon: "O" },
   { href: "/runs", label: "Live feed", icon: "R" },
-  { href: "/runs/demo", label: "Trace detail", icon: "T" },
+  { href: "/runs/run_0001", label: "Trace detail", icon: "T" },
 ];
 
 export function DashboardShell({ children }: { children: ReactNode }) {

@@ -147,3 +147,34 @@ test("persists theme changes and applies stored dark theme on load", async ({
   );
   await secondPage.close();
 });
+
+test("renders a deep-linked trace with a streaming waterfall", async ({
+  page,
+}) => {
+  await page.goto("/runs/run_0001");
+
+  await expect(
+    page.locator(".trace-hero").getByText("Trace detail"),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Execution timeline" }),
+  ).toBeVisible();
+  await expect(page.getByTestId("trace-waterfall")).toBeVisible();
+
+  const firstBar = page.locator(".trace-span-bar").first();
+  await expect(firstBar).toHaveCSS("opacity", "1");
+
+  const secondSpan = page.locator(".trace-span-label").nth(1);
+  const secondSpanName = (await secondSpan.innerText()).trim();
+  await secondSpan.click();
+
+  await expect(page.getByTestId("trace-detail-panel")).toContainText(
+    secondSpanName,
+  );
+  await expect(page.getByTestId("trace-detail-panel")).toContainText(
+    /completed for/,
+  );
+  await expect(page.locator(".trace-settled-result")).toContainText(
+    /settled as|still running/,
+  );
+});
