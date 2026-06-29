@@ -332,7 +332,7 @@
           "properties": [
             {
               "name": "padding",
-              "type": "\"sm\" | \"md\" | \"none\" | \"lg\" | undefined",
+              "type": "\"sm\" | \"md\" | \"none\" | \"lg\" | \"xl\" | undefined",
               "required": false,
               "default": "\"none\"",
               "description": "Inset applied to direct card content. Use \"none\" with Card slots."
@@ -355,7 +355,8 @@
             "none",
             "sm",
             "md",
-            "lg"
+            "lg",
+            "xl"
           ]
         }
       ]
@@ -576,7 +577,7 @@
             },
             {
               "name": "size",
-              "type": "\"sm\" | \"md\" | \"lg\" | \"xs\" | \"xl\" | \"2xl\" | undefined",
+              "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | \"xs\" | \"2xl\" | undefined",
               "required": false,
               "default": "\"xl\"",
               "description": "Visual type-scale step."
@@ -1207,6 +1208,13 @@
               "type": "ReactNode",
               "required": false,
               "description": "Optional chart, sparkline, or loading placeholder slot."
+            },
+            {
+              "name": "padding",
+              "type": "\"sm\" | \"md\" | \"none\" | \"lg\" | \"xl\" | undefined",
+              "required": false,
+              "default": "\"xl\"",
+              "description": "Inset applied to the metric surface."
             }
           ]
         },
@@ -1268,6 +1276,13 @@
               "type": "ReactNode",
               "required": false,
               "description": "Optional chart, sparkline, or loading placeholder slot."
+            },
+            {
+              "name": "padding",
+              "type": "\"sm\" | \"md\" | \"none\" | \"lg\" | \"xl\" | undefined",
+              "required": false,
+              "default": "\"xl\"",
+              "description": "Inset applied to the metric surface."
             }
           ]
         }
@@ -1659,7 +1674,7 @@
             },
             {
               "name": "size",
-              "type": "\"sm\" | \"md\" | \"lg\" | \"xs\" | \"xl\" | \"2xl\" | undefined",
+              "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | \"xs\" | \"2xl\" | undefined",
               "required": false,
               "default": "\"md\"",
               "description": "Visual type-scale step."
@@ -3464,6 +3479,10 @@
                 "lg": {
                   "$value": "{base.space.4}",
                   "$type": "dimension"
+                },
+                "xl": {
+                  "$value": "{base.space.6}",
+                  "$type": "dimension"
                 }
               },
               "stack": {
@@ -3482,6 +3501,10 @@
                 "lg": {
                   "$value": "{base.space.4}",
                   "$type": "dimension"
+                },
+                "xl": {
+                  "$value": "{base.space.6}",
+                  "$type": "dimension"
                 }
               },
               "gap": {
@@ -3499,6 +3522,10 @@
                 },
                 "lg": {
                   "$value": "{base.space.4}",
+                  "$type": "dimension"
+                },
+                "xl": {
+                  "$value": "{base.space.6}",
                   "$type": "dimension"
                 }
               }
