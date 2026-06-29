@@ -1,6 +1,7 @@
 import { Heading, Text } from "@jwrighty/cedar-react";
 
 import type { OverviewMetricKey } from "@/lib/observe/domain";
+import { isObserveTestMode } from "@/lib/observe/latency";
 
 import { DashboardShell } from "./dashboard-shell";
 import { MotionStatus } from "./motion-status";
@@ -24,6 +25,11 @@ const metricKeys = new Set<OverviewMetricKey>([
 export default async function Page({ searchParams }: PageProps) {
   const resolvedSearchParams = await searchParams;
   const failMetric = asOverviewMetricKey(resolvedSearchParams?.metricError);
+  // Honor an explicit `?testMode=1` so streaming-order e2e tests get the
+  // staggered latencies even when they reuse a dev server started without
+  // OBSERVE_TEST_MODE=1; otherwise fall back to the server's env.
+  const testMode =
+    firstParam(resolvedSearchParams?.testMode) === "1" || isObserveTestMode();
 
   return (
     <DashboardShell>
@@ -40,11 +46,11 @@ export default async function Page({ searchParams }: PageProps) {
 
         <div className="overview-grid">
           <div className="overview-top">
-            <OverviewMetricsRow failMetric={failMetric} />
+            <OverviewMetricsRow failMetric={failMetric} testMode={testMode} />
             <OverviewRunsChart />
           </div>
           <OverviewCharts />
-          <OverviewRecentRunsPreview />
+          <OverviewRecentRunsPreview testMode={testMode} />
         </div>
 
         <MotionStatus>
@@ -56,8 +62,12 @@ export default async function Page({ searchParams }: PageProps) {
 }
 
 function asOverviewMetricKey(value: string | string[] | undefined) {
-  const firstValue = Array.isArray(value) ? value[0] : value;
+  const firstValue = firstParam(value);
   return firstValue && metricKeys.has(firstValue as OverviewMetricKey)
     ? (firstValue as OverviewMetricKey)
     : null;
+}
+
+function firstParam(value: string | string[] | undefined) {
+  return Array.isArray(value) ? value[0] : value;
 }

@@ -19,8 +19,10 @@ const metrics: Array<{ key: OverviewMetricKey; label: string }> = [
 
 export function OverviewMetricsRow({
   failMetric,
+  testMode,
 }: {
   failMetric: OverviewMetricKey | null;
+  testMode?: boolean;
 }) {
   return (
     <section className="overview-metrics" aria-label="Overview metrics">
@@ -30,7 +32,11 @@ export function OverviewMetricsRow({
           label={metric.label}
         >
           <Suspense fallback={<OverviewMetricSkeleton metric={metric.key} />}>
-            <OverviewMetricCard metric={metric.key} failMetric={failMetric} />
+            <OverviewMetricCard
+              metric={metric.key}
+              failMetric={failMetric}
+              testMode={testMode}
+            />
           </Suspense>
         </MetricErrorBoundary>
       ))}
@@ -41,13 +47,16 @@ export function OverviewMetricsRow({
 async function OverviewMetricCard({
   metric,
   failMetric,
+  testMode,
 }: {
   metric: OverviewMetricKey;
   failMetric: OverviewMetricKey | null;
+  testMode?: boolean;
 }) {
   const payload = await overviewMetricPayload({
     metric,
     failMetric,
+    testMode,
   });
 
   return (

@@ -14,16 +14,20 @@ import {
 import { overviewRecentRunsPayload } from "@/lib/observe/api";
 import type { Run, RunStatus } from "@/lib/observe/domain";
 
-export function OverviewRecentRunsPreview() {
+export function OverviewRecentRunsPreview({
+  testMode,
+}: {
+  testMode?: boolean;
+}) {
   return (
     <Suspense fallback={<OverviewRecentRunsSkeleton />}>
-      <OverviewRecentRunsCard />
+      <OverviewRecentRunsCard testMode={testMode} />
     </Suspense>
   );
 }
 
-async function OverviewRecentRunsCard() {
-  const payload = await overviewRecentRunsPayload();
+async function OverviewRecentRunsCard({ testMode }: { testMode?: boolean }) {
+  const payload = await overviewRecentRunsPayload({ testMode });
 
   return (
     <article
