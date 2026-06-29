@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 
 import { overviewMetricPayload } from "@/lib/observe/api";
 import type { OverviewMetricKey } from "@/lib/observe/domain";
-import { isObserveTestMode } from "@/lib/observe/latency";
+import {
+  isObserveTestMode,
+  parseSlowMoMultiplier,
+} from "@/lib/observe/latency";
 
 const metricKeys = new Set<OverviewMetricKey>([
   "runs",
@@ -29,6 +32,7 @@ export async function GET(
         failMetric: asOverviewMetricKey(url.searchParams.get("failMetric")),
         testMode:
           url.searchParams.get("testMode") === "1" || isObserveTestMode(),
+        slowMoMultiplier: parseSlowMoMultiplier(url.searchParams.get("slowMo")),
       }),
     );
   } catch {

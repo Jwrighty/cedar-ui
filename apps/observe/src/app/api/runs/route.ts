@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
 
 import { listRunsPayload } from "@/lib/observe/api";
-import { isObserveTestMode } from "@/lib/observe/latency";
+import {
+  isObserveTestMode,
+  parseSlowMoMultiplier,
+} from "@/lib/observe/latency";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
@@ -9,6 +12,7 @@ export async function GET(request: Request) {
     cursor: url.searchParams.get("cursor"),
     limit: Number(url.searchParams.get("limit") ?? 10),
     testMode: url.searchParams.get("testMode") === "1" || isObserveTestMode(),
+    slowMoMultiplier: parseSlowMoMultiplier(url.searchParams.get("slowMo")),
   });
 
   return NextResponse.json(payload);

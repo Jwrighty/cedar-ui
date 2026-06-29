@@ -1,5 +1,8 @@
 import { createTraceStreamEvents, runTracePayload } from "@/lib/observe/api";
-import { isObserveTestMode } from "@/lib/observe/latency";
+import {
+  isObserveTestMode,
+  parseSlowMoMultiplier,
+} from "@/lib/observe/latency";
 
 export async function GET(
   request: Request,
@@ -9,7 +12,10 @@ export async function GET(
   const { id } = await context.params;
   const testMode =
     url.searchParams.get("testMode") === "1" || isObserveTestMode();
-  const trace = await runTracePayload({ id, testMode });
+  const slowMoMultiplier = parseSlowMoMultiplier(
+    url.searchParams.get("slowMo"),
+  );
+  const trace = await runTracePayload({ id, testMode, slowMoMultiplier });
 
   if (!trace) {
     return new Response("Run not found.", { status: 404 });
@@ -28,7 +34,9 @@ export async function GET(
         controller.enqueue(
           encoder.encode(`data: ${JSON.stringify(event)}\n\n`),
         );
-        await wait(testMode ? 5 : event.type === "token" ? 45 : 220);
+        await wait(
+          (testMode ? 5 : event.type === "token" ? 45 : 220) * slowMoMultiplier,
+        );
       }
 
       controller.close();

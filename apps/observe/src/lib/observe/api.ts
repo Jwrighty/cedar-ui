@@ -1,5 +1,6 @@
 import { createObserveCorpus } from "./generator";
 import { waitForEndpointLatency } from "./latency";
+import type { SlowMoMultiplier } from "./latency";
 import type {
   CostByModelChart,
   LatencyDistributionChart,
@@ -17,35 +18,45 @@ export interface ListRunsOptions {
   cursor?: string | null;
   limit?: number;
   testMode?: boolean;
+  slowMoMultiplier?: SlowMoMultiplier;
 }
 
 export interface OverviewMetricOptions {
   metric: OverviewMetricKey;
   failMetric?: OverviewMetricKey | null;
   testMode?: boolean;
+  slowMoMultiplier?: SlowMoMultiplier;
 }
 
 export interface OverviewChartOptions {
   chart: OverviewChartKey;
   testMode?: boolean;
+  slowMoMultiplier?: SlowMoMultiplier;
 }
 
 export interface RunTraceOptions {
   id: string;
   testMode?: boolean;
+  slowMoMultiplier?: SlowMoMultiplier;
 }
 
 export interface OverviewRecentRunsOptions {
   limit?: number;
   testMode?: boolean;
+  slowMoMultiplier?: SlowMoMultiplier;
 }
 
 export async function listRunsPayload({
   cursor,
   limit = 10,
   testMode,
+  slowMoMultiplier,
 }: ListRunsOptions = {}) {
-  await waitForEndpointLatency({ endpoint: "runs", testMode });
+  await waitForEndpointLatency({
+    endpoint: "runs",
+    testMode,
+    slowMoMultiplier,
+  });
 
   const start = Number(cursor ?? 0);
   const safeStart = Number.isFinite(start) && start > 0 ? start : 0;
@@ -68,8 +79,13 @@ export async function listRunsPayload({
 export async function overviewRecentRunsPayload({
   limit = 5,
   testMode,
+  slowMoMultiplier,
 }: OverviewRecentRunsOptions = {}) {
-  await waitForEndpointLatency({ endpoint: "overviewRecentRuns", testMode });
+  await waitForEndpointLatency({
+    endpoint: "overviewRecentRuns",
+    testMode,
+    slowMoMultiplier,
+  });
 
   const safeLimit =
     Number.isFinite(limit) && limit > 0 ? Math.min(limit, 8) : 5;
@@ -85,10 +101,12 @@ export async function overviewMetricPayload({
   metric,
   failMetric,
   testMode,
+  slowMoMultiplier,
 }: OverviewMetricOptions): Promise<OverviewMetric> {
   await waitForEndpointLatency({
     endpoint: endpointForMetric(metric),
     testMode,
+    slowMoMultiplier,
   });
 
   if (failMetric === metric) {
@@ -101,10 +119,12 @@ export async function overviewMetricPayload({
 export async function overviewChartPayload({
   chart,
   testMode,
+  slowMoMultiplier,
 }: OverviewChartOptions): Promise<OverviewChart> {
   await waitForEndpointLatency({
     endpoint: endpointForChart(chart),
     testMode,
+    slowMoMultiplier,
   });
 
   return createOverviewCharts().find((item) => item.key === chart)!;
@@ -113,8 +133,13 @@ export async function overviewChartPayload({
 export async function runTracePayload({
   id,
   testMode,
+  slowMoMultiplier,
 }: RunTraceOptions): Promise<RunTrace | null> {
-  await waitForEndpointLatency({ endpoint: "runDetail", testMode });
+  await waitForEndpointLatency({
+    endpoint: "runDetail",
+    testMode,
+    slowMoMultiplier,
+  });
 
   const corpus = createObserveCorpus();
   const run = corpus.runs.find((item) => item.id === id);

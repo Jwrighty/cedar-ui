@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 
 import { overviewChartPayload } from "@/lib/observe/api";
 import type { OverviewChartKey } from "@/lib/observe/domain";
-import { isObserveTestMode } from "@/lib/observe/latency";
+import {
+  isObserveTestMode,
+  parseSlowMoMultiplier,
+} from "@/lib/observe/latency";
 
 const chartKeys = new Set<OverviewChartKey>([
   "runs-over-time",
@@ -25,6 +28,7 @@ export async function GET(
     await overviewChartPayload({
       chart,
       testMode: url.searchParams.get("testMode") === "1" || isObserveTestMode(),
+      slowMoMultiplier: parseSlowMoMultiplier(url.searchParams.get("slowMo")),
     }),
   );
 }

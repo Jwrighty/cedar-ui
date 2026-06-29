@@ -14,6 +14,7 @@ import type {
   OverviewChartKey,
   RunsOverTimeChart,
 } from "@/lib/observe/domain";
+import type { SlowMoMultiplier } from "@/lib/observe/latency";
 
 const AREA_VIEW = {
   width: 720,
@@ -49,30 +50,64 @@ const secondaryCharts: OverviewChartKey[] = [
   "latency-distribution",
 ];
 
-export function OverviewRunsChart() {
+export function OverviewRunsChart({
+  testMode,
+  slowMoMultiplier,
+}: {
+  testMode?: boolean;
+  slowMoMultiplier?: SlowMoMultiplier;
+}) {
   const chart: OverviewChartKey = "runs-over-time";
 
   return (
     <Suspense fallback={<OverviewChartSkeleton chart={chart} />}>
-      <OverviewChartCard chart={chart} />
+      <OverviewChartCard
+        chart={chart}
+        testMode={testMode}
+        slowMoMultiplier={slowMoMultiplier}
+      />
     </Suspense>
   );
 }
 
-export function OverviewCharts() {
+export function OverviewCharts({
+  testMode,
+  slowMoMultiplier,
+}: {
+  testMode?: boolean;
+  slowMoMultiplier?: SlowMoMultiplier;
+}) {
   return (
     <section className="overview-charts" aria-label="Overview charts">
       {secondaryCharts.map((chart) => (
-        <Suspense key={chart} fallback={<OverviewChartSkeleton chart={chart} />}>
-          <OverviewChartCard chart={chart} />
+        <Suspense
+          key={chart}
+          fallback={<OverviewChartSkeleton chart={chart} />}
+        >
+          <OverviewChartCard
+            chart={chart}
+            testMode={testMode}
+            slowMoMultiplier={slowMoMultiplier}
+          />
         </Suspense>
       ))}
     </section>
   );
 }
 
-async function OverviewChartCard({ chart }: { chart: OverviewChartKey }) {
-  const payload = await fetchOverviewChart(chart);
+async function OverviewChartCard({
+  chart,
+  testMode,
+  slowMoMultiplier,
+}: {
+  chart: OverviewChartKey;
+  testMode?: boolean;
+  slowMoMultiplier?: SlowMoMultiplier;
+}) {
+  const payload = await fetchOverviewChart(chart, {
+    testMode,
+    slowMoMultiplier,
+  });
 
   return (
     <article
@@ -284,12 +319,29 @@ function AreaGrid({ frame }: { frame: ReturnType<typeof areaFrame> }) {
   );
 }
 
-async function fetchOverviewChart(chart: OverviewChartKey) {
+async function fetchOverviewChart(
+  chart: OverviewChartKey,
+  {
+    testMode,
+    slowMoMultiplier = 1,
+  }: { testMode?: boolean; slowMoMultiplier?: SlowMoMultiplier } = {},
+) {
   const requestHeaders = await headers();
   const host = requestHeaders.get("host") ?? "127.0.0.1:3010";
   const protocol = requestHeaders.get("x-forwarded-proto") ?? "http";
+  const params = new URLSearchParams();
+
+  if (testMode) {
+    params.set("testMode", "1");
+  }
+
+  if (slowMoMultiplier !== 1) {
+    params.set("slowMo", String(slowMoMultiplier));
+  }
+
+  const query = params.size > 0 ? `?${params.toString()}` : "";
   const response = await fetch(
-    `${protocol}://${host}/api/overview/charts/${chart}`,
+    `${protocol}://${host}/api/overview/charts/${chart}${query}`,
     {
       cache: "no-store",
     },

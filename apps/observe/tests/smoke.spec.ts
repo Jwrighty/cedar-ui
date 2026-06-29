@@ -182,6 +182,48 @@ test("streams overview metrics from skeletons in deterministic order", async ({
   await expect(page.getByTestId("overview-recent-runs")).toBeVisible();
 });
 
+test("replays the Overview loading choreography with slow motion", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/?testMode=1", { waitUntil: "commit" });
+
+  await expect(page.getByTestId("overview-metric-runs")).toBeVisible();
+  await expect(page.getByTestId("demo-mode-control")).toBeVisible();
+  await expect(page.getByRole("button", { name: "2x" })).toBeEnabled();
+
+  await page.getByRole("button", { name: "2x" }).click();
+
+  await expect(page).toHaveURL(/slowMo=2/);
+  await expect(page.getByTestId("overview-metric-skeleton-runs")).toBeVisible();
+  await expect
+    .poll(() =>
+      page.evaluate(() =>
+        getComputedStyle(document.querySelector(".observe-panel")!)
+          .getPropertyValue("--semantic-motion-duration-settle")
+          .trim(),
+      ),
+    )
+    .toBe("360ms");
+  await expect(page.getByTestId("overview-metric-runs")).toBeVisible({
+    timeout: 3000,
+  });
+
+  await page.getByRole("button", { name: "Replay" }).click();
+
+  await expect(page.getByTestId("overview-metric-skeleton-runs")).toBeVisible();
+  await expect(page.getByTestId("overview-metric-runs")).toBeVisible({
+    timeout: 3000,
+  });
+  await expect(page.getByTestId("overview-chart-runs-over-time")).toBeVisible({
+    timeout: 7000,
+  });
+  await expect(page.locator(".overview-chart__draw--sweep").first()).toHaveCSS(
+    "animation-name",
+    "none",
+  );
+});
+
 test("renders recent runs with status pills and trace links", async ({
   page,
 }) => {

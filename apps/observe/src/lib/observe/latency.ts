@@ -14,6 +14,10 @@ export const endpointLatencies = {
 
 export type ObserveEndpoint = keyof typeof endpointLatencies;
 
+const supportedSlowMoMultipliers = [1, 2, 4] as const;
+
+export type SlowMoMultiplier = (typeof supportedSlowMoMultipliers)[number];
+
 const testEndpointLatencies: Partial<Record<ObserveEndpoint, number>> = {
   overviewMetricRuns: 500,
   overviewMetricSuccessRate: 1000,
@@ -28,18 +32,32 @@ const testEndpointLatencies: Partial<Record<ObserveEndpoint, number>> = {
 export interface LatencyOptions {
   endpoint: ObserveEndpoint;
   testMode?: boolean;
+  slowMoMultiplier?: SlowMoMultiplier;
 }
 
 export async function waitForEndpointLatency({
   endpoint,
   testMode = isObserveTestMode(),
+  slowMoMultiplier = 1,
 }: LatencyOptions) {
-  const delay = testMode
+  const baseDelay = testMode
     ? (testEndpointLatencies[endpoint] ?? 1)
     : endpointLatencies[endpoint];
+  const delay = baseDelay * slowMoMultiplier;
   await new Promise((resolve) => setTimeout(resolve, delay));
 }
 
 export function isObserveTestMode() {
   return process.env.OBSERVE_TEST_MODE === "1";
+}
+
+export function parseSlowMoMultiplier(
+  value: string | string[] | null | undefined,
+): SlowMoMultiplier {
+  const firstValue = Array.isArray(value) ? value[0] : value;
+  const multiplier = Number(firstValue);
+
+  return supportedSlowMoMultipliers.includes(multiplier as SlowMoMultiplier)
+    ? (multiplier as SlowMoMultiplier)
+    : 1;
 }

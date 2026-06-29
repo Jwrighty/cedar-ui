@@ -13,21 +13,36 @@ import {
 
 import { overviewRecentRunsPayload } from "@/lib/observe/api";
 import type { Run, RunStatus } from "@/lib/observe/domain";
+import type { SlowMoMultiplier } from "@/lib/observe/latency";
 
 export function OverviewRecentRunsPreview({
   testMode,
+  slowMoMultiplier,
 }: {
   testMode?: boolean;
+  slowMoMultiplier?: SlowMoMultiplier;
 }) {
   return (
     <Suspense fallback={<OverviewRecentRunsSkeleton />}>
-      <OverviewRecentRunsCard testMode={testMode} />
+      <OverviewRecentRunsCard
+        testMode={testMode}
+        slowMoMultiplier={slowMoMultiplier}
+      />
     </Suspense>
   );
 }
 
-async function OverviewRecentRunsCard({ testMode }: { testMode?: boolean }) {
-  const payload = await overviewRecentRunsPayload({ testMode });
+async function OverviewRecentRunsCard({
+  testMode,
+  slowMoMultiplier,
+}: {
+  testMode?: boolean;
+  slowMoMultiplier?: SlowMoMultiplier;
+}) {
+  const payload = await overviewRecentRunsPayload({
+    testMode,
+    slowMoMultiplier,
+  });
 
   return (
     <article

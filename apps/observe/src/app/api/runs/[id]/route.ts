@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
 
 import { runTracePayload } from "@/lib/observe/api";
-import { isObserveTestMode } from "@/lib/observe/latency";
+import {
+  isObserveTestMode,
+  parseSlowMoMultiplier,
+} from "@/lib/observe/latency";
 
 export async function GET(
   request: Request,
@@ -12,6 +15,7 @@ export async function GET(
   const trace = await runTracePayload({
     id,
     testMode: url.searchParams.get("testMode") === "1" || isObserveTestMode(),
+    slowMoMultiplier: parseSlowMoMultiplier(url.searchParams.get("slowMo")),
   });
 
   if (!trace) {

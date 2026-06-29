@@ -237,6 +237,33 @@ a {
   gap: var(--semantic-space-stack-sm);
 }
 
+.demo-mode {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: var(--semantic-space-gap-sm);
+  padding: var(--semantic-space-inset-xs);
+  border: var(--semantic-border-width) solid
+    var(--semantic-color-border-default);
+  border-radius: var(--semantic-radius-control);
+  background: var(--semantic-color-surface-raised);
+}
+
+.demo-mode__replay,
+.demo-mode__speed {
+  min-inline-size: 4.5rem;
+}
+
+.demo-mode__speeds {
+  display: flex;
+  align-items: center;
+  gap: var(--semantic-space-gap-xs);
+}
+
+.demo-mode__speed[aria-pressed="true"] {
+  border-color: var(--semantic-color-action-rest);
+}
+
 /* All dashboard rows share one rhythm so grouped grids and the gaps
    between rows read as a single, consistent grid. */
 .overview-grid {
@@ -989,6 +1016,19 @@ a {
 
   .dashboard-header__actions {
     justify-content: flex-start;
+  }
+
+  .demo-mode {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .demo-mode__speeds {
+    flex: 1 1 auto;
+  }
+
+  .demo-mode__speed {
+    flex: 1 1 0;
   }
 
   .overview-metrics {

@@ -1,9 +1,15 @@
 import { Heading, Text } from "@jwrighty/cedar-react";
+import type { CSSProperties } from "react";
 
 import type { OverviewMetricKey } from "@/lib/observe/domain";
-import { isObserveTestMode } from "@/lib/observe/latency";
+import {
+  isObserveTestMode,
+  parseSlowMoMultiplier,
+  type SlowMoMultiplier,
+} from "@/lib/observe/latency";
 
 import { DashboardShell } from "./dashboard-shell";
+import { DemoModeControl } from "./demo-mode-control";
 import { MotionStatus } from "./motion-status";
 import { OverviewCharts, OverviewRunsChart } from "./overview-charts";
 import { OverviewMetricsRow } from "./overview-metrics";
@@ -25,15 +31,22 @@ const metricKeys = new Set<OverviewMetricKey>([
 export default async function Page({ searchParams }: PageProps) {
   const resolvedSearchParams = await searchParams;
   const failMetric = asOverviewMetricKey(resolvedSearchParams?.metricError);
+  const replayKey = firstParam(resolvedSearchParams?.replay) ?? "initial";
+  const slowMoMultiplier = parseSlowMoMultiplier(resolvedSearchParams?.slowMo);
   // Honor an explicit `?testMode=1` so streaming-order e2e tests get the
   // staggered latencies even when they reuse a dev server started without
   // OBSERVE_TEST_MODE=1; otherwise fall back to the server's env.
   const testMode =
     firstParam(resolvedSearchParams?.testMode) === "1" || isObserveTestMode();
+  const demoKey = `${replayKey}-${slowMoMultiplier}`;
 
   return (
     <DashboardShell>
-      <section className="observe-panel" aria-labelledby="observe-title">
+      <section
+        className="observe-panel"
+        aria-labelledby="observe-title"
+        style={demoMotionStyle(slowMoMultiplier)}
+      >
         <header className="observe-panel__intro">
           <Heading id="observe-title" level={2} size="xl">
             Live run health
@@ -42,15 +55,33 @@ export default async function Page({ searchParams }: PageProps) {
             Seeded data is flowing through the mock backend and into a server
             component.
           </Text>
+          <DemoModeControl />
         </header>
 
         <div className="overview-grid">
           <div className="overview-top">
-            <OverviewMetricsRow failMetric={failMetric} testMode={testMode} />
-            <OverviewRunsChart />
+            <OverviewMetricsRow
+              key={`metrics-${demoKey}`}
+              failMetric={failMetric}
+              testMode={testMode}
+              slowMoMultiplier={slowMoMultiplier}
+            />
+            <OverviewRunsChart
+              key={`runs-chart-${demoKey}`}
+              testMode={testMode}
+              slowMoMultiplier={slowMoMultiplier}
+            />
           </div>
-          <OverviewCharts />
-          <OverviewRecentRunsPreview testMode={testMode} />
+          <OverviewCharts
+            key={`charts-${demoKey}`}
+            testMode={testMode}
+            slowMoMultiplier={slowMoMultiplier}
+          />
+          <OverviewRecentRunsPreview
+            key={`recent-runs-${demoKey}`}
+            testMode={testMode}
+            slowMoMultiplier={slowMoMultiplier}
+          />
         </div>
 
         <MotionStatus>
@@ -70,4 +101,20 @@ function asOverviewMetricKey(value: string | string[] | undefined) {
 
 function firstParam(value: string | string[] | undefined) {
   return Array.isArray(value) ? value[0] : value;
+}
+
+function demoMotionStyle(
+  slowMoMultiplier: SlowMoMultiplier,
+): CSSProperties &
+  Record<
+    | "--semantic-motion-duration-feedback"
+    | "--semantic-motion-duration-settle"
+    | "--semantic-motion-duration-draw",
+    string
+  > {
+  return {
+    "--semantic-motion-duration-feedback": `${120 * slowMoMultiplier}ms`,
+    "--semantic-motion-duration-settle": `${180 * slowMoMultiplier}ms`,
+    "--semantic-motion-duration-draw": `${320 * slowMoMultiplier}ms`,
+  };
 }

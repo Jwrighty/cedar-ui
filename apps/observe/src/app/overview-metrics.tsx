@@ -4,6 +4,7 @@ import { Skeleton, Stat } from "@jwrighty/cedar-react";
 
 import { overviewMetricPayload } from "@/lib/observe/api";
 import type { OverviewMetric, OverviewMetricKey } from "@/lib/observe/domain";
+import type { SlowMoMultiplier } from "@/lib/observe/latency";
 
 import { MetricErrorBoundary } from "./metric-error-boundary";
 import { normalizePoints, toAreaPath, toSmoothPath } from "./sparkline";
@@ -20,9 +21,11 @@ const metrics: Array<{ key: OverviewMetricKey; label: string }> = [
 export function OverviewMetricsRow({
   failMetric,
   testMode,
+  slowMoMultiplier,
 }: {
   failMetric: OverviewMetricKey | null;
   testMode?: boolean;
+  slowMoMultiplier?: SlowMoMultiplier;
 }) {
   return (
     <section className="overview-metrics" aria-label="Overview metrics">
@@ -36,6 +39,7 @@ export function OverviewMetricsRow({
               metric={metric.key}
               failMetric={failMetric}
               testMode={testMode}
+              slowMoMultiplier={slowMoMultiplier}
             />
           </Suspense>
         </MetricErrorBoundary>
@@ -48,15 +52,18 @@ async function OverviewMetricCard({
   metric,
   failMetric,
   testMode,
+  slowMoMultiplier,
 }: {
   metric: OverviewMetricKey;
   failMetric: OverviewMetricKey | null;
   testMode?: boolean;
+  slowMoMultiplier?: SlowMoMultiplier;
 }) {
   const payload = await overviewMetricPayload({
     metric,
     failMetric,
     testMode,
+    slowMoMultiplier,
   });
 
   return (
@@ -103,7 +110,11 @@ function MetricBars({ metric }: { metric: OverviewMetric }) {
   const max = Math.max(...metric.sparkline, 1);
 
   return (
-    <div className="metric-sparkline" role="img" aria-label={sparklineLabel(metric)}>
+    <div
+      className="metric-sparkline"
+      role="img"
+      aria-label={sparklineLabel(metric)}
+    >
       {metric.sparkline.map((value, index) => (
         <span
           // Bars share bucket values; index keeps duplicate heights stable.
