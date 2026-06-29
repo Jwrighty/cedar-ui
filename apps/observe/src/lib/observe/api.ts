@@ -35,6 +35,11 @@ export interface RunTraceOptions {
   testMode?: boolean;
 }
 
+export interface OverviewRecentRunsOptions {
+  limit?: number;
+  testMode?: boolean;
+}
+
 export async function listRunsPayload({
   cursor,
   limit = 10,
@@ -56,6 +61,22 @@ export async function listRunsPayload({
   return {
     runs,
     nextCursor,
+    generatedAt: new Date("2026-02-24T12:00:00.000Z").toISOString(),
+  };
+}
+
+export async function overviewRecentRunsPayload({
+  limit = 5,
+  testMode,
+}: OverviewRecentRunsOptions = {}) {
+  await waitForEndpointLatency({ endpoint: "overviewRecentRuns", testMode });
+
+  const safeLimit =
+    Number.isFinite(limit) && limit > 0 ? Math.min(limit, 8) : 5;
+  const corpus = createObserveCorpus();
+
+  return {
+    runs: corpus.runs.slice(0, safeLimit),
     generatedAt: new Date("2026-02-24T12:00:00.000Z").toISOString(),
   };
 }

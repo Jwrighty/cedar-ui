@@ -13,8 +13,12 @@ test("renders the dashboard shell around seeded observe data", async ({
     page.getByRole("heading", { name: "Live run health" }),
   ).toBeVisible();
   await expect(page.getByRole("navigation", { name: "Primary" })).toBeVisible();
-  await expect(page.getByText("Latest run")).toBeVisible();
-  await expect(page.getByText(/Rendered from `\/api\/runs`/)).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Recent runs" }),
+  ).toBeVisible();
+  await expect(
+    page.getByText(/deterministic seed data with tuned Suspense boundaries/),
+  ).toBeVisible();
   await expect(page.getByTestId("overview-metric-runs")).toBeVisible();
 });
 
@@ -94,6 +98,79 @@ test("streams overview metrics from skeletons in deterministic order", async ({
   ).toBeVisible();
 
   await expect(page.getByTestId("overview-metric-p95Latency")).toBeVisible();
+  await expect(page.getByTestId("overview-recent-runs-skeleton")).toBeVisible();
+  await expect(page.getByTestId("overview-recent-runs")).toBeVisible();
+});
+
+test("renders recent runs with status pills and trace links", async ({
+  page,
+}) => {
+  await page.goto("/");
+
+  const recentRuns = page.getByTestId("overview-recent-runs");
+  await expect(recentRuns).toBeVisible();
+  await expect(
+    recentRuns.getByRole("link", { name: "View feed" }),
+  ).toHaveAttribute("href", "/runs");
+  await expect(
+    recentRuns.getByRole("columnheader", { name: "Tokens" }),
+  ).toBeVisible();
+  await expect(
+    recentRuns.getByText(/Running|Success|Error/).first(),
+  ).toBeVisible();
+  await page.addScriptTag({
+    content: await readFile(
+      new URL(
+        "../../../node_modules/.pnpm/node_modules/axe-core/axe.min.js",
+        import.meta.url,
+      ),
+      "utf8",
+    ),
+  });
+
+  const violations = await page.evaluate(async () => {
+    const target = document.querySelector(
+      '[data-testid="overview-recent-runs"]',
+    );
+
+    if (!target) {
+      return [{ id: "missing-recent-runs", nodes: [] }];
+    }
+
+    const axe = (
+      window as typeof window & {
+        axe: {
+          run: (
+            target: Element,
+            options?: unknown,
+          ) => Promise<{
+            violations: Array<{
+              id: string;
+              nodes: Array<{ target: string[] }>;
+            }>;
+          }>;
+        };
+      }
+    ).axe;
+
+    return (await axe.run(target)).violations.map((violation) => ({
+      id: violation.id,
+      nodes: violation.nodes.map((node) => node.target),
+    }));
+  });
+
+  expect(violations).toEqual([]);
+
+  const firstTraceLink = recentRuns
+    .getByRole("link", { name: /Open trace for/ })
+    .first();
+  await expect(firstTraceLink).toHaveAttribute("href", "/runs/run_0001");
+
+  await firstTraceLink.click();
+  await expect(page).toHaveURL(/\/runs\/run_0001$/);
+  await expect(
+    page.locator(".trace-hero").getByText("Trace detail"),
+  ).toBeVisible();
 });
 
 test("keeps Stat values and deltas from overlapping at narrow card widths", async ({

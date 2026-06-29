@@ -5,6 +5,7 @@ import {
   createOverviewCharts,
   createTraceStreamEvents,
   createOverviewMetrics,
+  overviewRecentRunsPayload,
   listRunsPayload,
   overviewChartPayload,
   overviewMetricPayload,
@@ -50,6 +51,22 @@ describe("listRunsPayload", () => {
 
     expect(payload.runs).toHaveLength(10);
     expect(payload.nextCursor).toBe("10");
+  });
+});
+
+describe("overviewRecentRunsPayload", () => {
+  it("serves the newest runs for the Overview preview", async () => {
+    const startedAt = performance.now();
+    const payload = await overviewRecentRunsPayload({ testMode: true });
+
+    expect(performance.now() - startedAt).toBeLessThan(4000);
+    expect(payload.runs).toHaveLength(5);
+    expect(payload.runs[0]).toMatchObject({
+      id: "run_0001",
+      label: expect.any(String),
+      status: expect.stringMatching(/running|success|error/),
+    });
+    expect(payload.generatedAt).toBe("2026-02-24T12:00:00.000Z");
   });
 });
 

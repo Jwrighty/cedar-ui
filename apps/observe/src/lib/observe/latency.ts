@@ -6,6 +6,7 @@ export const endpointLatencies = {
   overviewChartRunsOverTime: 170,
   overviewChartCostByModel: 210,
   overviewChartLatencyDistribution: 250,
+  overviewRecentRuns: 290,
   runs: 180,
   runDetail: 260,
   liveFeed: 400,
@@ -21,6 +22,7 @@ const testEndpointLatencies: Partial<Record<ObserveEndpoint, number>> = {
   overviewChartRunsOverTime: 2400,
   overviewChartCostByModel: 2800,
   overviewChartLatencyDistribution: 3200,
+  overviewRecentRuns: 3600,
 };
 
 export interface LatencyOptions {
