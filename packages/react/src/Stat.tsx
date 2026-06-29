@@ -1,7 +1,7 @@
 "use client";
 
 import { forwardRef, type HTMLAttributes, type ReactNode } from "react";
-import { Card, CardBody } from "./Card";
+import { Card, type CardProps } from "./Card";
 import styles from "./Stat.module.css";
 
 export type StatDeltaDirection = "positive" | "negative" | "neutral";
@@ -23,6 +23,8 @@ export interface StatProps extends HTMLAttributes<HTMLDivElement> {
   delta?: StatDelta;
   /** Optional chart, sparkline, or loading placeholder slot. */
   visual?: ReactNode;
+  /** Inset applied to the metric surface. @default "xl" */
+  padding?: CardProps["padding"];
 }
 
 const deltaClass = (direction: StatDeltaDirection) =>
@@ -38,16 +40,17 @@ const deltaClass = (direction: StatDeltaDirection) =>
  * <Stat label="Runs" value="1,248" delta={{ direction: "positive", value: "+8%" }} />
  */
 export const Stat = forwardRef<HTMLDivElement, StatProps>(function Stat(
-  { label, value, delta, visual, className, ...props },
+  { label, value, delta, visual, className, padding = "xl", ...props },
   ref,
 ) {
   return (
     <Card
       ref={ref}
       className={className ? `${styles.stat} ${className}` : styles.stat}
+      padding={padding}
       {...props}
     >
-      <CardBody className={styles.body}>
+      <div className={styles.body}>
         <div className={styles.content}>
           <p className={styles.label}>{label}</p>
           <div className={styles.valueRow}>
@@ -63,7 +66,7 @@ export const Stat = forwardRef<HTMLDivElement, StatProps>(function Stat(
           </div>
         </div>
         {visual ? <div className={styles.visual}>{visual}</div> : null}
-      </CardBody>
+      </div>
     </Card>
   );
 });

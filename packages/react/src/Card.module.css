@@ -24,6 +24,10 @@
   padding: var(--semantic-space-inset-lg);
 }
 
+.paddingXl {
+  padding: var(--semantic-space-inset-xl);
+}
+
 .section {
   box-sizing: border-box;
 }
