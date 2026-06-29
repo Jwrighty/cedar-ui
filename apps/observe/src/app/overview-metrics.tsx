@@ -54,6 +54,7 @@ async function OverviewMetricCard({
     <Stat
       className="metric-card metric-card--loaded"
       data-testid={`overview-metric-${metric}`}
+      padding="lg"
       label={payload.label}
       value={formatMetricValue(payload)}
       delta={{

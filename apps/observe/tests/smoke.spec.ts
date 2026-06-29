@@ -144,11 +144,11 @@ test("keeps Stat values and deltas from overlapping at narrow card widths", asyn
     <div class="card stat">
       <div class="body">
         <div class="content">
-          <p class="label">P95 latency</p>
-          <div class="valueRow">
-            <div class="value">9,336ms</div>
+          <div class="header">
+            <p class="label">P95 latency</p>
             <div class="delta positive">-4%</div>
           </div>
+          <div class="value">9,336ms</div>
         </div>
       </div>
     </div>
@@ -165,7 +165,12 @@ test("keeps Stat values and deltas from overlapping at narrow card widths", asyn
     const valueBox = value.getBoundingClientRect();
     const deltaBox = delta.getBoundingClientRect();
 
-    return value.scrollWidth > value.clientWidth && deltaBox.y < valueBox.bottom;
+    // The delta now sits on the label row above the value, so the value owns
+    // the full width and never wraps mid-token or collides with the delta.
+    const valueOverflows = value.scrollWidth > value.clientWidth + 1;
+    const deltaOverlapsValue = deltaBox.bottom > valueBox.top + 1;
+
+    return valueOverflows || deltaOverlapsValue;
   });
 
   expect(collisionRisk).toBe(false);

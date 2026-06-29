@@ -228,15 +228,44 @@ a {
 }
 
 .observe-panel {
-  width: min(100%, 60rem);
+  width: min(100%, 90rem);
   display: grid;
   gap: var(--semantic-space-stack-xl);
+}
+
+.observe-panel__intro {
+  display: grid;
+  gap: var(--semantic-space-stack-sm);
+}
+
+/* All dashboard rows share one rhythm so grouped grids and the gaps
+   between rows read as a single, consistent grid. */
+.overview-grid {
+  display: grid;
+  gap: var(--semantic-space-gap-lg);
+}
+
+.overview-top {
+  display: grid;
+  gap: var(--semantic-space-gap-lg);
 }
 
 .overview-metrics {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--semantic-space-gap-lg);
+}
+
+/* Wide screens: stat cards form a 2x2 block beside the runs chart. */
+@media (min-width: 75rem) {
+  .overview-top {
+    grid-template-columns: 2fr 3fr;
+    align-items: stretch;
+  }
+
+  .overview-top .overview-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .metric-card {
@@ -302,7 +331,7 @@ a {
 
 .metric-sparkline span {
   min-block-size: 0.25rem;
-  border-radius: 999px 999px 0 0;
+  border-radius: 0.25rem 0.25rem 0 0;
   background: var(--semantic-color-chart-categorical-one);
 }
 
@@ -346,10 +375,6 @@ a {
     var(--semantic-motion-easing-settle) both;
 }
 
-.overview-chart-card--runs-over-time {
-  grid-column: 1 / -1;
-}
-
 .overview-chart-card__header {
   display: grid;
   gap: var(--semantic-space-stack-sm);
@@ -369,7 +394,8 @@ a {
 
 .overview-chart {
   inline-size: 100%;
-  block-size: 15rem;
+  block-size: 100%;
+  min-block-size: 12rem;
   display: block;
   overflow: visible;
 }
@@ -395,39 +421,109 @@ a {
   stroke: var(--semantic-color-chart-categorical-one);
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-width: 4;
+  stroke-width: 2.5;
 }
 
-.overview-chart__bar {
-  fill: var(--semantic-color-chart-categorical-two);
-  transform-box: fill-box;
+/* Cost by model: full-width horizontal bars with labels to the left. */
+.cost-bars {
+  display: grid;
+  align-content: center;
+  gap: var(--semantic-space-gap-md);
+  min-block-size: 12rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cost-bar {
+  display: grid;
+  gap: var(--semantic-space-stack-sm);
+}
+
+.cost-bar__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--semantic-space-gap-md);
+}
+
+.cost-bar__label {
+  color: var(--semantic-color-text-default);
+  font-size: var(--semantic-font-size-sm);
+  font-weight: var(--semantic-font-label-weight);
+}
+
+.cost-bar__value {
+  flex: 0 0 auto;
+  color: var(--semantic-color-text-muted);
+  font-size: var(--semantic-font-size-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.cost-bar__track {
+  block-size: 0.875rem;
+  border-radius: 999px;
+  background: var(--semantic-color-surface-sunken);
+}
+
+.cost-bar__fill {
+  display: block;
+  block-size: 100%;
+  min-inline-size: 0.5rem;
+  border-radius: inherit;
+  background: var(--semantic-color-chart-categorical-two);
   transform-origin: left center;
   animation: chart-bar-grow var(--semantic-motion-duration-draw)
     var(--semantic-motion-easing-emphasized) both;
 }
 
-.overview-chart__bar--vertical {
-  fill: var(--semantic-color-chart-categorical-three);
-  animation-name: chart-bar-grow-y;
+/* Latency distribution: full-width column chart. */
+.latency-bars {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  align-items: end;
+  gap: var(--semantic-space-gap-md);
+  min-block-size: 12rem;
+  padding-block: var(--semantic-space-stack-md);
+}
+
+.latency-bar {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  align-items: end;
+  justify-items: center;
+  gap: var(--semantic-space-stack-sm);
+  block-size: 100%;
+}
+
+.latency-bar__count {
+  color: var(--semantic-color-text-default);
+  font-size: var(--semantic-font-size-sm);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--semantic-font-label-weight);
+}
+
+.latency-bar__track {
+  display: flex;
+  align-items: end;
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.latency-bar__fill {
+  inline-size: 100%;
+  border-radius: var(--semantic-radius-control) var(--semantic-radius-control) 0
+    0;
+  background: var(--semantic-color-chart-categorical-three);
   transform-origin: bottom center;
+  animation: chart-bar-grow-y var(--semantic-motion-duration-draw)
+    var(--semantic-motion-easing-emphasized) both;
 }
 
-.overview-chart__bar-label,
-.overview-chart__bar-value,
-.overview-chart__bucket-label {
-  fill: var(--semantic-color-text-muted);
-  font-family: var(--semantic-font-body-family);
-  font-size: 0.75rem;
-}
-
-.overview-chart__bar-label {
-  fill: var(--semantic-color-text-on-action);
-  font-weight: var(--semantic-font-label-weight);
-}
-
-.overview-chart__bar-value {
-  fill: var(--semantic-color-text-default);
-  font-weight: var(--semantic-font-label-weight);
+.latency-bar__label {
+  color: var(--semantic-color-text-muted);
+  font-size: var(--semantic-font-size-xs);
 }
 
 .overview-chart-legend {
@@ -544,7 +640,7 @@ a {
 }
 
 .trace-page {
-  width: min(100%, 60rem);
+  width: min(100%, 90rem);
   display: grid;
   gap: var(--semantic-space-stack-xl);
 }
@@ -875,7 +971,8 @@ a {
 
   .overview-chart-card,
   .overview-chart__draw--sweep,
-  .overview-chart__bar {
+  .cost-bar__fill,
+  .latency-bar__fill {
     animation: none;
     opacity: 1;
     transform: none;

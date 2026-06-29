@@ -6,7 +6,7 @@ import type { OverviewMetricKey } from "@/lib/observe/domain";
 
 import { DashboardShell } from "./dashboard-shell";
 import { MotionStatus } from "./motion-status";
-import { OverviewCharts } from "./overview-charts";
+import { OverviewCharts, OverviewRunsChart } from "./overview-charts";
 import { OverviewMetricsRow } from "./overview-metrics";
 
 export const dynamic = "force-dynamic";
@@ -41,21 +41,27 @@ export default async function Page({ searchParams }: PageProps) {
   return (
     <DashboardShell>
       <section className="observe-panel" aria-labelledby="observe-title">
-        <Text className="observe-kicker" size="sm" tone="muted">
-          Overview
-        </Text>
-        <Heading id="observe-title" level={2} size="xl">
-          Live run health
-        </Heading>
-        <Text tone="muted">
-          Seeded data is flowing through the mock backend and into a server
-          component.
-        </Text>
+        <header className="observe-panel__intro">
+          <Text className="observe-kicker" size="sm" tone="muted">
+            Overview
+          </Text>
+          <Heading id="observe-title" level={2} size="xl">
+            Live run health
+          </Heading>
+          <Text tone="muted">
+            Seeded data is flowing through the mock backend and into a server
+            component.
+          </Text>
+        </header>
 
-        <OverviewMetricsRow failMetric={failMetric} />
-        <OverviewCharts />
+        <div className="overview-grid">
+          <div className="overview-top">
+            <OverviewMetricsRow failMetric={failMetric} />
+            <OverviewRunsChart />
+          </div>
+          <OverviewCharts />
 
-        <article className="run-card" data-status={run.status}>
+          <article className="run-card" data-status={run.status}>
           <div>
             <Text size="sm" tone="muted">
               Latest run
@@ -84,7 +90,8 @@ export default async function Page({ searchParams }: PageProps) {
               </dd>
             </div>
           </dl>
-        </article>
+          </article>
+        </div>
 
         <MotionStatus>
           Rendered from `/api/runs` with deterministic seed data.
