@@ -12,12 +12,13 @@ const card = recipe({
       sm: styles.paddingSm,
       md: styles.paddingMd,
       lg: styles.paddingLg,
+      xl: styles.paddingXl,
     },
   },
 });
 
 type CardVariants = VariantProps<{
-  padding: { none: string; sm: string; md: string; lg: string };
+  padding: { none: string; sm: string; md: string; lg: string; xl: string };
 }>;
 
 /** Props for the Card surface primitive. */

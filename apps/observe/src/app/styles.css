@@ -1,9 +1,19 @@
 :root {
   color-scheme: light;
+  --observe-color-shell-background: var(--semantic-color-surface-raised);
+  --observe-color-sidebar-background: var(--semantic-color-surface-page);
+  --observe-color-header-background: color-mix(in srgb,
+      var(--observe-color-shell-background) 88%,
+      transparent);
 }
 
 [data-theme="dark"] {
   color-scheme: dark;
+  --observe-color-shell-background: var(--semantic-color-surface-page);
+  --observe-color-sidebar-background: var(--semantic-color-surface-raised);
+  --observe-color-header-background: color-mix(in srgb,
+      var(--observe-color-shell-background) 88%,
+      transparent);
 }
 
 * {
@@ -12,7 +22,7 @@
 
 body {
   margin: 0;
-  background: var(--semantic-color-surface-page);
+  background: var(--observe-color-shell-background);
   color: var(--semantic-color-text-default);
   font-family: var(--semantic-font-body-family);
 }
@@ -28,13 +38,12 @@ a {
   min-height: 100vh;
   display: grid;
   grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
-  background: var(--semantic-color-surface-page);
-  transition: grid-template-columns var(--semantic-motion-duration-settle)
-    var(--semantic-motion-easing-settle);
+  background: var(--observe-color-shell-background);
+  transition: grid-template-columns var(--semantic-motion-duration-settle) var(--semantic-motion-easing-settle);
 }
 
 .dashboard-shell--collapsed {
-  --sidebar-width: 4.75rem;
+  --sidebar-width: 4rem;
   --sidebar-label-opacity: 0;
 }
 
@@ -43,9 +52,8 @@ a {
   top: 0;
   height: 100vh;
   overflow: hidden;
-  border-right: var(--semantic-border-width) solid
-    var(--semantic-color-border-default);
-  background: var(--semantic-color-surface-raised);
+  border-right: var(--semantic-border-width) solid var(--semantic-color-border-default);
+  background: var(--observe-color-sidebar-background);
 }
 
 .dashboard-sidebar__inner {
@@ -57,8 +65,7 @@ a {
   min-width: 0;
   overflow: hidden;
   opacity: var(--sidebar-label-opacity);
-  transition: opacity var(--semantic-motion-duration-feedback)
-    var(--semantic-motion-easing-enter);
+  transition: opacity var(--semantic-motion-duration-feedback) var(--semantic-motion-easing-enter);
   white-space: nowrap;
 }
 
@@ -107,10 +114,8 @@ a {
   font-weight: var(--semantic-font-label-weight);
   text-decoration: none;
   transition:
-    background-color var(--semantic-motion-duration-feedback)
-      var(--semantic-motion-easing-enter),
-    color var(--semantic-motion-duration-feedback)
-      var(--semantic-motion-easing-enter);
+    background-color var(--semantic-motion-duration-feedback) var(--semantic-motion-easing-enter),
+    color var(--semantic-motion-duration-feedback) var(--semantic-motion-easing-enter);
 }
 
 .dashboard-nav__link[aria-current="page"] {
@@ -124,8 +129,7 @@ a {
 }
 
 .dashboard-nav__link:focus-visible {
-  outline: var(--semantic-focus-ring-width) solid
-    var(--semantic-color-focus-ring);
+  outline: var(--semantic-focus-ring-width) solid var(--semantic-color-focus-ring);
   outline-offset: var(--semantic-border-width);
 }
 
@@ -145,7 +149,7 @@ a {
   overflow: hidden;
 }
 
-.dashboard-sidebar__toggle > span:first-child {
+.dashboard-sidebar__toggle>span:first-child {
   width: 2.5rem;
   flex: 0 0 2.5rem;
   text-align: center;
@@ -159,19 +163,13 @@ a {
 
 .dashboard-header {
   min-width: 0;
-  min-height: 5.75rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--semantic-space-gap-lg);
-  padding: var(--semantic-space-inset-md) var(--semantic-space-inset-lg);
-  border-bottom: var(--semantic-border-width) solid
-    var(--semantic-color-border-default);
-  background: color-mix(
-    in srgb,
-    var(--semantic-color-surface-page) 88%,
-    transparent
-  );
+  padding: var(--semantic-space-inset-md) var(--semantic-space-inset-xl);
+  border-bottom: var(--semantic-border-width) solid var(--semantic-color-border-default);
+  background: var(--observe-color-header-background);
 }
 
 .dashboard-header__kicker,
@@ -189,8 +187,7 @@ a {
   align-items: center;
   min-height: 2rem;
   padding-inline: var(--semantic-space-inset-sm);
-  border: var(--semantic-border-width) solid
-    var(--semantic-color-status-success-border);
+  border: var(--semantic-border-width) solid var(--semantic-color-status-success-border);
   border-radius: 999px;
   background: var(--semantic-color-status-success-surface);
   color: var(--semantic-color-status-success-foreground);
@@ -215,19 +212,19 @@ a {
 
 .dashboard-content {
   min-width: 0;
-  padding: var(--semantic-space-inset-lg);
+  padding: var(--semantic-space-inset-xl);
 }
 
 .observe-panel {
   width: min(100%, 60rem);
   display: grid;
-  gap: var(--semantic-space-stack-lg);
+  gap: var(--semantic-space-stack-xl);
 }
 
 .overview-metrics {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--semantic-space-gap-md);
+  gap: var(--semantic-space-gap-lg);
 }
 
 .metric-card {
@@ -235,8 +232,7 @@ a {
 }
 
 .metric-card--loaded {
-  animation: metric-settle var(--semantic-motion-duration-settle)
-    var(--semantic-motion-easing-settle) both;
+  animation: metric-settle var(--semantic-motion-duration-settle) var(--semantic-motion-easing-settle) both;
 }
 
 .metric-card--skeleton,
@@ -244,8 +240,7 @@ a {
   display: grid;
   gap: var(--semantic-space-stack-md);
   padding: var(--semantic-space-inset-md);
-  border: var(--semantic-border-width) solid
-    var(--semantic-color-border-default);
+  border: var(--semantic-border-width) solid var(--semantic-color-border-default);
   border-radius: var(--semantic-radius-overlay);
   background: var(--semantic-color-surface-raised);
 }
@@ -311,8 +306,7 @@ a {
   display: grid;
   gap: var(--semantic-space-stack-md);
   padding: var(--semantic-space-inset-lg);
-  border: var(--semantic-border-width) solid
-    var(--semantic-color-status-success-border);
+  border: var(--semantic-border-width) solid var(--semantic-color-status-success-border);
   border-radius: var(--semantic-radius-overlay);
   background: var(--semantic-color-surface-raised);
   box-shadow: 0 1rem 3rem rgba(15, 23, 42, 0.12);
@@ -594,9 +588,10 @@ a {
 }
 
 @media (max-width: 48rem) {
+
   .dashboard-shell,
   .dashboard-shell--collapsed {
-    --sidebar-width: 4.75rem;
+    --sidebar-width: 4rem;
     --sidebar-label-opacity: 0;
   }
 
@@ -658,6 +653,7 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {

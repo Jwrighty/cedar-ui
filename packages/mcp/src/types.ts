@@ -1,5 +1,3 @@
-import type { ComponentMeta } from "@jwrighty/cedar-react";
-
 /**
  * The shape of `cedar.manifest.json`, the generated artifact the MCP server
  * reads. Produced by `@jwrighty/cedar-react`'s agent-surface generator
@@ -27,14 +25,27 @@ export interface PackageReference {
 }
 
 /**
+ * The manifest copy of Cedar's per-component usage metadata. This mirrors the
+ * React package's `ComponentMeta` contract, but stays local so the MCP server
+ * can typecheck before `@jwrighty/cedar-react` has emitted declaration files.
+ */
+export interface ManifestComponentMeta {
+  summary: string;
+  useWhen: string[];
+  avoidWhen: { situation: string; useInstead: string }[];
+  a11yNotes: string[];
+  relatedComponents: string[];
+  status: "experimental" | "stable" | "deprecated";
+}
+
+/**
  * A single component entry in the manifest: the human-authored
- * {@link ComponentMeta} (the single source of truth co-located with each
+ * {@link ManifestComponentMeta} (generated from the single source of truth
+ * co-located with each
  * component, per ADR-0009) plus the fields the generator derives from the
  * source — its export names, originating module, prop types, and variants.
- * Extending `ComponentMeta` keeps the authored fields tied to their owner so
- * the two cannot drift apart.
  */
-export interface ManifestComponent extends ComponentMeta {
+export interface ManifestComponent extends ManifestComponentMeta {
   name: string;
   exports: string[];
   source?: string;
@@ -92,7 +103,7 @@ export type TokenNode =
 export interface ComponentSummary {
   name: string;
   summary: string;
-  status: ComponentMeta["status"];
+  status: ManifestComponentMeta["status"];
   exports: string[];
 }
 

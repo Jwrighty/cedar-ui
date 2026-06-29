@@ -3,8 +3,6 @@
   flex-flow: row wrap;
   align-items: center;
   box-sizing: border-box;
-  margin: var(--semantic-space-gap-none);
-  padding: var(--semantic-space-gap-none);
 }
 
 .gapNone {

@@ -3,6 +3,7 @@
 import { forwardRef, type ElementType, type ReactElement } from "react";
 import type { PolymorphicProps, PolymorphicRef } from "./polymorphic";
 import { recipe, type VariantProps } from "./recipe";
+import { listResetClass } from "./reset";
 import styles from "./Inline.module.css";
 
 const inline = recipe({
@@ -42,14 +43,12 @@ function InlineImpl<E extends ElementType = "div">(
 ) {
   const Component = as ?? "div";
   const { className: variantClass, dataAttrs } = inline({ gap });
+  const classes = [variantClass, listResetClass(as), className]
+    .filter(Boolean)
+    .join(" ");
 
   return (
-    <Component
-      ref={ref}
-      className={className ? `${variantClass} ${className}` : variantClass}
-      {...dataAttrs}
-      {...props}
-    />
+    <Component ref={ref} className={classes} {...dataAttrs} {...props} />
   );
 }
 

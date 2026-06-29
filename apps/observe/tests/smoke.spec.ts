@@ -41,6 +41,32 @@ test("applies global and Cedar styles on first load", async ({ page }) => {
   }
 });
 
+test("swaps light shell backgrounds while keeping dark surfaces", async ({
+  page,
+}) => {
+  await page.goto("/");
+
+  await expect(page.locator(".dashboard-shell")).toHaveCSS(
+    "background-color",
+    "rgb(255, 255, 255)",
+  );
+  await expect(page.locator(".dashboard-sidebar")).toHaveCSS(
+    "background-color",
+    "rgb(252, 252, 252)",
+  );
+
+  await page.getByRole("button", { name: "Switch to dark theme" }).click();
+
+  await expect(page.locator(".dashboard-shell")).toHaveCSS(
+    "background-color",
+    "rgb(18, 18, 18)",
+  );
+  await expect(page.locator(".dashboard-sidebar")).toHaveCSS(
+    "background-color",
+    "rgb(23, 23, 23)",
+  );
+});
+
 test("streams overview metrics from skeletons in deterministic order", async ({
   page,
 }) => {
