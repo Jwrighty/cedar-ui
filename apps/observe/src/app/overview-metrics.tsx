@@ -6,6 +6,9 @@ import { overviewMetricPayload } from "@/lib/observe/api";
 import type { OverviewMetric, OverviewMetricKey } from "@/lib/observe/domain";
 
 import { MetricErrorBoundary } from "./metric-error-boundary";
+import { normalizePoints, toAreaPath, toSmoothPath } from "./sparkline";
+
+const SPARKLINE_VIEW = { width: 200, height: 48, padding: 2 } as const;
 
 const metrics: Array<{ key: OverviewMetricKey; label: string }> = [
   { key: "runs", label: "Runs" },
@@ -80,19 +83,70 @@ function OverviewMetricSkeleton({ metric }: { metric: OverviewMetricKey }) {
 }
 
 function MetricSparkline({ metric }: { metric: OverviewMetric }) {
+  if (metric.key === "runs") {
+    return <MetricBars metric={metric} />;
+  }
+
+  return <MetricLine metric={metric} />;
+}
+
+function MetricBars({ metric }: { metric: OverviewMetric }) {
   const max = Math.max(...metric.sparkline, 1);
 
   return (
-    <div className="metric-sparkline" aria-hidden="true">
+    <div className="metric-sparkline" role="img" aria-label={sparklineLabel(metric)}>
       {metric.sparkline.map((value, index) => (
         <span
-          // The sparkline is decorative; index keeps duplicate bucket values stable.
+          // Bars share bucket values; index keeps duplicate heights stable.
           key={`${metric.key}-${index}`}
           style={{ height: `${Math.max(18, (value / max) * 100)}%` }}
         />
       ))}
     </div>
   );
+}
+
+function MetricLine({ metric }: { metric: OverviewMetric }) {
+  const points = normalizePoints(metric.sparkline, SPARKLINE_VIEW);
+  const line = toSmoothPath(points);
+  const area = toAreaPath(line, points, SPARKLINE_VIEW.height);
+  const gradientId = `metric-sparkline-fill-${metric.key}`;
+
+  return (
+    <svg
+      className={`metric-line metric-line--${metric.delta.direction}`}
+      viewBox={`0 0 ${SPARKLINE_VIEW.width} ${SPARKLINE_VIEW.height}`}
+      preserveAspectRatio="none"
+      role="img"
+      aria-label={sparklineLabel(metric)}
+    >
+      <defs>
+        <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="currentColor" stopOpacity={0.28} />
+          <stop offset="100%" stopColor="currentColor" stopOpacity={0} />
+        </linearGradient>
+      </defs>
+      <path d={area} fill={`url(#${gradientId})`} />
+      <path
+        d={line}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1.8}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function sparklineLabel(metric: OverviewMetric) {
+  const trend =
+    metric.delta.direction === "neutral"
+      ? "holding steady"
+      : metric.delta.direction === "positive"
+        ? "improving"
+        : "regressing";
+  return `${metric.label} trend across the recent window, ${trend}.`;
 }
 
 function formatMetricValue(metric: OverviewMetric) {

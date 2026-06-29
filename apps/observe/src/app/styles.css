@@ -292,6 +292,24 @@ a {
   background: var(--semantic-color-chart-categorical-one);
 }
 
+.metric-line {
+  inline-size: 100%;
+  block-size: 2.75rem;
+  display: block;
+}
+
+.metric-line--positive {
+  color: var(--semantic-color-status-success-foreground);
+}
+
+.metric-line--negative {
+  color: var(--semantic-color-status-error-foreground);
+}
+
+.metric-line--neutral {
+  color: var(--semantic-color-chart-categorical-one);
+}
+
 @keyframes metric-settle {
   from {
     opacity: 0;

@@ -134,7 +134,7 @@ export function createOverviewMetrics(): OverviewMetric[] {
       label: "Runs",
       value: currentRuns.length,
       delta: deltaPercent(currentRuns.length, previousRuns.length, "positive"),
-      sparkline: bucketCounts(currentRuns, "count"),
+      sparkline: bucketSeries(currentRuns, "count"),
     },
     {
       key: "successRate",
@@ -154,7 +154,7 @@ export function createOverviewMetrics(): OverviewMetric[] {
         ),
         "positive",
       ),
-      sparkline: bucketCounts(currentRuns, "successRate"),
+      sparkline: bucketSeries(currentRuns, "successRate"),
     },
     {
       key: "totalCost",
@@ -165,7 +165,7 @@ export function createOverviewMetrics(): OverviewMetric[] {
         sum(previousRuns, (run) => run.costUsd),
         "negative",
       ),
-      sparkline: bucketCounts(currentRuns, "cost"),
+      sparkline: bucketSeries(currentRuns, "cost"),
     },
     {
       key: "p95Latency",
@@ -185,7 +185,7 @@ export function createOverviewMetrics(): OverviewMetric[] {
         ),
         "negative",
       ),
-      sparkline: bucketCounts(completedRuns, "latency"),
+      sparkline: bucketSeries(completedRuns, "latency"),
     },
   ];
 }
@@ -225,15 +225,23 @@ function deltaPercent(
   };
 }
 
-function bucketCounts(
+export function bucketSeries(
   runs: Run[],
   mode: "count" | "successRate" | "cost" | "latency",
+  bucketCount = 8,
 ) {
-  const bucketCount = 8;
   const buckets = Array.from({ length: bucketCount }, () => [] as Run[]);
+  const times = runs.map((run) => Date.parse(run.startedAt));
+  const min = Math.min(...times);
+  const max = Math.max(...times);
+  const span = max - min || 1;
 
   runs.forEach((run, index) => {
-    buckets[index % bucketCount]?.push(run);
+    const bucket = Math.min(
+      bucketCount - 1,
+      Math.floor(((times[index]! - min) / span) * bucketCount),
+    );
+    buckets[bucket]?.push(run);
   });
 
   return buckets.map((bucket) => {
@@ -247,7 +255,9 @@ function bucketCounts(
       );
     }
     if (mode === "cost") {
-      return roundCurrency(sum(bucket, (run) => run.costUsd));
+      // Round only to shed float noise — cent-rounding here would collapse the
+      // small per-bucket sums into one or two values and flatten the series.
+      return Math.round(sum(bucket, (run) => run.costUsd) * 10000) / 10000;
     }
 
     return percentile(

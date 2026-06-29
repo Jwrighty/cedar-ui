@@ -4,7 +4,7 @@
 
 .body {
   display: grid;
-  gap: var(--semantic-space-stack-md);
+  gap: var(--semantic-space-stack-lg);
 }
 
 .content {

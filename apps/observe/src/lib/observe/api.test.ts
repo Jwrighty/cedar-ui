@@ -1,12 +1,33 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  bucketSeries,
   createTraceStreamEvents,
   createOverviewMetrics,
   listRunsPayload,
   overviewMetricPayload,
   runTracePayload,
 } from "./api";
+import type { Run } from "./domain";
+
+function makeRun(startedAt: string, overrides: Partial<Run> = {}): Run {
+  return {
+    id: `run_${startedAt}`,
+    label: "Run",
+    agentName: "Agent",
+    model: "gpt-5.1",
+    status: "success",
+    environment: "production",
+    startedAt,
+    durationMs: 1000,
+    tokensIn: 0,
+    tokensOut: 0,
+    costUsd: 0,
+    spanCount: 1,
+    sessionId: "session_1",
+    ...overrides,
+  };
+}
 
 describe("listRunsPayload", () => {
   it("serves seeded runs through the shared latency-aware API payload", async () => {
@@ -27,6 +48,39 @@ describe("listRunsPayload", () => {
 
     expect(payload.runs).toHaveLength(10);
     expect(payload.nextCursor).toBe("10");
+  });
+});
+
+describe("bucketSeries", () => {
+  it("bins runs into contiguous chronological buckets, oldest first", () => {
+    const runs = [
+      makeRun("2026-02-24T10:15:00.000Z", { costUsd: 4 }),
+      makeRun("2026-02-24T10:00:00.000Z", { costUsd: 1 }),
+      makeRun("2026-02-24T10:10:00.000Z", { costUsd: 3 }),
+      makeRun("2026-02-24T10:05:00.000Z", { costUsd: 2 }),
+    ];
+
+    expect(bucketSeries(runs, "cost", 2)).toEqual([3, 7]);
+  });
+
+  it("bins by equal time width so run volume varies with arrival density", () => {
+    const runs = [
+      makeRun("2026-02-24T10:00:00.000Z"),
+      makeRun("2026-02-24T10:01:00.000Z"),
+      makeRun("2026-02-24T10:02:00.000Z"),
+      makeRun("2026-02-24T10:20:00.000Z"),
+    ];
+
+    expect(bucketSeries(runs, "count", 2)).toEqual([3, 1]);
+  });
+
+  it("keeps sub-cent variation in the cost series instead of rounding to whole cents", () => {
+    const runs = [
+      makeRun("2026-02-24T10:00:00.000Z", { costUsd: 0.061 }),
+      makeRun("2026-02-24T10:05:00.000Z", { costUsd: 0.066 }),
+    ];
+
+    expect(bucketSeries(runs, "cost", 2)).toEqual([0.061, 0.066]);
   });
 });
 

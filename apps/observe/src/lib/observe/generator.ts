@@ -12,7 +12,16 @@ const DEFAULT_SEED = 20260224;
 const DEFAULT_RUN_COUNT = 250;
 const BASE_TIME_MS = Date.parse("2026-02-24T12:00:00.000Z");
 
-const STATUSES = ["success", "success", "success", "running", "error"] as const;
+// Reliability drifts gently upward toward the present: the newest runs succeed
+// near SUCCESS_HIGH and fade to SUCCESS_LOW over DRIFT_HORIZON runs into the
+// past, so the success-rate sparkline reads as a healthy, recovering trend.
+const RUNNING_RATE = 0.08;
+const SUCCESS_HIGH = 0.96;
+const SUCCESS_LOW = 0.5;
+const DRIFT_HORIZON = 144;
+// Average spacing between runs; jittered per run and slightly denser recently.
+const BASE_GAP_MS = 5 * 60 * 1000;
+
 const ENVIRONMENTS = ["production", "production", "staging"] as const;
 const MODELS = [
   "gpt-5-mini",
@@ -47,10 +56,19 @@ export function createObserveCorpus(
   const runs: Run[] = [];
   const spans: Span[] = [];
   const messages: Message[] = [];
+  let elapsedMs = 0;
 
   for (let index = 0; index < runCount; index += 1) {
     const id = `run_${String(index + 1).padStart(4, "0")}`;
-    const status = pick(STATUSES, random) satisfies RunStatus;
+    const successProb =
+      SUCCESS_HIGH -
+      (SUCCESS_HIGH - SUCCESS_LOW) * Math.min(1, index / DRIFT_HORIZON);
+    const status: RunStatus =
+      random() < RUNNING_RATE
+        ? "running"
+        : random() < successProb
+          ? "success"
+          : "error";
     const environment = pick(ENVIRONMENTS, random) satisfies Environment;
     const model = pick(MODELS, random);
     const agentName = pick(AGENTS, random);
@@ -59,9 +77,11 @@ export function createObserveCorpus(
     const tokensOut = 180 + Math.floor(random() * 1800);
     const durationMs =
       status === "running" ? null : 900 + Math.floor(random() * 9000);
-    const startedAt = new Date(
-      BASE_TIME_MS - index * 5 * 60 * 1000,
-    ).toISOString();
+    const startedAt = new Date(BASE_TIME_MS - elapsedMs).toISOString();
+    // Older runs are spaced further apart; recent activity is denser, and every
+    // gap is jittered so run volume varies across the timeline.
+    const gapScale = 0.5 + (index / runCount) * 1.5;
+    elapsedMs += Math.round(BASE_GAP_MS * gapScale * (0.4 + random() * 1.2));
     const run: Run = {
       id,
       label: `${agentName} #${String(4000 + index)}`,
