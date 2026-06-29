@@ -348,9 +348,9 @@ a {
 }
 
 .trace-page {
-  width: min(100%, 72rem);
+  width: min(100%, 60rem);
   display: grid;
-  gap: var(--semantic-space-stack-lg);
+  gap: var(--semantic-space-stack-xl);
 }
 
 .trace-back-link {
