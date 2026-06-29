@@ -52,9 +52,8 @@ export const Stat = forwardRef<HTMLDivElement, StatProps>(function Stat(
     >
       <div className={styles.body}>
         <div className={styles.content}>
-          <p className={styles.label}>{label}</p>
-          <div className={styles.valueRow}>
-            <div className={styles.value}>{value}</div>
+          <div className={styles.header}>
+            <p className={styles.label}>{label}</p>
             {delta ? (
               <div
                 className={deltaClass(delta.direction)}
@@ -64,6 +63,7 @@ export const Stat = forwardRef<HTMLDivElement, StatProps>(function Stat(
               </div>
             ) : null}
           </div>
+          <div className={styles.value}>{value}</div>
         </div>
         {visual ? <div className={styles.visual}>{visual}</div> : null}
       </div>

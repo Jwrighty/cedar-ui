@@ -12,23 +12,22 @@
   gap: var(--semantic-space-stack-md);
 }
 
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--semantic-space-gap-md);
+  min-inline-size: 0;
+}
+
 .label {
   margin: 0;
+  min-inline-size: 0;
   color: var(--semantic-color-text-muted);
   font-family: var(--semantic-font-body-family);
   font-size: var(--base-font-size-sm);
   font-weight: var(--semantic-font-label-weight);
   line-height: var(--base-font-line-height-normal);
-}
-
-.valueRow {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  min-inline-size: 0;
-  column-gap: var(--semantic-space-gap-md);
-  row-gap: var(--semantic-space-stack-sm, var(--semantic-space-stack-md));
 }
 
 .value {
