@@ -1,6 +1,12 @@
 import { createObserveCorpus } from "./generator";
 import { waitForEndpointLatency } from "./latency";
-import type { OverviewMetric, OverviewMetricKey, Run } from "./domain";
+import type {
+  OverviewMetric,
+  OverviewMetricKey,
+  Run,
+  RunTrace,
+  TraceStreamEvent,
+} from "./domain";
 
 export interface ListRunsOptions {
   cursor?: string | null;
@@ -11,6 +17,11 @@ export interface ListRunsOptions {
 export interface OverviewMetricOptions {
   metric: OverviewMetricKey;
   failMetric?: OverviewMetricKey | null;
+  testMode?: boolean;
+}
+
+export interface RunTraceOptions {
+  id: string;
   testMode?: boolean;
 }
 
@@ -54,6 +65,58 @@ export async function overviewMetricPayload({
   }
 
   return createOverviewMetrics().find((item) => item.key === metric)!;
+}
+
+export async function runTracePayload({
+  id,
+  testMode,
+}: RunTraceOptions): Promise<RunTrace | null> {
+  await waitForEndpointLatency({ endpoint: "runDetail", testMode });
+
+  const corpus = createObserveCorpus();
+  const run = corpus.runs.find((item) => item.id === id);
+
+  if (!run) {
+    return null;
+  }
+
+  return {
+    run,
+    spans: corpus.spans
+      .filter((span) => span.runId === id)
+      .sort((a, b) => a.startOffsetMs - b.startOffsetMs),
+    messages: corpus.messages.filter((message) =>
+      corpus.spans.some(
+        (span) => span.runId === id && span.id === message.spanId,
+      ),
+    ),
+  };
+}
+
+export function createTraceStreamEvents(trace: RunTrace): TraceStreamEvent[] {
+  const events: TraceStreamEvent[] = [];
+  const assistantMessages = trace.messages.filter(
+    (message) => message.role === "assistant",
+  );
+
+  for (const span of trace.spans) {
+    events.push({ type: "span", spanId: span.id });
+
+    const message = assistantMessages.find((item) => item.spanId === span.id);
+
+    if (message) {
+      for (const token of tokenizeAssistantOutput(message.content)) {
+        events.push({ type: "token", spanId: span.id, token });
+      }
+    }
+  }
+
+  events.push({
+    type: "complete",
+    result: `${trace.run.label} ${trace.run.status === "running" ? "is still running" : `settled as ${trace.run.status}`}.`,
+  });
+
+  return events;
 }
 
 export function createOverviewMetrics(): OverviewMetric[] {
@@ -216,4 +279,9 @@ function sum(runs: Run[], getValue: (run: Run) => number) {
 
 function roundCurrency(value: number) {
   return Math.round(value * 100) / 100;
+}
+
+function tokenizeAssistantOutput(content: string) {
+  const tokens = content.match(/\S+\s*/g);
+  return tokens && tokens.length > 0 ? tokens : [content];
 }

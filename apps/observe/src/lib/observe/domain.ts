@@ -50,6 +50,27 @@ export interface ObserveCorpus {
   messages: Message[];
 }
 
+export interface RunTrace {
+  run: Run;
+  spans: Span[];
+  messages: Message[];
+}
+
+export type TraceStreamEvent =
+  | {
+      type: "span";
+      spanId: string;
+    }
+  | {
+      type: "token";
+      spanId: string;
+      token: string;
+    }
+  | {
+      type: "complete";
+      result: string;
+    };
+
 export type OverviewMetricKey =
   | "runs"
   | "successRate"

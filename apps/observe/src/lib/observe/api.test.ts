@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  createTraceStreamEvents,
   createOverviewMetrics,
   listRunsPayload,
   overviewMetricPayload,
+  runTracePayload,
 } from "./api";
 
 describe("listRunsPayload", () => {
@@ -75,5 +77,55 @@ describe("overviewMetricPayload", () => {
     expect(createOverviewMetrics().map((metric) => metric.key)).toContain(
       "runs",
     );
+  });
+});
+
+describe("runTracePayload", () => {
+  it("serves one run with its nested spans and messages", async () => {
+    const trace = await runTracePayload({
+      id: "run_0001",
+      testMode: true,
+    });
+
+    expect(trace?.run.id).toBe("run_0001");
+    expect(trace?.spans.length).toBe(trace?.run.spanCount);
+    expect(trace?.spans[0]).toMatchObject({
+      parentSpanId: null,
+      startOffsetMs: 0,
+    });
+    expect(trace?.spans.some((span) => span.parentSpanId !== null)).toBe(true);
+    expect(trace?.messages[0]).toMatchObject({
+      spanId: trace?.spans[0]?.id,
+      role: "assistant",
+    });
+  });
+
+  it("returns null for an unknown run id", async () => {
+    await expect(
+      runTracePayload({ id: "run_unknown", testMode: true }),
+    ).resolves.toBeNull();
+  });
+});
+
+describe("createTraceStreamEvents", () => {
+  it("reveals spans, streams assistant tokens, and announces completion once", async () => {
+    const trace = await runTracePayload({
+      id: "run_0001",
+      testMode: true,
+    });
+
+    expect(trace).not.toBeNull();
+
+    const events = createTraceStreamEvents(trace!);
+
+    expect(events[0]).toEqual({
+      type: "span",
+      spanId: trace!.spans[0]?.id,
+    });
+    expect(events.some((event) => event.type === "token")).toBe(true);
+    expect(events.at(-1)).toEqual({
+      type: "complete",
+      result: `${trace!.run.label} settled as ${trace!.run.status}.`,
+    });
   });
 });
