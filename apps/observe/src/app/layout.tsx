@@ -27,10 +27,8 @@ const themeInitializer = `
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInitializer }} />
-      </head>
       <body>
+        <script dangerouslySetInnerHTML={{ __html: themeInitializer }} />
         <Providers>{children}</Providers>
       </body>
     </html>

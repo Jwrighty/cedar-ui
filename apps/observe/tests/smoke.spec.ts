@@ -17,6 +17,30 @@ test("renders the dashboard shell around seeded observe data", async ({
   await expect(page.getByTestId("overview-metric-runs")).toBeVisible();
 });
 
+test("applies global and Cedar styles on first load", async ({ page }) => {
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    if (attempt === 0) {
+      await page.goto("/", { waitUntil: "commit" });
+    } else {
+      await page.reload({ waitUntil: "commit" });
+    }
+
+    await expect(page.locator(".dashboard-shell")).toHaveCSS("display", "grid");
+    await expect(page.locator(".dashboard-nav__link").first()).toHaveCSS(
+      "text-decoration-line",
+      "none",
+    );
+    await expect(page.locator(".dashboard-brand__mark")).not.toHaveCSS(
+      "background-color",
+      "rgba(0, 0, 0, 0)",
+    );
+    await expect(page.locator("body")).not.toHaveCSS(
+      "font-family",
+      '"Times New Roman"',
+    );
+  }
+});
+
 test("streams overview metrics from skeletons in deterministic order", async ({
   page,
 }) => {
