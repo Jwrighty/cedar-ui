@@ -1,6 +1,9 @@
 export { Button } from "./Button";
 export type { ButtonProps } from "./Button";
 export { buttonMeta } from "./Button.meta";
+export { IconButton } from "./IconButton";
+export type { IconButtonProps } from "./IconButton";
+export { iconButtonMeta } from "./IconButton.meta";
 export { Badge, StatusPill } from "./Badge";
 export type { BadgeProps, StatusPillProps } from "./Badge";
 export { badgeMeta } from "./Badge.meta";
