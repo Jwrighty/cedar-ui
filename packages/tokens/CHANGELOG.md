@@ -1,5 +1,30 @@
 # @jwrighty/cedar-tokens
 
+## 0.3.0
+
+### Minor Changes
+
+- ce0d017: Split the `cedar` brand theme into a `cedar-light` / `cedar-dark` pair and re-point it
+  to a bright amber accent (`#f59e0b` fill with a near-black label) matching the default
+  themes' bright-fill expression. `cedar-light` keeps the light neutral surfaces and only
+  swaps the accent; `cedar-dark` is a full block on the near-black neutral surfaces. Adds
+  `amber.300`/`amber.800` base steps. **Breaking:** `[data-theme="cedar"]` is renamed to
+  `[data-theme="cedar-light"]`. See ADR 0012.
+- 33d97eb: Add an `xl` (24px) step across the spacing scale (`inset`, `stack`, and `gap`)
+  and the `Card` `padding` variant. `Stat` now accepts a `padding` prop (forwarded
+  to `Card`) and defaults to `xl` for a roomier metric surface.
+- a20cce4: Redefine the default light and dark themes: a bright mint accent (`#72e3ad` fill
+  with near-black label) on pure-neutral surfaces — near-white in light, near-black
+  (`#121212`) in dark. Adds a `neutral` base ramp, re-points the `teal` ramp
+  mint-forward, removes the `warm` ramp, makes `text.on-action` dark, keeps the
+  chart palette mint-led (visible 600 steps on light, bright on dark), and keeps
+  status/danger AA in both themes. See ADR 0011.
+
+### Patch Changes
+
+- 62b30d4: Add Observe-oriented Card, Skeleton, Badge, Stat, and table presentation primitives.
+- c288538: Add observe foundation tokens for motion, status colours, and chart palettes.
+
 ## 0.2.0
 
 ### Minor Changes
