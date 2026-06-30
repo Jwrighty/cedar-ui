@@ -7,6 +7,11 @@
     var(--observe-color-shell-background) 88%,
     transparent
   );
+  --observe-color-nav-active-background: color-mix(
+    in srgb,
+    var(--semantic-color-surface-sunken) 50%,
+    var(--semantic-color-surface-page)
+  );
 }
 
 [data-theme="dark"] {
@@ -18,6 +23,7 @@
     var(--observe-color-shell-background) 88%,
     transparent
   );
+  --observe-color-nav-active-background: var(--semantic-color-action-subtle);
 }
 
 * {
@@ -125,7 +131,7 @@ a {
 }
 
 .dashboard-nav__link[aria-current="page"] {
-  background: var(--semantic-color-action-subtle);
+  background: var(--observe-color-nav-active-background);
   color: var(--semantic-color-text-default);
 }
 
