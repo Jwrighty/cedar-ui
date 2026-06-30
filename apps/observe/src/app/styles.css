@@ -82,8 +82,7 @@ a {
   overflow: hidden;
 }
 
-.dashboard-brand__mark,
-.dashboard-nav__icon {
+.dashboard-brand__mark {
   width: 2.5rem;
   height: 2.5rem;
   flex: 0 0 2.5rem;
@@ -92,9 +91,6 @@ a {
   justify-content: center;
   border-radius: var(--semantic-radius-control);
   font-weight: var(--semantic-font-weight-semibold);
-}
-
-.dashboard-brand__mark {
   background: var(--semantic-color-action-rest);
   color: var(--semantic-color-text-on-action);
 }
@@ -105,15 +101,16 @@ a {
 
 .dashboard-nav {
   display: grid;
-  gap: var(--semantic-space-gap-sm);
+  gap: var(--semantic-space-stack-sm);
 }
 
 .dashboard-nav__link {
   min-width: 0;
-  height: 2.75rem;
+  height: 2rem;
   display: flex;
   align-items: center;
   gap: var(--semantic-space-gap-sm);
+  padding-inline: var(--semantic-space-inset-sm);
   overflow: hidden;
   border-radius: var(--semantic-radius-control);
   color: var(--semantic-color-text-muted);
@@ -144,25 +141,15 @@ a {
 }
 
 .dashboard-nav__icon {
-  color: var(--semantic-color-text-accent);
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 1rem;
+  color: inherit;
 }
 
-.dashboard-sidebar__footer {
-  margin-top: auto;
-  padding: 0;
-}
-
-.dashboard-sidebar__toggle {
-  width: 100%;
-  justify-content: flex-start;
-  gap: var(--semantic-space-gap-sm);
-  overflow: hidden;
-}
-
-.dashboard-sidebar__toggle > span:first-child {
-  width: 2.5rem;
-  flex: 0 0 2.5rem;
-  text-align: center;
+.dashboard-shell--collapsed .dashboard-nav__link {
+  justify-content: center;
+  padding-inline: 0;
 }
 
 .dashboard-main {
@@ -190,35 +177,6 @@ a {
 .dashboard-header__actions {
   flex: 0 0 auto;
   justify-content: flex-end;
-}
-
-.dashboard-env-pill {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2rem;
-  padding-inline: var(--semantic-space-inset-sm);
-  border: var(--semantic-border-width) solid
-    var(--semantic-color-status-success-border);
-  border-radius: 999px;
-  background: var(--semantic-color-status-success-surface);
-  color: var(--semantic-color-status-success-foreground);
-  font-size: var(--semantic-font-size-sm);
-  font-weight: var(--semantic-font-label-weight);
-}
-
-.dashboard-theme-toggle {
-  gap: var(--semantic-space-gap-sm);
-}
-
-.dashboard-theme-toggle__icon {
-  width: 1.25rem;
-  height: 1.25rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-  background: var(--semantic-color-action-subtle);
-  color: var(--semantic-color-text-accent);
 }
 
 .dashboard-content {

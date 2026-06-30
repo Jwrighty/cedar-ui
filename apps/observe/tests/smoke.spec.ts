@@ -7,7 +7,7 @@ test("renders the dashboard shell around seeded observe data", async ({
   await page.goto("/");
 
   await expect(
-    page.getByRole("heading", { name: "Agent run telemetry" }),
+    page.getByRole("button", { name: "Collapse sidebar" }),
   ).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "Live run health" }),
@@ -199,7 +199,7 @@ test("replays the Overview loading choreography with slow motion", async ({
   // The slow-mo duration is now `calc(var(--base-motion-duration-base) * 2)`,
   // which getPropertyValue won't reduce to a plain `ms` value. Resolve it via a
   // probe element's transition-delay (a property the reduced-motion override
-  // leaves alone) so we assert the real 180ms * 2 = 360ms.
+  // leaves alone) so we assert the real 220ms * 2 = 440ms.
   await expect
     .poll(() =>
       page.evaluate(() => {
@@ -211,7 +211,7 @@ test("replays the Overview loading choreography with slow motion", async ({
         return value;
       }),
     )
-    .toBe("0.36s");
+    .toBe("0.44s");
   await expect(page.getByTestId("overview-metric-runs")).toBeVisible({
     timeout: 3000,
   });
