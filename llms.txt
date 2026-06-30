@@ -83,6 +83,16 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Accessibility:** `level` renders a real h1–h6 element; keep levels in logical document order. Visual `size` does not change the semantic level exposed to assistive technology. Do not skip heading levels just to get a smaller or larger visual style.
 - **Related:** Text, Dialog, Button
 
+### IconButton
+
+- **Exports:** `IconButton`
+- **Status:** `experimental`
+- **Summary:** A square, icon-only button for compact, recognisable actions.
+- **Use when:** A control is recognisable from its icon alone (close, collapse, theme toggle, overflow menu). Space is tight — a toolbar, table row, dialog header, or app chrome. You want a neutral, low-emphasis action that doesn't compete with primary buttons.
+- **Avoid when:** The action needs a visible text label to be understood; use Button instead. Toggling a binary on/off state; use Switch or ToggleButton instead. (ToggleButton not currently listed in Cedar public components.) Navigating to a URL or route; use Link instead. (Link not currently listed in Cedar public components.)
+- **Accessibility:** aria-label is required — an icon conveys no accessible name on its own. Renders a native <button>; keyboard- and screen-reader-operable by default. Use onPress (not onClick) so pointer, keyboard, and touch are unified. Mark the icon itself aria-hidden so the label is the only accessible name. Focus-visible ring is driven by [data-focus-visible], shown only for keyboard focus.
+- **Related:** Button, Tooltip
+
 ### Inline
 
 - **Exports:** `Inline`

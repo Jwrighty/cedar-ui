@@ -1,0 +1,107 @@
+/*
+ * IconButton styles. A square control built from the same component tokens as
+ * Button, but icon-only: width is pinned to the control height so it stays
+ * square, and the icon child is sized per control size. Colour comes from
+ * semantic tokens so it re-themes via [data-theme]. Interaction state is driven
+ * by the data-attributes React Aria Components exposes — [data-hovered] /
+ * [data-pressed] / [data-focus-visible] / [data-disabled].
+ *
+ * Unlike Button, ghost/secondary are neutral (text colour, not accent) because
+ * icon-only controls are usually chrome rather than the primary action.
+ */
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  padding: 0;
+  border: var(--semantic-border-width) solid transparent;
+  border-radius: var(--semantic-radius-control);
+  color: var(--semantic-color-text-default);
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease;
+}
+
+/* The icon child: pinned per size so it never flex-shrinks or stretches. */
+.iconButton > svg {
+  flex: 0 0 auto;
+}
+
+/* --- Sizes ------------------------------------------------------------- */
+.sm {
+  width: var(--component-button-height-sm);
+  height: var(--component-button-height-sm);
+}
+.sm > svg {
+  width: 1rem;
+  height: 1rem;
+}
+.md {
+  width: var(--component-button-height-md);
+  height: var(--component-button-height-md);
+}
+.md > svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+.lg {
+  width: var(--component-button-height-lg);
+  height: var(--component-button-height-lg);
+}
+.lg > svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* --- Variants --------------------------------------------------------- */
+.primary {
+  background: var(--semantic-color-action-rest);
+  color: var(--semantic-color-text-on-action);
+}
+.primary[data-hovered] {
+  background: var(--semantic-color-action-hover);
+}
+.primary[data-pressed] {
+  background: var(--semantic-color-action-active);
+}
+
+.secondary {
+  background: var(--semantic-color-surface-raised);
+  color: var(--semantic-color-text-default);
+  border-color: var(--semantic-color-border-default);
+}
+.secondary[data-hovered] {
+  background: var(--semantic-color-surface-sunken);
+  border-color: var(--semantic-color-border-strong);
+}
+.secondary[data-pressed] {
+  background: var(--semantic-color-surface-sunken);
+  border-color: var(--semantic-color-border-strong);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--semantic-color-text-default);
+}
+.ghost[data-hovered] {
+  background: var(--semantic-color-surface-sunken);
+}
+.ghost[data-pressed] {
+  background: var(--semantic-color-surface-sunken);
+}
+
+/* --- Shared state ----------------------------------------------------- */
+.iconButton[data-focus-visible] {
+  outline: var(--semantic-focus-ring-width) solid
+    var(--semantic-color-focus-ring);
+  outline-offset: var(--semantic-border-width);
+}
+.iconButton[data-disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}

@@ -70,6 +70,13 @@ const componentBindings = [
     propTypeNames: ["HeadingProps"],
   },
   {
+    name: "IconButton",
+    exports: ["IconButton"],
+    metaExport: "iconButtonMeta",
+    sourceFile: "IconButton.tsx",
+    propTypeNames: ["IconButtonProps"],
+  },
+  {
     name: "Inline",
     exports: ["Inline"],
     metaExport: "inlineMeta",

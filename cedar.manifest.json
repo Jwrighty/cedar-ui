@@ -6,11 +6,11 @@
   "packages": {
     "react": {
       "name": "@jwrighty/cedar-react",
-      "version": "0.2.0"
+      "version": "0.3.0"
     },
     "tokens": {
       "name": "@jwrighty/cedar-tokens",
-      "version": "0.2.0"
+      "version": "0.3.0"
     }
   },
   "generatedFrom": {
@@ -644,6 +644,108 @@
             "muted",
             "accent",
             "danger"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "IconButton",
+      "exports": [
+        "IconButton"
+      ],
+      "status": "experimental",
+      "summary": "A square, icon-only button for compact, recognisable actions.",
+      "useWhen": [
+        "A control is recognisable from its icon alone (close, collapse, theme toggle, overflow menu).",
+        "Space is tight — a toolbar, table row, dialog header, or app chrome.",
+        "You want a neutral, low-emphasis action that doesn't compete with primary buttons."
+      ],
+      "avoidWhen": [
+        {
+          "situation": "The action needs a visible text label to be understood",
+          "useInstead": "Button"
+        },
+        {
+          "situation": "Toggling a binary on/off state",
+          "useInstead": "Switch or ToggleButton"
+        },
+        {
+          "situation": "Navigating to a URL or route",
+          "useInstead": "Link"
+        }
+      ],
+      "a11yNotes": [
+        "aria-label is required — an icon conveys no accessible name on its own.",
+        "Renders a native <button>; keyboard- and screen-reader-operable by default.",
+        "Use onPress (not onClick) so pointer, keyboard, and touch are unified.",
+        "Mark the icon itself aria-hidden so the label is the only accessible name.",
+        "Focus-visible ring is driven by [data-focus-visible], shown only for keyboard focus."
+      ],
+      "relatedComponents": [
+        "Button",
+        "Tooltip"
+      ],
+      "source": "packages/react/src/IconButton.tsx",
+      "props": [
+        {
+          "typeName": "IconButtonProps",
+          "kind": "interface",
+          "exported": true,
+          "description": "A square, icon-only button built on React Aria Components.\n\nUse it for compact, recognisable actions that don't need a text label —\ntoolbar controls, a sidebar collapse toggle, a theme switch, a dialog close.\nIt owns its square geometry and icon sizing so a single icon child renders\nconsistently; pass a 24×24 icon (e.g. a Lucide glyph) and the button scales\nit to match the control size.\n\nUnlike `Button`, the `ghost` and `secondary` variants are **neutral** by\ndefault (they inherit text colour, not the accent), because icon-only\ncontrols are usually chrome rather than the primary call to action.\n\nAn icon alone conveys no accessible name, so `aria-label` is **required** —\nthe type system enforces it.\n\nFollows React Aria's prop conventions: use `isDisabled` (not `disabled`) and\n`onPress` (not `onClick`).",
+          "extends": [
+            "AriaButtonProps"
+          ],
+          "properties": [
+            {
+              "name": "variant",
+              "type": "\"primary\" | \"secondary\" | \"ghost\" | undefined",
+              "required": false,
+              "default": "\"ghost\"",
+              "description": "Visual emphasis."
+            },
+            {
+              "name": "size",
+              "type": "\"sm\" | \"md\" | \"lg\" | undefined",
+              "required": false,
+              "default": "\"md\"",
+              "description": "Control size; also drives the icon size (sm 16, md 20, lg 24)."
+            },
+            {
+              "name": "className",
+              "type": "string | undefined",
+              "required": false,
+              "description": "Extra class names, merged after the variant classes."
+            },
+            {
+              "name": "aria-label",
+              "type": "string",
+              "required": true,
+              "description": "Accessible name for the action. Required — an icon has no text."
+            },
+            {
+              "name": "children",
+              "type": "ReactNode",
+              "required": true,
+              "description": "A single icon element."
+            }
+          ]
+        }
+      ],
+      "variants": [
+        {
+          "name": "variant",
+          "options": [
+            "primary",
+            "secondary",
+            "ghost"
+          ]
+        },
+        {
+          "name": "size",
+          "options": [
+            "sm",
+            "md",
+            "lg"
           ]
         }
       ]
