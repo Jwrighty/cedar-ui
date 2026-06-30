@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 
-import { headers } from "next/headers";
 import { Group } from "@visx/group";
 import { scaleLinear } from "@visx/scale";
 import { AreaClosed, LinePath } from "@visx/shape";
@@ -14,6 +13,7 @@ import type {
   OverviewChartKey,
   RunsOverTimeChart,
 } from "@/lib/observe/domain";
+import { overviewChartPayload } from "@/lib/observe/api";
 import type { SlowMoMultiplier } from "@/lib/observe/latency";
 
 const AREA_VIEW = {
@@ -326,32 +326,11 @@ async function fetchOverviewChart(
     slowMoMultiplier = 1,
   }: { testMode?: boolean; slowMoMultiplier?: SlowMoMultiplier } = {},
 ) {
-  const requestHeaders = await headers();
-  const host = requestHeaders.get("host") ?? "127.0.0.1:3010";
-  const protocol = requestHeaders.get("x-forwarded-proto") ?? "http";
-  const params = new URLSearchParams();
-
-  if (testMode) {
-    params.set("testMode", "1");
-  }
-
-  if (slowMoMultiplier !== 1) {
-    params.set("slowMo", String(slowMoMultiplier));
-  }
-
-  const query = params.size > 0 ? `?${params.toString()}` : "";
-  const response = await fetch(
-    `${protocol}://${host}/api/overview/charts/${chart}${query}`,
-    {
-      cache: "no-store",
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error(`Unable to load ${chart} chart.`);
-  }
-
-  return (await response.json()) as OverviewChart;
+  // Call the data layer directly rather than round-tripping through our own
+  // /api route. A server-side fetch to the deployment's public host fails
+  // behind Vercel preview Deployment Protection (the request is unauthenticated),
+  // crashing the server render; this also drops a needless network hop.
+  return overviewChartPayload({ chart, testMode, slowMoMultiplier });
 }
 
 function areaFrame() {
