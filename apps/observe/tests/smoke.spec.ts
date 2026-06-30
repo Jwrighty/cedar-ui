@@ -7,7 +7,7 @@ test("renders the dashboard shell around seeded observe data", async ({
   await page.goto("/");
 
   await expect(
-    page.getByRole("heading", { name: "Agent run telemetry" }),
+    page.getByRole("button", { name: "Collapse sidebar" }),
   ).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "Live run health" }),

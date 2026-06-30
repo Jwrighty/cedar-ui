@@ -2,16 +2,19 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  Activity,
+  LayoutDashboard,
+  Moon,
+  PanelLeftClose,
+  PanelLeftOpen,
+  Sun,
+  Waypoints,
+  type LucideIcon,
+} from "lucide-react";
 import { Suspense, useEffect, useMemo, useState, type ReactNode } from "react";
 
-import {
-  Box,
-  Button,
-  Heading,
-  Inline,
-  Stack,
-  Tooltip,
-} from "@jwrighty/cedar-react";
+import { Button, Inline, Stack, Tooltip } from "@jwrighty/cedar-react";
 
 import { DemoModeControl } from "./demo-mode-control";
 
@@ -20,10 +23,14 @@ const SIDEBAR_STORAGE_KEY = "observe-sidebar-collapsed";
 
 type Theme = "light" | "dark";
 
-const navigationItems = [
-  { href: "/", label: "Overview", icon: "O" },
-  { href: "/runs", label: "Live feed", icon: "R" },
-  { href: "/runs/run_0001", label: "Trace detail", icon: "T" },
+const navigationItems: Array<{
+  href: string;
+  label: string;
+  Icon: LucideIcon;
+}> = [
+  { href: "/", label: "Overview", Icon: LayoutDashboard },
+  { href: "/runs", label: "Live feed", Icon: Activity },
+  { href: "/runs/run_0001", label: "Trace detail", Icon: Waypoints },
 ];
 
 export function DashboardShell({ children }: { children: ReactNode }) {
@@ -41,8 +48,9 @@ export function DashboardShell({ children }: { children: ReactNode }) {
   }, []);
 
   const collapseLabel = isCollapsed ? "Expand sidebar" : "Collapse sidebar";
+  const CollapseIcon = isCollapsed ? PanelLeftOpen : PanelLeftClose;
   const nextTheme = theme === "dark" ? "light" : "dark";
-  const themeLabel = theme === "dark" ? "Dark theme" : "Light theme";
+  const ThemeIcon = theme === "dark" ? Moon : Sun;
 
   const shellClassName = useMemo(
     () =>
@@ -66,88 +74,76 @@ export function DashboardShell({ children }: { children: ReactNode }) {
           </Inline>
 
           <nav className="dashboard-nav" aria-label="Primary">
-            {navigationItems.map((item) => {
+            {navigationItems.map(({ href, label, Icon }) => {
               const isCurrent =
-                item.href === "/"
-                  ? pathname === item.href
-                  : pathname.startsWith(item.href);
+                href === "/" ? pathname === href : pathname.startsWith(href);
 
               return (
-                <Tooltip.Trigger key={item.label} delay={500}>
+                <Tooltip.Trigger key={label} delay={500}>
                   <Link
                     className="dashboard-nav__link"
-                    href={item.href}
+                    href={href}
                     aria-current={isCurrent ? "page" : undefined}
                   >
-                    <span className="dashboard-nav__icon" aria-hidden="true">
-                      {item.icon}
-                    </span>
-                    <span className="dashboard-sidebar__label">
-                      {item.label}
-                    </span>
+                    <Icon
+                      className="dashboard-nav__icon"
+                      size={16}
+                      aria-hidden="true"
+                    />
+                    <span className="dashboard-sidebar__label">{label}</span>
                   </Link>
-                  <Tooltip placement="right">{item.label}</Tooltip>
+                  <Tooltip placement="right">{label}</Tooltip>
                 </Tooltip.Trigger>
               );
             })}
           </nav>
-
-          <Box className="dashboard-sidebar__footer">
-            <Tooltip.Trigger delay={500}>
-              <Button
-                className="dashboard-sidebar__toggle"
-                variant="ghost"
-                size="sm"
-                aria-label={collapseLabel}
-                aria-expanded={!isCollapsed}
-                onPress={() => {
-                  const nextValue = !isCollapsed;
-                  setIsCollapsed(nextValue);
-                  window.localStorage.setItem(
-                    SIDEBAR_STORAGE_KEY,
-                    String(nextValue),
-                  );
-                }}
-              >
-                <span aria-hidden="true">{isCollapsed ? ">>" : "<<"}</span>
-                <span className="dashboard-sidebar__label">
-                  {collapseLabel}
-                </span>
-              </Button>
-              <Tooltip placement="right">{collapseLabel}</Tooltip>
-            </Tooltip.Trigger>
-          </Box>
         </Stack>
       </aside>
 
       <div className="dashboard-main">
         <header className="dashboard-header">
-          <Heading level={1} size="lg">
-            Agent run telemetry
-          </Heading>
+          <Tooltip.Trigger delay={500}>
+            <Button
+              className="dashboard-icon-button"
+              variant="ghost"
+              size="sm"
+              aria-label={collapseLabel}
+              aria-expanded={!isCollapsed}
+              onPress={() => {
+                const nextValue = !isCollapsed;
+                setIsCollapsed(nextValue);
+                window.localStorage.setItem(
+                  SIDEBAR_STORAGE_KEY,
+                  String(nextValue),
+                );
+              }}
+            >
+              <CollapseIcon size={18} aria-hidden="true" />
+            </Button>
+            <Tooltip placement="bottom">{collapseLabel}</Tooltip>
+          </Tooltip.Trigger>
 
           <Inline className="dashboard-header__actions" gap="sm">
             <Suspense fallback={null}>
               <DemoModeControl />
             </Suspense>
-            <span className="dashboard-env-pill">Production</span>
-            <Button
-              className="dashboard-theme-toggle"
-              variant="secondary"
-              size="sm"
-              aria-label={`Switch to ${nextTheme} theme`}
-              aria-pressed={theme === "dark"}
-              onPress={() => {
-                setTheme(nextTheme);
-                document.documentElement.dataset.theme = nextTheme;
-                window.localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
-              }}
-            >
-              <span className="dashboard-theme-toggle__icon" aria-hidden="true">
-                {theme === "dark" ? "D" : "L"}
-              </span>
-              <span suppressHydrationWarning>{themeLabel}</span>
-            </Button>
+            <Tooltip.Trigger delay={500}>
+              <Button
+                className="dashboard-icon-button"
+                variant="ghost"
+                size="sm"
+                aria-label={`Switch to ${nextTheme} theme`}
+                aria-pressed={theme === "dark"}
+                onPress={() => {
+                  setTheme(nextTheme);
+                  document.documentElement.dataset.theme = nextTheme;
+                  window.localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+                }}
+              >
+                <ThemeIcon size={18} aria-hidden="true" />
+              </Button>
+              <Tooltip placement="bottom">{`Switch to ${nextTheme} theme`}</Tooltip>
+            </Tooltip.Trigger>
           </Inline>
         </header>
 
