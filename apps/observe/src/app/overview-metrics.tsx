@@ -88,10 +88,9 @@ function OverviewMetricSkeleton({ metric }: { metric: OverviewMetricKey }) {
       data-testid={`overview-metric-skeleton-${metric}`}
       aria-label="Loading metric"
     >
-      <Skeleton className="metric-card__label-skeleton" shape="text" />
       <div className="metric-card__value-row-skeleton">
-        <Skeleton className="metric-card__value-skeleton" shape="text" />
-        <Skeleton className="metric-card__delta-skeleton" shape="text" />
+        <Skeleton className="metric-card__label-skeleton" shape="text" />
+        <Skeleton className="metric-card__value-skeleton" shape="rounded" />
       </div>
       <Skeleton className="metric-card__sparkline-skeleton" shape="rounded" />
     </div>

@@ -266,8 +266,9 @@ a {
 
 .metric-card--skeleton,
 .metric-card--error {
-  display: grid;
-  gap: var(--semantic-space-stack-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--semantic-space-stack-lg);
   padding: var(--semantic-space-inset-xl);
   border: var(--semantic-border-width) solid
     var(--semantic-color-border-default);
@@ -285,19 +286,17 @@ a {
 }
 
 .metric-card__label-skeleton {
-  inline-size: 42%;
+  height: 21px;
 }
 
 .metric-card__value-row-skeleton {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
   gap: var(--semantic-space-gap-md);
 }
 
 .metric-card__value-skeleton {
-  inline-size: 48%;
-  min-block-size: 2.4rem;
+  height: 38px;
 }
 
 .metric-card__delta-skeleton {
@@ -305,7 +304,7 @@ a {
 }
 
 .metric-card__sparkline-skeleton {
-  min-block-size: 2.5rem;
+ height: 40px;
 }
 
 .metric-sparkline {
@@ -350,7 +349,9 @@ a {
   min-width: 0;
   min-block-size: 22rem;
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  /* Two rows for the loaded card (header + chart). The skeleton has a third
+     legend child, which auto-places into an implicit row with the same gap. */
+  grid-template-rows: auto minmax(0, 1fr);
   gap: var(--semantic-space-stack-md);
   padding: var(--semantic-space-inset-xl);
   border: var(--semantic-border-width) solid
@@ -520,7 +521,7 @@ a {
 }
 
 .overview-chart-skeleton__plot {
-  min-block-size: 15rem;
+  min-block-size: 12em;
 }
 
 .overview-chart-skeleton__legend {
@@ -528,6 +529,7 @@ a {
   display: grid;
   grid-template-columns: 1fr 0.7fr 0.5fr;
   gap: var(--semantic-space-gap-sm);
+  margin-top: 1rem;
 }
 
 @keyframes chart-settle {
