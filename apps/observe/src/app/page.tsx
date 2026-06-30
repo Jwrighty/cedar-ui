@@ -113,6 +113,6 @@ function demoMotionStyle(
   return {
     "--semantic-motion-duration-feedback": `calc(var(--base-motion-duration-fast) * ${slowMoMultiplier})`,
     "--semantic-motion-duration-settle": `calc(var(--base-motion-duration-base) * ${slowMoMultiplier})`,
-    "--semantic-motion-duration-draw": `calc(var(--base-motion-duration-slow) * ${slowMoMultiplier})`,
+    "--semantic-motion-duration-draw": `calc(var(--base-motion-duration-draw) * ${slowMoMultiplier})`,
   };
 }

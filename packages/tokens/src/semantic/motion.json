@@ -14,12 +14,13 @@
           "$value": "{base.motion.duration.base}",
           "$type": "duration"
         },
-        "draw": { "$value": "{base.motion.duration.slow}", "$type": "duration" }
+        "draw": { "$value": "{base.motion.duration.draw}", "$type": "duration" }
       },
       "easing": {
         "settle": { "$value": "{base.motion.easing.out}" },
         "enter": { "$value": "{base.motion.easing.snap}" },
-        "emphasized": { "$value": "{base.motion.easing.overshoot}" }
+        "emphasized": { "$value": "{base.motion.easing.decelerate}" },
+        "playful": { "$value": "{base.motion.easing.overshoot}" }
       },
       "spring": {
         "overlay": {

@@ -11,18 +11,38 @@ const css = readFileSync(
 );
 
 test("observe motion tokens are exposed as semantic CSS variables and typed exports", () => {
-  assert.equal(tokens.base.motion.duration.fast, "120ms");
-  assert.equal(tokens.semantic.motion.duration.settle, "180ms");
+  assert.equal(tokens.base.motion.duration.fast, "140ms");
+  assert.equal(tokens.semantic.motion.duration.settle, "220ms");
   assert.equal(
     tokens.semantic.motion.easing.settle,
     "cubic-bezier(0.16, 1, 0.3, 1)",
+  );
+
+  // Charts draw on a longer, dedicated duration and a non-bouncy decelerate
+  // curve — the overshoot easing is reserved for the `playful` alias so chart
+  // marks never scale past their container.
+  assert.equal(tokens.semantic.motion.duration.draw, "600ms");
+  assert.equal(
+    tokens.semantic.motion.easing.emphasized,
+    "cubic-bezier(0.05, 0.7, 0.1, 1)",
+  );
+  assert.equal(
+    tokens.semantic.motion.easing.playful,
+    "cubic-bezier(0.34, 1.56, 0.64, 1)",
   );
 
   assert.match(
     css,
     /--semantic-motion-duration-settle:\s*var\(--base-motion-duration-base\)/,
   );
-  assert.match(css, /--semantic-motion-easing-emphasized:/);
+  assert.match(
+    css,
+    /--semantic-motion-duration-draw:\s*var\(--base-motion-duration-draw\)/,
+  );
+  assert.match(
+    css,
+    /--semantic-motion-easing-emphasized:\s*var\(--base-motion-easing-decelerate\)/,
+  );
 });
 
 test("observe status and chart colour tokens are themeable and exported", () => {
