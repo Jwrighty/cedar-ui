@@ -9,7 +9,6 @@ import {
 } from "@/lib/observe/latency";
 
 import { DashboardShell } from "./dashboard-shell";
-import { DemoModeControl } from "./demo-mode-control";
 import { MotionStatus } from "./motion-status";
 import { OverviewCharts, OverviewRunsChart } from "./overview-charts";
 import { OverviewMetricsRow } from "./overview-metrics";
@@ -55,7 +54,6 @@ export default async function Page({ searchParams }: PageProps) {
             Seeded data is flowing through the mock backend and into a server
             component.
           </Text>
-          <DemoModeControl />
         </header>
 
         <div className="overview-grid">
@@ -113,8 +111,8 @@ function demoMotionStyle(
     string
   > {
   return {
-    "--semantic-motion-duration-feedback": `${120 * slowMoMultiplier}ms`,
-    "--semantic-motion-duration-settle": `${180 * slowMoMultiplier}ms`,
-    "--semantic-motion-duration-draw": `${320 * slowMoMultiplier}ms`,
+    "--semantic-motion-duration-feedback": `calc(var(--base-motion-duration-fast) * ${slowMoMultiplier})`,
+    "--semantic-motion-duration-settle": `calc(var(--base-motion-duration-base) * ${slowMoMultiplier})`,
+    "--semantic-motion-duration-draw": `calc(var(--base-motion-duration-slow) * ${slowMoMultiplier})`,
   };
 }

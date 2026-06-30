@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { Suspense, useEffect, useMemo, useState, type ReactNode } from "react";
 
 import {
   Box,
@@ -12,6 +12,8 @@ import {
   Stack,
   Tooltip,
 } from "@jwrighty/cedar-react";
+
+import { DemoModeControl } from "./demo-mode-control";
 
 const THEME_STORAGE_KEY = "observe-theme";
 const SIDEBAR_STORAGE_KEY = "observe-sidebar-collapsed";
@@ -125,6 +127,9 @@ export function DashboardShell({ children }: { children: ReactNode }) {
           </Heading>
 
           <Inline className="dashboard-header__actions" gap="sm">
+            <Suspense fallback={null}>
+              <DemoModeControl />
+            </Suspense>
             <span className="dashboard-env-pill">Production</span>
             <Button
               className="dashboard-theme-toggle"

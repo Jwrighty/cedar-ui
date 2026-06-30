@@ -196,15 +196,22 @@ test("replays the Overview loading choreography with slow motion", async ({
 
   await expect(page).toHaveURL(/slowMo=2/);
   await expect(page.getByTestId("overview-metric-skeleton-runs")).toBeVisible();
+  // The slow-mo duration is now `calc(var(--base-motion-duration-base) * 2)`,
+  // which getPropertyValue won't reduce to a plain `ms` value. Resolve it via a
+  // probe element's transition-delay (a property the reduced-motion override
+  // leaves alone) so we assert the real 180ms * 2 = 360ms.
   await expect
     .poll(() =>
-      page.evaluate(() =>
-        getComputedStyle(document.querySelector(".observe-panel")!)
-          .getPropertyValue("--semantic-motion-duration-settle")
-          .trim(),
-      ),
+      page.evaluate(() => {
+        const probe = document.createElement("div");
+        probe.style.transitionDelay = "var(--semantic-motion-duration-settle)";
+        document.querySelector(".observe-panel")!.append(probe);
+        const value = getComputedStyle(probe).transitionDelay;
+        probe.remove();
+        return value;
+      }),
     )
-    .toBe("360ms");
+    .toBe("0.36s");
   await expect(page.getByTestId("overview-metric-runs")).toBeVisible({
     timeout: 3000,
   });

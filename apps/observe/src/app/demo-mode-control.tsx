@@ -57,7 +57,7 @@ export function DemoModeControl() {
         Replay
       </Button>
 
-      <div className="demo-mode__speeds" aria-label="Slow motion speed">
+      <div className="demo-mode__speeds" role="group" aria-label="Slow motion speed">
         {slowMoOptions.map((option) => (
           <Button
             key={option}

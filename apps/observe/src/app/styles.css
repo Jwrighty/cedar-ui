@@ -249,9 +249,12 @@ a {
   background: var(--semantic-color-surface-raised);
 }
 
-.demo-mode__replay,
+.demo-mode__replay {
+  min-inline-size: 4rem;
+}
+
 .demo-mode__speed {
-  min-inline-size: 4.5rem;
+  min-inline-size: 2.75rem;
 }
 
 .demo-mode__speeds {
@@ -1015,6 +1018,8 @@ a {
   }
 
   .dashboard-header__actions {
+    width: 100%;
+    flex-wrap: wrap;
     justify-content: flex-start;
   }
 
