@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { Suspense, useEffect, useMemo, useState, type ReactNode } from "react";
 
-import { Button, Inline, Stack, Tooltip } from "@jwrighty/cedar-react";
+import { IconButton, Inline, Stack, Tooltip } from "@jwrighty/cedar-react";
 
 import { DemoModeControl } from "./demo-mode-control";
 
@@ -103,8 +103,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
       <div className="dashboard-main">
         <header className="dashboard-header">
           <Tooltip.Trigger delay={500}>
-            <Button
-              className="dashboard-icon-button"
+            <IconButton
               variant="ghost"
               size="sm"
               aria-label={collapseLabel}
@@ -118,8 +117,8 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                 );
               }}
             >
-              <CollapseIcon size={16} aria-hidden="true" />
-            </Button>
+              <CollapseIcon aria-hidden="true" />
+            </IconButton>
             <Tooltip placement="bottom">{collapseLabel}</Tooltip>
           </Tooltip.Trigger>
 
@@ -128,8 +127,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
               <DemoModeControl />
             </Suspense>
             <Tooltip.Trigger delay={500}>
-              <Button
-                className="dashboard-icon-button"
+              <IconButton
                 variant="ghost"
                 size="sm"
                 aria-label={`Switch to ${nextTheme} theme`}
@@ -140,8 +138,8 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                   window.localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
                 }}
               >
-                <ThemeIcon size={16} aria-hidden="true" />
-              </Button>
+                <ThemeIcon aria-hidden="true" />
+              </IconButton>
               <Tooltip placement="bottom">{`Switch to ${nextTheme} theme`}</Tooltip>
             </Tooltip.Trigger>
           </Inline>
