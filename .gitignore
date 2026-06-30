@@ -11,6 +11,11 @@ storybook-static/
 coverage/
 *.tsbuildinfo
 
+# Playwright
+test-results/
+playwright-report/
+.playwright/
+
 .claude/
 .agents/
 .scratch/
