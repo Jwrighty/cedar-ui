@@ -144,7 +144,7 @@ a {
   width: 1rem;
   height: 1rem;
   flex: 0 0 1rem;
-  color: var(--semantic-color-text-accent);
+  color: inherit;
 }
 
 .dashboard-shell--collapsed .dashboard-nav__link {
@@ -179,7 +179,7 @@ a {
   justify-content: flex-end;
 }
 
-.dashboard-icon-button {
+.dashboard-header .dashboard-icon-button {
   width: 2.25rem;
   height: 2.25rem;
   flex: 0 0 2.25rem;
@@ -187,11 +187,17 @@ a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--semantic-color-text-muted);
+  color: var(--semantic-color-text-default);
 }
 
-.dashboard-icon-button:hover {
-  color: var(--semantic-color-text-default);
+.dashboard-header .dashboard-icon-button:hover {
+  background: var(--semantic-color-surface-sunken);
+}
+
+.dashboard-icon-button svg {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
 }
 
 .dashboard-content {

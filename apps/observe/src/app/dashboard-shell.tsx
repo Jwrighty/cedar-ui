@@ -118,7 +118,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                 );
               }}
             >
-              <CollapseIcon size={18} aria-hidden="true" />
+              <CollapseIcon size={16} aria-hidden="true" />
             </Button>
             <Tooltip placement="bottom">{collapseLabel}</Tooltip>
           </Tooltip.Trigger>
@@ -140,7 +140,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                   window.localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
                 }}
               >
-                <ThemeIcon size={18} aria-hidden="true" />
+                <ThemeIcon size={16} aria-hidden="true" />
               </Button>
               <Tooltip placement="bottom">{`Switch to ${nextTheme} theme`}</Tooltip>
             </Tooltip.Trigger>
