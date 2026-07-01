@@ -261,7 +261,11 @@ describe("createTraceStreamEvents", () => {
 
 describe("listRunsPayload filtering + sorting", () => {
   it("filters by status", async () => {
-    const { runs } = await listRunsPayload({ status: "error", limit: 100, testMode: true });
+    const { runs } = await listRunsPayload({
+      status: "error",
+      limit: 100,
+      testMode: true,
+    });
     expect(runs.length).toBeGreaterThan(0);
     expect(runs.every((r) => r.status === "error")).toBe(true);
   });
@@ -273,7 +277,9 @@ describe("listRunsPayload filtering + sorting", () => {
       limit: 100,
       testMode: true,
     });
-    expect(runs.every((r) => r.model === "o4-mini" && r.environment === "staging")).toBe(true);
+    expect(
+      runs.every((r) => r.model === "o4-mini" && r.environment === "staging"),
+    ).toBe(true);
   });
 
   it("sorts by cost ascending", async () => {
@@ -294,7 +300,11 @@ describe("listRunsPayload filtering + sorting", () => {
   });
 
   it("paginates the filtered+sorted set via cursor", async () => {
-    const first = await listRunsPayload({ status: "success", limit: 10, testMode: true });
+    const first = await listRunsPayload({
+      status: "success",
+      limit: 10,
+      testMode: true,
+    });
     expect(first.nextCursor).not.toBeNull();
     const second = await listRunsPayload({
       status: "success",
@@ -302,7 +312,9 @@ describe("listRunsPayload filtering + sorting", () => {
       limit: 10,
       testMode: true,
     });
-    const overlap = first.runs.filter((r) => second.runs.some((s) => s.id === r.id));
+    const overlap = first.runs.filter((r) =>
+      second.runs.some((s) => s.id === r.id),
+    );
     expect(overlap).toHaveLength(0);
   });
 
@@ -319,9 +331,17 @@ describe("listRunsPayload filtering + sorting", () => {
 
   it("filters by from/to on startedAt", async () => {
     const facets = runsFacets();
-    const from = new Date(Date.parse(facets.referenceTime) - 60 * 60 * 1000).toISOString();
-    const { runs } = await listRunsPayload({ from, limit: 100, testMode: true });
-    expect(runs.every((r) => Date.parse(r.startedAt) >= Date.parse(from))).toBe(true);
+    const from = new Date(
+      Date.parse(facets.referenceTime) - 60 * 60 * 1000,
+    ).toISOString();
+    const { runs } = await listRunsPayload({
+      from,
+      limit: 100,
+      testMode: true,
+    });
+    expect(runs.every((r) => Date.parse(r.startedAt) >= Date.parse(from))).toBe(
+      true,
+    );
   });
 });
 
@@ -330,7 +350,9 @@ describe("runsFacets", () => {
     const facets = runsFacets();
     expect(facets.models.length).toBeGreaterThan(1);
     expect(new Set(facets.models).size).toBe(facets.models.length);
-    expect(facets.environments).toEqual(expect.arrayContaining(["production", "staging"]));
+    expect(facets.environments).toEqual(
+      expect.arrayContaining(["production", "staging"]),
+    );
     expect(Number.isNaN(Date.parse(facets.referenceTime))).toBe(false);
   });
 });
@@ -340,7 +362,9 @@ describe("appendedRuns", () => {
     expect(appendedRuns(3)).toEqual(appendedRuns(3));
     const facets = runsFacets();
     for (const run of appendedRuns(3)) {
-      expect(Date.parse(run.startedAt)).toBeGreaterThan(Date.parse(facets.referenceTime));
+      expect(Date.parse(run.startedAt)).toBeGreaterThan(
+        Date.parse(facets.referenceTime),
+      );
       expect(run.id).toMatch(/^run_appended_/);
     }
   });
@@ -350,11 +374,17 @@ describe("applyRunTag", () => {
   it("adds and removes tags", () => {
     const added = applyRunTag({ id: "run_0001", tag: "customer", op: "add" });
     expect(added.tags).toContain("customer");
-    const removed = applyRunTag({ id: "run_0001", tag: "customer", op: "remove" });
+    const removed = applyRunTag({
+      id: "run_0001",
+      tag: "customer",
+      op: "remove",
+    });
     expect(removed.tags).not.toContain("customer");
   });
 
   it("throws for the deterministic failure tag", () => {
-    expect(() => applyRunTag({ id: "run_0001", tag: "fail", op: "add" })).toThrow();
+    expect(() =>
+      applyRunTag({ id: "run_0001", tag: "fail", op: "add" }),
+    ).toThrow();
   });
 });

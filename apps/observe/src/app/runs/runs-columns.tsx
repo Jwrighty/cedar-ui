@@ -47,7 +47,12 @@ function statusLabel(status: Run["status"]): string {
 }
 
 export const RUN_COLUMNS: RunColumn[] = [
-  { id: "time", header: "Time", isNumeric: false, cell: (r) => formatTime(r.startedAt) },
+  {
+    id: "time",
+    header: "Time",
+    isNumeric: false,
+    cell: (r) => formatTime(r.startedAt),
+  },
   { id: "label", header: "Run", isNumeric: false, cell: (r) => r.label },
   { id: "model", header: "Model", isNumeric: false, cell: (r) => r.model },
   {
@@ -60,7 +65,22 @@ export const RUN_COLUMNS: RunColumn[] = [
       </StatusPill>
     ),
   },
-  { id: "tokens", header: "Tokens", isNumeric: true, cell: (r) => formatTokens(r) },
-  { id: "cost", header: "Cost", isNumeric: true, cell: (r) => formatCost(r.costUsd) },
-  { id: "latency", header: "Latency", isNumeric: true, cell: (r) => formatLatency(r.durationMs) },
+  {
+    id: "tokens",
+    header: "Tokens",
+    isNumeric: true,
+    cell: (r) => formatTokens(r),
+  },
+  {
+    id: "cost",
+    header: "Cost",
+    isNumeric: true,
+    cell: (r) => formatCost(r.costUsd),
+  },
+  {
+    id: "latency",
+    header: "Latency",
+    isNumeric: true,
+    cell: (r) => formatLatency(r.durationMs),
+  },
 ];

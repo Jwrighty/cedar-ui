@@ -45,7 +45,13 @@ describe("generator tags", () => {
     const b = createObserveCorpus();
     expect(a.runs.map((r) => r.tags)).toEqual(b.runs.map((r) => r.tags));
 
-    const vocab = new Set(["regression", "flagged", "customer", "internal", "slow"]);
+    const vocab = new Set([
+      "regression",
+      "flagged",
+      "customer",
+      "internal",
+      "slow",
+    ]);
     for (const run of a.runs) {
       expect(Array.isArray(run.tags)).toBe(true);
       expect(run.tags.length).toBeLessThanOrEqual(3);

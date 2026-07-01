@@ -50,8 +50,10 @@ export function serializeSort(field: RunSortField, dir: SortDir): string {
 
 export function parseRunsQuery(params: URLSearchParams): RunsQuery {
   const [rawField, rawDir] = (params.get("sort") ?? "").split(":");
-  const sortField = oneOf<RunSortField>(rawField ?? null, SORT_FIELDS) ?? DEFAULT_SORT.field;
-  const sortDir: SortDir = rawDir === "asc" || rawDir === "desc" ? rawDir : DEFAULT_SORT.dir;
+  const sortField =
+    oneOf<RunSortField>(rawField ?? null, SORT_FIELDS) ?? DEFAULT_SORT.field;
+  const sortDir: SortDir =
+    rawDir === "asc" || rawDir === "desc" ? rawDir : DEFAULT_SORT.dir;
 
   return {
     status: oneOf<RunStatus>(params.get("status"), STATUSES),

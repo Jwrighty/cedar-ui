@@ -19,10 +19,7 @@ import type { Run } from "@/lib/observe/domain";
 import { RUN_COLUMNS } from "./runs-columns";
 import { useLiveRuns } from "./use-live-runs";
 import { useTagRun } from "./use-tag-run";
-import {
-  runsQueryString,
-  useRunsSearchParams,
-} from "./use-runs-search-params";
+import { runsQueryString, useRunsSearchParams } from "./use-runs-search-params";
 
 interface RunsPage {
   runs: Run[];
@@ -106,7 +103,11 @@ export function RunsTable() {
                   isNumeric={col.isNumeric}
                   align={col.isNumeric ? "end" : "start"}
                   aria-sort={
-                    active ? (query.sortDir === "asc" ? "ascending" : "descending") : "none"
+                    active
+                      ? query.sortDir === "asc"
+                        ? "ascending"
+                        : "descending"
+                      : "none"
                   }
                 >
                   <button
@@ -131,7 +132,11 @@ export function RunsTable() {
             ? Array.from({ length: 10 }, (_, i) => (
                 <TableRow key={`sk-${i}`} aria-hidden="true">
                   {RUN_COLUMNS.map((col) => (
-                    <TableCell key={col.id} isNumeric={col.isNumeric} align={col.isNumeric ? "end" : "start"}>
+                    <TableCell
+                      key={col.id}
+                      isNumeric={col.isNumeric}
+                      align={col.isNumeric ? "end" : "start"}
+                    >
                       <Skeleton shape="text" className="runs-skeleton-cell" />
                     </TableCell>
                   ))}
@@ -158,18 +163,27 @@ export function RunsTable() {
                   }}
                 >
                   {RUN_COLUMNS.map((col) => (
-                    <TableCell key={col.id} isNumeric={col.isNumeric} align={col.isNumeric ? "end" : "start"}>
+                    <TableCell
+                      key={col.id}
+                      isNumeric={col.isNumeric}
+                      align={col.isNumeric ? "end" : "start"}
+                    >
                       {col.cell(run)}
                     </TableCell>
                   ))}
                   <TableCell onClick={(e) => e.stopPropagation()}>
-                    <span className="runs-tags" data-testid={`run-tags-${run.id}`}>
+                    <span
+                      className="runs-tags"
+                      data-testid={`run-tags-${run.id}`}
+                    >
                       {run.tags.map((tag) => (
                         <button
                           key={tag}
                           type="button"
                           className="runs-tag"
-                          onClick={() => tagRun.mutate({ id: run.id, tag, op: "remove" })}
+                          onClick={() =>
+                            tagRun.mutate({ id: run.id, tag, op: "remove" })
+                          }
                         >
                           {tag} ×
                         </button>
@@ -178,7 +192,13 @@ export function RunsTable() {
                         type="button"
                         className="runs-tag runs-tag--add"
                         data-testid={`run-tag-add-${run.id}`}
-                        onClick={() => tagRun.mutate({ id: run.id, tag: "flagged", op: "add" })}
+                        onClick={() =>
+                          tagRun.mutate({
+                            id: run.id,
+                            tag: "flagged",
+                            op: "add",
+                          })
+                        }
                       >
                         + flag
                       </button>
@@ -192,12 +212,17 @@ export function RunsTable() {
 
       {!isPending && !isError && runs.length === 0 ? (
         <div className="runs-empty" data-testid="runs-empty" role="status">
-          <Heading level={2} size="sm">No runs match these filters</Heading>
+          <Heading level={2} size="sm">
+            No runs match these filters
+          </Heading>
           <Text tone="muted">
-            Try widening the time range or clearing a filter to see more activity.
+            Try widening the time range or clearing a filter to see more
+            activity.
           </Text>
           {hasActiveFilters ? (
-            <Button variant="secondary" onPress={reset}>Reset filters</Button>
+            <Button variant="secondary" onPress={reset}>
+              Reset filters
+            </Button>
           ) : null}
         </div>
       ) : null}
@@ -205,7 +230,9 @@ export function RunsTable() {
       {isError ? (
         <div className="runs-error" data-testid="runs-error" role="alert">
           <Text tone="muted">Could not load runs.</Text>
-          <Button variant="secondary" onPress={() => refetch()}>Retry</Button>
+          <Button variant="secondary" onPress={() => refetch()}>
+            Retry
+          </Button>
         </div>
       ) : null}
     </div>

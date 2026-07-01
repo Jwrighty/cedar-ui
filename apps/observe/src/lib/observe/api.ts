@@ -70,7 +70,11 @@ export async function listRunsPayload({
   testMode,
   slowMoMultiplier,
 }: ListRunsOptions = {}) {
-  await waitForEndpointLatency({ endpoint: "runs", testMode, slowMoMultiplier });
+  await waitForEndpointLatency({
+    endpoint: "runs",
+    testMode,
+    slowMoMultiplier,
+  });
 
   const start = Number(cursor ?? 0);
   const safeStart = Number.isFinite(start) && start > 0 ? start : 0;
@@ -531,7 +535,8 @@ export function runsFacets(): {
     new Set(runs.map((r) => r.environment)),
   ) as Environment[];
   const referenceTime = runs.reduce(
-    (latest, r) => (Date.parse(r.startedAt) > Date.parse(latest) ? r.startedAt : latest),
+    (latest, r) =>
+      Date.parse(r.startedAt) > Date.parse(latest) ? r.startedAt : latest,
     runs[0]!.startedAt,
   );
   return { models, environments: environments.sort(), referenceTime };

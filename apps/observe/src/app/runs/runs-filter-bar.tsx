@@ -53,7 +53,9 @@ export function RunsFilterBar() {
         >
           <option value="">All</option>
           {STATUS_OPTIONS.map((s) => (
-            <option key={s} value={s}>{s[0]!.toUpperCase() + s.slice(1)}</option>
+            <option key={s} value={s}>
+              {s[0]!.toUpperCase() + s.slice(1)}
+            </option>
           ))}
         </select>
       </label>
@@ -66,7 +68,9 @@ export function RunsFilterBar() {
         >
           <option value="">All</option>
           {(facets?.models ?? []).map((m) => (
-            <option key={m} value={m}>{m}</option>
+            <option key={m} value={m}>
+              {m}
+            </option>
           ))}
         </select>
       </label>
@@ -79,7 +83,9 @@ export function RunsFilterBar() {
         >
           <option value="">All</option>
           {(facets?.environments ?? []).map((env) => (
-            <option key={env} value={env}>{env}</option>
+            <option key={env} value={env}>
+              {env}
+            </option>
           ))}
         </select>
       </label>
@@ -101,7 +107,9 @@ export function RunsFilterBar() {
       </div>
 
       {hasActiveFilters ? (
-        <Button variant="secondary" onPress={reset}>Reset</Button>
+        <Button variant="secondary" onPress={reset}>
+          Reset
+        </Button>
       ) : null}
     </div>
   );

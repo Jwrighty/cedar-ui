@@ -63,7 +63,10 @@ export function useTagRun() {
       for (const [key, data] of context?.snapshots ?? []) {
         queryClient.setQueryData(key, data);
       }
-      toast.error({ title: "Couldn’t update tag", description: "Change reverted." });
+      toast.error({
+        title: "Couldn’t update tag",
+        description: "Change reverted.",
+      });
     },
     onSuccess: () => {
       toast.success({ title: "Tag updated" });

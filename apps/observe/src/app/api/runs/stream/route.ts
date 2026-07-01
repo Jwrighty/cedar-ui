@@ -5,7 +5,8 @@ export const dynamic = "force-dynamic";
 
 export function GET(request: Request) {
   const testMode =
-    new URL(request.url).searchParams.get("testMode") === "1" || isObserveTestMode();
+    new URL(request.url).searchParams.get("testMode") === "1" ||
+    isObserveTestMode();
   const intervalMs = testMode ? 150 : 4000;
   const runs = appendedRuns(12);
 

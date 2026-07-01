@@ -28,7 +28,10 @@ export const handlers = [
     return HttpResponse.json(payload);
   }),
   http.post("*/api/runs/:id/tags", async ({ request, params }) => {
-    const body = (await request.json()) as { tag: string; op: "add" | "remove" };
+    const body = (await request.json()) as {
+      tag: string;
+      op: "add" | "remove";
+    };
     if (body.tag === "fail") {
       return HttpResponse.json({ error: "Tag rejected" }, { status: 500 });
     }
