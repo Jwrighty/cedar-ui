@@ -17,6 +17,7 @@ import {
 
 import type { Run } from "@/lib/observe/domain";
 import { RUN_COLUMNS } from "./runs-columns";
+import { useLiveRuns } from "./use-live-runs";
 import {
   runsQueryString,
   useRunsSearchParams,
@@ -62,7 +63,13 @@ export function RunsTable() {
     getNextPageParam: (last) => last.nextCursor,
   });
 
-  const runs = data?.pages.flatMap((p) => p.runs) ?? [];
+  const isDefaultView =
+    !hasActiveFilters && query.sortField === "time" && query.sortDir === "desc";
+  const liveRuns = useLiveRuns({ enabled: isDefaultView });
+
+  const fetchedRuns = data?.pages.flatMap((p) => p.runs) ?? [];
+  const seen = new Set(fetchedRuns.map((r) => r.id));
+  const runs = [...liveRuns.filter((r) => !seen.has(r.id)), ...fetchedRuns];
 
   // Infinite-scroll sentinel.
   const sentinelRef = useRef<HTMLTableRowElement | null>(null);

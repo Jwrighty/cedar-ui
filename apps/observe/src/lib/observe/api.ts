@@ -536,3 +536,21 @@ export function runsFacets(): {
   );
   return { models, environments: environments.sort(), referenceTime };
 }
+
+export function appendedRuns(count: number): Run[] {
+  const facets = runsFacets();
+  const baseMs = Date.parse(facets.referenceTime);
+  const corpus = createObserveCorpus();
+  const template = corpus.runs;
+  return Array.from({ length: count }, (_, i) => {
+    const source = template[i % template.length]!;
+    return {
+      ...source,
+      id: `run_appended_${String(i + 1).padStart(4, "0")}`,
+      label: `${source.agentName} #${String(9000 + i)}`,
+      status: "success",
+      startedAt: new Date(baseMs + (i + 1) * 1000).toISOString(),
+      tags: [],
+    };
+  });
+}

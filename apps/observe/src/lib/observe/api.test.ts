@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  appendedRuns,
   bucketSeries,
   createOverviewCharts,
   createTraceStreamEvents,
@@ -330,5 +331,16 @@ describe("runsFacets", () => {
     expect(new Set(facets.models).size).toBe(facets.models.length);
     expect(facets.environments).toEqual(expect.arrayContaining(["production", "staging"]));
     expect(Number.isNaN(Date.parse(facets.referenceTime))).toBe(false);
+  });
+});
+
+describe("appendedRuns", () => {
+  it("is deterministic and sorts after the reference time", () => {
+    expect(appendedRuns(3)).toEqual(appendedRuns(3));
+    const facets = runsFacets();
+    for (const run of appendedRuns(3)) {
+      expect(Date.parse(run.startedAt)).toBeGreaterThan(Date.parse(facets.referenceTime));
+      expect(run.id).toMatch(/^run_appended_/);
+    }
   });
 });
