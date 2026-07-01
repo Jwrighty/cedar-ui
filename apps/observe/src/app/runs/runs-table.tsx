@@ -18,6 +18,7 @@ import {
 import type { Run } from "@/lib/observe/domain";
 import { RUN_COLUMNS } from "./runs-columns";
 import { useLiveRuns } from "./use-live-runs";
+import { useTagRun } from "./use-tag-run";
 import {
   runsQueryString,
   useRunsSearchParams,
@@ -66,6 +67,7 @@ export function RunsTable() {
   const isDefaultView =
     !hasActiveFilters && query.sortField === "time" && query.sortDir === "desc";
   const liveRuns = useLiveRuns({ enabled: isDefaultView });
+  const tagRun = useTagRun();
 
   const fetchedRuns = data?.pages.flatMap((p) => p.runs) ?? [];
   const seen = new Set(fetchedRuns.map((r) => r.id));
@@ -121,6 +123,7 @@ export function RunsTable() {
                 </TableHeaderCell>
               );
             })}
+            <TableHeaderCell scope="col">Tags</TableHeaderCell>
           </TableRow>
         </thead>
         <tbody>
@@ -132,6 +135,9 @@ export function RunsTable() {
                       <Skeleton shape="text" className="runs-skeleton-cell" />
                     </TableCell>
                   ))}
+                  <TableCell>
+                    <Skeleton shape="text" className="runs-skeleton-cell" />
+                  </TableCell>
                 </TableRow>
               ))
             : runs.map((run) => (
@@ -156,6 +162,28 @@ export function RunsTable() {
                       {col.cell(run)}
                     </TableCell>
                   ))}
+                  <TableCell onClick={(e) => e.stopPropagation()}>
+                    <span className="runs-tags" data-testid={`run-tags-${run.id}`}>
+                      {run.tags.map((tag) => (
+                        <button
+                          key={tag}
+                          type="button"
+                          className="runs-tag"
+                          onClick={() => tagRun.mutate({ id: run.id, tag, op: "remove" })}
+                        >
+                          {tag} ×
+                        </button>
+                      ))}
+                      <button
+                        type="button"
+                        className="runs-tag runs-tag--add"
+                        data-testid={`run-tag-add-${run.id}`}
+                        onClick={() => tagRun.mutate({ id: run.id, tag: "flagged", op: "add" })}
+                      >
+                        + flag
+                      </button>
+                    </span>
+                  </TableCell>
                 </TableRow>
               ))}
           {hasNextPage ? <tr ref={sentinelRef} aria-hidden="true" /> : null}

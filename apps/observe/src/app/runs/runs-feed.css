@@ -76,3 +76,18 @@
   display: inline-flex;
   gap: var(--semantic-space-gap-sm);
 }
+
+.runs-tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--semantic-space-gap-sm);
+}
+
+.runs-tag {
+  font: inherit;
+  border: 1px solid var(--semantic-color-border-default, currentColor);
+  border-radius: 999px;
+  padding: 0 var(--semantic-space-inset-sm);
+  background: none;
+  cursor: pointer;
+}

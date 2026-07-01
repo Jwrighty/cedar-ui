@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   appendedRuns,
+  applyRunTag,
   bucketSeries,
   createOverviewCharts,
   createTraceStreamEvents,
@@ -342,5 +343,18 @@ describe("appendedRuns", () => {
       expect(Date.parse(run.startedAt)).toBeGreaterThan(Date.parse(facets.referenceTime));
       expect(run.id).toMatch(/^run_appended_/);
     }
+  });
+});
+
+describe("applyRunTag", () => {
+  it("adds and removes tags", () => {
+    const added = applyRunTag({ id: "run_0001", tag: "customer", op: "add" });
+    expect(added.tags).toContain("customer");
+    const removed = applyRunTag({ id: "run_0001", tag: "customer", op: "remove" });
+    expect(removed.tags).not.toContain("customer");
+  });
+
+  it("throws for the deterministic failure tag", () => {
+    expect(() => applyRunTag({ id: "run_0001", tag: "fail", op: "add" })).toThrow();
   });
 });

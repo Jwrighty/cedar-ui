@@ -27,4 +27,11 @@ export const handlers = [
     await delay(1);
     return HttpResponse.json(payload);
   }),
+  http.post("*/api/runs/:id/tags", async ({ request, params }) => {
+    const body = (await request.json()) as { tag: string; op: "add" | "remove" };
+    if (body.tag === "fail") {
+      return HttpResponse.json({ error: "Tag rejected" }, { status: 500 });
+    }
+    return HttpResponse.json({ id: String(params.id), tags: [body.tag] });
+  }),
 ];

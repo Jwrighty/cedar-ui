@@ -537,6 +537,27 @@ export function runsFacets(): {
   return { models, environments: environments.sort(), referenceTime };
 }
 
+export function applyRunTag({
+  id,
+  tag,
+  op,
+}: {
+  id: string;
+  tag: string;
+  op: "add" | "remove";
+}): { id: string; tags: string[] } {
+  if (tag === "fail") {
+    throw new Error("Tag rejected");
+  }
+  const run =
+    createObserveCorpus().runs.find((r) => r.id === id) ??
+    ({ tags: [] } as unknown as Run);
+  const current = new Set(run.tags);
+  if (op === "add") current.add(tag);
+  else current.delete(tag);
+  return { id, tags: Array.from(current) };
+}
+
 export function appendedRuns(count: number): Run[] {
   const facets = runsFacets();
   const baseMs = Date.parse(facets.referenceTime);
