@@ -1,6 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 
 import type { Run } from "@/lib/observe/domain";
 import type { LiveFeedEvent } from "@/lib/observe/api";
@@ -8,6 +14,7 @@ import type { LiveFeedEvent } from "@/lib/observe/api";
 export interface LiveRunsState {
   liveRuns: Run[];
   announcement: string;
+  setLiveRuns: Dispatch<SetStateAction<Run[]>>;
 }
 
 export function useLiveRuns({ enabled }: { enabled: boolean }): LiveRunsState {
@@ -58,5 +65,5 @@ export function useLiveRuns({ enabled }: { enabled: boolean }): LiveRunsState {
     };
   }, [enabled]);
 
-  return { liveRuns, announcement };
+  return { liveRuns, announcement, setLiveRuns };
 }

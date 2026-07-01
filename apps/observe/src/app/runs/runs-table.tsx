@@ -63,8 +63,44 @@ export function RunsTable() {
 
   const isDefaultView =
     !hasActiveFilters && query.sortField === "time" && query.sortDir === "desc";
-  const { liveRuns, announcement } = useLiveRuns({ enabled: isDefaultView });
+  const { liveRuns, announcement, setLiveRuns } = useLiveRuns({
+    enabled: isDefaultView,
+  });
   const tagRun = useTagRun();
+
+  function handleTag(id: string, tag: string, op: "add" | "remove") {
+    const liveRun = liveRuns.find((r) => r.id === id);
+    if (!liveRun) {
+      tagRun.mutate({ id, tag, op });
+      return;
+    }
+    // Live/SSE-sourced rows aren't in the react-query cache the mutation
+    // patches, so mirror the optimistic update (and its rollback) here too.
+    const prevTags = liveRun.tags;
+    setLiveRuns((prev) =>
+      prev.map((r) =>
+        r.id === id
+          ? {
+              ...r,
+              tags:
+                op === "add"
+                  ? Array.from(new Set([...r.tags, tag]))
+                  : r.tags.filter((t) => t !== tag),
+            }
+          : r,
+      ),
+    );
+    tagRun.mutate(
+      { id, tag, op },
+      {
+        onError: () => {
+          setLiveRuns((prev) =>
+            prev.map((r) => (r.id === id ? { ...r, tags: prevTags } : r)),
+          );
+        },
+      },
+    );
+  }
 
   const fetchedRuns = data?.pages.flatMap((p) => p.runs) ?? [];
   const seen = new Set(fetchedRuns.map((r) => r.id));
@@ -189,9 +225,7 @@ export function RunsTable() {
                           key={tag}
                           type="button"
                           className="runs-tag"
-                          onClick={() =>
-                            tagRun.mutate({ id: run.id, tag, op: "remove" })
-                          }
+                          onClick={() => handleTag(run.id, tag, "remove")}
                         >
                           {tag} ×
                         </button>
@@ -200,13 +234,7 @@ export function RunsTable() {
                         type="button"
                         className="runs-tag runs-tag--add"
                         data-testid={`run-tag-add-${run.id}`}
-                        onClick={() =>
-                          tagRun.mutate({
-                            id: run.id,
-                            tag: "flagged",
-                            op: "add",
-                          })
-                        }
+                        onClick={() => handleTag(run.id, "flagged", "add")}
                       >
                         + flag
                       </button>

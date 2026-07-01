@@ -94,20 +94,20 @@ export function RunsFilterBar() {
         <span className="runs-filter__label">Range</span>
         <div className="runs-range">
           {RANGE_PRESETS.map((preset) => (
-            <button
+            <Button
               key={preset.label}
-              type="button"
-              className="runs-range__btn"
-              onClick={() => applyRange(preset.hours)}
+              variant="secondary"
+              size="sm"
+              onPress={() => applyRange(preset.hours)}
             >
               {preset.label}
-            </button>
+            </Button>
           ))}
         </div>
       </div>
 
       {hasActiveFilters ? (
-        <Button variant="secondary" onPress={reset}>
+        <Button variant="secondary" size="sm" onPress={reset}>
           Reset
         </Button>
       ) : null}
