@@ -19,7 +19,7 @@
 - Test mode: honour `testMode` (`OBSERVE_TEST_MODE=1` or `?testMode=1`) collapsing latencies; MSW handlers pass `testMode: true`.
 - axe-clean; native table semantics preserved; app owns the table's `aria-label` and row focus.
 - App-only work needs **no changeset**. Only if a change touches `packages/tokens`/`packages/react` add a `.changeset/*.md` per package and run `pnpm changeset:check --since=origin/main`. This plan is app-only by design.
-- Run commands from `apps/observe` unless noted. Typecheck: `pnpm --filter @jwrighty/observe typecheck`. Unit: `pnpm --filter @jwrighty/observe test`. E2E: `pnpm --filter @jwrighty/observe test:e2e` (confirm exact script names in `apps/observe/package.json` before first run; substitute if different).
+- Run commands from `apps/observe` unless noted. Typecheck: `pnpm --filter observe typecheck`. Unit: `pnpm --filter observe test`. E2E: `pnpm --filter observe test:e2e` (confirm exact script names in `apps/observe/package.json` before first run; substitute if different).
 
 ---
 
@@ -98,7 +98,7 @@ describe("generator tags", () => {
 
 - [ ] **Step 2: Run the test to verify it fails**
 
-Run: `pnpm --filter @jwrighty/observe test -- generator`
+Run: `pnpm --filter observe test -- generator`
 Expected: FAIL — `run.tags` is `undefined` (property does not exist on `Run`).
 
 - [ ] **Step 3: Add the field to the domain type**
@@ -144,12 +144,12 @@ And add `tags,` to the `run` object literal (after `sessionId`):
 
 - [ ] **Step 5: Run the test to verify it passes**
 
-Run: `pnpm --filter @jwrighty/observe test -- generator`
+Run: `pnpm --filter observe test -- generator`
 Expected: PASS.
 
 - [ ] **Step 6: Typecheck**
 
-Run: `pnpm --filter @jwrighty/observe typecheck`
+Run: `pnpm --filter observe typecheck`
 Expected: PASS (no other code depends on `tags` yet; existing `Run` literals are only built in the generator).
 
 - [ ] **Step 7: Commit**
@@ -226,7 +226,7 @@ describe("parseRunsQuery", () => {
 
 - [ ] **Step 2: Run the test to verify it fails**
 
-Run: `pnpm --filter @jwrighty/observe test -- runs-query`
+Run: `pnpm --filter observe test -- runs-query`
 Expected: FAIL — module `./runs-query` not found.
 
 - [ ] **Step 3: Implement `runs-query.ts`**
@@ -303,7 +303,7 @@ export function parseRunsQuery(params: URLSearchParams): RunsQuery {
 
 - [ ] **Step 4: Run the test to verify it passes**
 
-Run: `pnpm --filter @jwrighty/observe test -- runs-query`
+Run: `pnpm --filter observe test -- runs-query`
 Expected: PASS.
 
 - [ ] **Step 5: Commit**
@@ -415,7 +415,7 @@ describe("runsFacets", () => {
 
 - [ ] **Step 2: Run the tests to verify they fail**
 
-Run: `pnpm --filter @jwrighty/observe test -- api`
+Run: `pnpm --filter observe test -- api`
 Expected: FAIL — `runsFacets` not exported; `listRunsPayload` ignores the new options.
 
 - [ ] **Step 3: Extend `ListRunsOptions` and `listRunsPayload`**
@@ -555,12 +555,12 @@ export function runsFacets(): {
 
 - [ ] **Step 5: Run the tests to verify they pass**
 
-Run: `pnpm --filter @jwrighty/observe test -- api`
+Run: `pnpm --filter observe test -- api`
 Expected: PASS (all cases).
 
 - [ ] **Step 6: Typecheck + full unit run**
 
-Run: `pnpm --filter @jwrighty/observe typecheck && pnpm --filter @jwrighty/observe test`
+Run: `pnpm --filter observe typecheck && pnpm --filter observe test`
 Expected: PASS. Note: the Overview still calls `listRunsPayload`/`overviewRecentRunsPayload` — verify Overview tests still pass (default sort is now time:desc; `overviewRecentRunsPayload` still slices `corpus.runs` directly and is unaffected).
 
 - [ ] **Step 7: Commit**
@@ -673,12 +673,12 @@ Note: register `*/api/runs/facets` **before** `*/api/runs` (MSW matches most-spe
 
 - [ ] **Step 4: Verify the route compiles and responds**
 
-Run: `pnpm --filter @jwrighty/observe typecheck`
+Run: `pnpm --filter observe typecheck`
 Expected: PASS.
 
 Then start the dev server and check both endpoints:
 
-Run: `pnpm --filter @jwrighty/observe dev` (background), then:
+Run: `pnpm --filter observe dev` (background), then:
 `curl -s 'http://localhost:3010/api/runs?status=error&limit=3' | head -c 400`
 `curl -s 'http://localhost:3010/api/runs/facets'`
 Expected: JSON with only `error` runs; facets with `models`, `environments`, `referenceTime`. (Confirm the dev port from `apps/observe/package.json`/`next.config`; substitute if not 3010.)
@@ -707,7 +707,7 @@ git commit -m "feat(observe): wire runs filter/sort params and facets endpoint"
 
 - [ ] **Step 1: Install the dependency**
 
-Run: `pnpm --filter @jwrighty/observe add @tanstack/react-table`
+Run: `pnpm --filter observe add @tanstack/react-table`
 Expected: `@tanstack/react-table` added to `apps/observe/package.json` dependencies.
 
 - [ ] **Step 2: Implement the hook**
@@ -836,7 +836,7 @@ export function useRunsSearchParams() {
 
 - [ ] **Step 3: Typecheck**
 
-Run: `pnpm --filter @jwrighty/observe typecheck`
+Run: `pnpm --filter observe typecheck`
 Expected: PASS.
 
 - [ ] **Step 4: Commit**
@@ -939,7 +939,7 @@ export const RUN_COLUMNS: RunColumn[] = [
 
 - [ ] **Step 2: Typecheck**
 
-Run: `pnpm --filter @jwrighty/observe typecheck`
+Run: `pnpm --filter observe typecheck`
 Expected: PASS.
 
 - [ ] **Step 3: Commit**
@@ -1214,7 +1214,7 @@ Note: confirm the exact motion/space token names against `packages/tokens` outpu
 
 - [ ] **Step 3: Typecheck**
 
-Run: `pnpm --filter @jwrighty/observe typecheck`
+Run: `pnpm --filter observe typecheck`
 Expected: PASS.
 
 - [ ] **Step 4: Commit**
@@ -1383,7 +1383,7 @@ Append to `apps/observe/src/app/runs/runs-feed.css`:
 
 - [ ] **Step 3: Typecheck**
 
-Run: `pnpm --filter @jwrighty/observe typecheck`
+Run: `pnpm --filter observe typecheck`
 Expected: PASS.
 
 - [ ] **Step 4: Commit**
@@ -1459,7 +1459,7 @@ Start the dev server and open `/runs`. Confirm: skeleton rows appear then fade t
 
 - [ ] **Step 4: Typecheck + build**
 
-Run: `pnpm --filter @jwrighty/observe typecheck`
+Run: `pnpm --filter observe typecheck`
 Expected: PASS.
 
 - [ ] **Step 5: Commit**
@@ -1534,7 +1534,7 @@ Note: adjust selectors to match final DOM (e.g. if `getByLabel("Status")` is amb
 
 - [ ] **Step 2: Run the E2E suite**
 
-Run: `pnpm --filter @jwrighty/observe test:e2e -- live-feed`
+Run: `pnpm --filter observe test:e2e -- live-feed`
 Expected: 3 tests PASS. (Confirm the exact e2e script name; substitute if different.)
 
 - [ ] **Step 3: axe check**
@@ -1607,7 +1607,7 @@ describe("appendedRuns", () => {
 });
 ```
 
-Run: `pnpm --filter @jwrighty/observe test -- api`
+Run: `pnpm --filter observe test -- api`
 Expected: PASS.
 
 - [ ] **Step 2: Create the SSE route**
@@ -1710,7 +1710,7 @@ import { useLiveRuns } from "./use-live-runs";
 
 - [ ] **Step 5: Verify + typecheck**
 
-Run: `pnpm --filter @jwrighty/observe typecheck`
+Run: `pnpm --filter observe typecheck`
 Expected: PASS. In the browser at `/runs` (default view), new rows should fade in at the top every few seconds without moving the scroll position.
 
 - [ ] **Step 6: Commit**
@@ -1785,7 +1785,7 @@ describe("applyRunTag", () => {
 });
 ```
 
-Run: `pnpm --filter @jwrighty/observe test -- api`
+Run: `pnpm --filter observe test -- api`
 Expected: PASS.
 
 - [ ] **Step 2: Create the mutation route**
@@ -1984,7 +1984,7 @@ Note: the skeleton branch renders `RUN_COLUMNS.length` cells — add one more sk
 
 - [ ] **Step 6: Typecheck + browser check**
 
-Run: `pnpm --filter @jwrighty/observe typecheck`
+Run: `pnpm --filter observe typecheck`
 Expected: PASS. In the browser, clicking "+ flag" adds a tag immediately and shows a success toast; the tag persists in the react-query cache.
 
 - [ ] **Step 7: E2E for the optimistic mutation**
@@ -2009,7 +2009,7 @@ test("tagging a run applies optimistically and shows a toast", async ({ page }) 
 
 Note: to also assert the rollback path, drive the `tag === "fail"` case (e.g. add a test-only add button or trigger via the API in a follow-up); the MSW handler already returns 500 for `fail`, so `toast.error` + rollback fire. Keep the happy-path test as the required E2E; document the failure path as covered by the `applyRunTag` unit test.
 
-Run: `pnpm --filter @jwrighty/observe test:e2e -- live-feed-tag`
+Run: `pnpm --filter observe test:e2e -- live-feed-tag`
 Expected: PASS.
 
 - [ ] **Step 8: Commit**
@@ -2029,9 +2029,9 @@ git commit -m "feat(observe): optimistic run tagging with toast feedback"
 
 Run:
 ```
-pnpm --filter @jwrighty/observe typecheck
-pnpm --filter @jwrighty/observe test
-pnpm --filter @jwrighty/observe test:e2e
+pnpm --filter observe typecheck
+pnpm --filter observe test
+pnpm --filter observe test:e2e
 ```
 Expected: all PASS.
 
