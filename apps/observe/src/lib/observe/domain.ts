@@ -21,6 +21,7 @@ export interface Run {
   costUsd: number;
   spanCount: number;
   sessionId: string;
+  tags: string[];
 }
 
 export interface Span {

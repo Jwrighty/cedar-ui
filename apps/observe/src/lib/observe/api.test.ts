@@ -28,6 +28,7 @@ function makeRun(startedAt: string, overrides: Partial<Run> = {}): Run {
     costUsd: 0,
     spanCount: 1,
     sessionId: "session_1",
+    tags: [],
     ...overrides,
   };
 }

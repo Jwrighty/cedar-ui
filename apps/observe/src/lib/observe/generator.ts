@@ -42,6 +42,13 @@ const SPAN_TYPES = [
   "guardrail",
   "embedding",
 ] as const;
+const TAG_VOCAB = [
+  "regression",
+  "flagged",
+  "customer",
+  "internal",
+  "slow",
+] as const;
 
 export interface CreateObserveCorpusOptions {
   seed?: number;
@@ -82,6 +89,12 @@ export function createObserveCorpus(
     // gap is jittered so run volume varies across the timeline.
     const gapScale = 0.5 + (index / runCount) * 1.5;
     elapsedMs += Math.round(BASE_GAP_MS * gapScale * (0.4 + random() * 1.2));
+    const tagCount = Math.floor(random() * 4) - 1; // -1..2 → biases toward 0
+    const tags: string[] = [];
+    for (let t = 0; t < Math.max(0, tagCount); t += 1) {
+      const tag = pick(TAG_VOCAB, random);
+      if (!tags.includes(tag)) tags.push(tag);
+    }
     const run: Run = {
       id,
       label: `${agentName} #${String(4000 + index)}`,
@@ -98,6 +111,7 @@ export function createObserveCorpus(
       ),
       spanCount,
       sessionId: `session_${Math.floor(index / 4) + 1}`,
+      tags,
     };
 
     runs.push(run);

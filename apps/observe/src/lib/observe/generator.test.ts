@@ -38,3 +38,20 @@ describe("createObserveCorpus", () => {
     expect(new Set(gaps).size).toBeGreaterThan(1);
   });
 });
+
+describe("generator tags", () => {
+  it("assigns deterministic tags from a fixed vocabulary", () => {
+    const a = createObserveCorpus();
+    const b = createObserveCorpus();
+    expect(a.runs.map((r) => r.tags)).toEqual(b.runs.map((r) => r.tags));
+
+    const vocab = new Set(["regression", "flagged", "customer", "internal", "slow"]);
+    for (const run of a.runs) {
+      expect(Array.isArray(run.tags)).toBe(true);
+      expect(run.tags.length).toBeLessThanOrEqual(3);
+      for (const tag of run.tags) expect(vocab.has(tag)).toBe(true);
+    }
+    // At least some runs are tagged, so the feed's tag UI has data.
+    expect(a.runs.some((r) => r.tags.length > 0)).toBe(true);
+  });
+});
