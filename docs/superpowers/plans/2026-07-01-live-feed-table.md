@@ -2070,3 +2070,311 @@ Then use the `superpowers:finishing-a-development-branch` skill to decide merge/
 - **Cedar prop-name confirmations** flagged inline (Button `variant`, Text `tone`, Toast compound names, muted-text/border/motion token names). Grep the corresponding `packages/react/src/*.tsx` / `packages/tokens` before running each affected step; substitute the real name. These are the only intentional "confirm-then-fill" points and each names exactly what to look up.
 - **Script names** (`test`, `test:e2e`, `dev`, `typecheck`, dev port) — confirm in `apps/observe/package.json` and `playwright.config.ts` at Task 4/Step 4 and reuse throughout.
 - **Column count invariant**: header, skeleton, and data rows must all render the same number of `<TableCell>`s (7 data columns in Phase A; 8 after the Tags column in Task 12). A mismatch is the most likely regression.
+
+---
+
+# Phase B (continued) — completing issue 08
+
+Added after the final review found two issue-08 acceptance criteria unbuilt.
+
+## Task 14: In-place status transition (running → success/error)
+
+**Files:**
+- Modify: `apps/observe/src/lib/observe/api.ts` (change `appendedRuns` to emit running rows; add `LiveFeedEvent` + `liveFeedEvents`)
+- Modify: `apps/observe/src/lib/observe/api.test.ts` (append a `liveFeedEvents` test)
+- Modify: `apps/observe/src/app/api/runs/stream/route.ts` (stream events, not raw runs)
+- Modify: `apps/observe/src/app/runs/use-live-runs.ts` (parse events, apply status in place, guard JSON.parse)
+- Modify: `apps/observe/src/app/runs/runs-columns.tsx` (cross-fade the status cell on change)
+- Modify: `apps/observe/src/app/runs/runs-feed.css` (status cross-fade + reduced-motion)
+
+**Interfaces:**
+- Produces: `type LiveFeedEvent = { type: "run"; run: Run } | { type: "status"; id: string; status: RunStatus; durationMs: number }`; `liveFeedEvents(count: number): LiveFeedEvent[]`.
+
+- [ ] **Step 1: Change `appendedRuns` to emit running rows; add the event helper + failing test**
+
+In `api.ts`, change the `appendedRuns` run literal fields from `status: "success"` to `status: "running"` and `durationMs: <whatever it is>` to `durationMs: null` (leave id/label/startedAt/tags logic as-is). Then add below it:
+
+```ts
+export type LiveFeedEvent =
+  | { type: "run"; run: Run }
+  | { type: "status"; id: string; status: RunStatus; durationMs: number };
+
+export function liveFeedEvents(count: number): LiveFeedEvent[] {
+  const runs = appendedRuns(count);
+  const runEvents: LiveFeedEvent[] = runs.map((run) => ({ type: "run", run }));
+  const statusEvents: LiveFeedEvent[] = runs.map((run, i) => ({
+    type: "status",
+    id: run.id,
+    status: i % 4 === 3 ? "error" : "success", // deterministic settle
+    durationMs: 1200 + i * 300,
+  }));
+  return [...runEvents, ...statusEvents]; // all rows arrive, then settle
+}
+```
+
+Append to `api.test.ts` (add `liveFeedEvents` to the existing `./api` import):
+
+```ts
+describe("liveFeedEvents", () => {
+  it("emits running run events, then deterministic status settlements", () => {
+    const a = liveFeedEvents(4);
+    expect(liveFeedEvents(4)).toEqual(a); // deterministic
+    const runEvents = a.filter((e) => e.type === "run");
+    const statusEvents = a.filter((e) => e.type === "status");
+    expect(runEvents).toHaveLength(4);
+    expect(statusEvents).toHaveLength(4);
+    for (const e of runEvents) {
+      if (e.type === "run") {
+        expect(e.run.status).toBe("running");
+        expect(e.run.durationMs).toBeNull();
+      }
+    }
+    const ids = new Set(
+      runEvents.flatMap((e) => (e.type === "run" ? [e.run.id] : [])),
+    );
+    for (const e of statusEvents) {
+      if (e.type === "status") {
+        expect(ids.has(e.id)).toBe(true);
+        expect(["success", "error"]).toContain(e.status);
+        expect(e.durationMs).toBeGreaterThan(0);
+      }
+    }
+    // every run event precedes every status event
+    const firstStatus = a.findIndex((e) => e.type === "status");
+    const lastRun = a.map((e) => e.type).lastIndexOf("run");
+    expect(lastRun).toBeLessThan(firstStatus);
+  });
+});
+```
+
+- [ ] **Step 2: Run the test to verify it fails, then passes**
+
+`pnpm --filter observe test -- api` → FAIL (liveFeedEvents undefined) → after Step 1 implementation, PASS. Also confirm the existing `appendedRuns` determinism test still passes (it does not assert status).
+
+- [ ] **Step 3: Stream events from the SSE route**
+
+In `stream/route.ts`, import `liveFeedEvents` instead of `appendedRuns`, and replace `const runs = appendedRuns(12);` with `const events = liveFeedEvents(12);`, iterating `events` (enqueue `data: ${JSON.stringify(events[i])}\n\n`; close when `i >= events.length`). Keep the interval/abort cleanup exactly as-is.
+
+- [ ] **Step 4: Apply status in place in `use-live-runs`**
+
+Replace the `onmessage` body so it parses `LiveFeedEvent` (guarded) and either prepends a run or updates status in place:
+
+```ts
+source.onmessage = (event) => {
+  let parsed: LiveFeedEvent;
+  try {
+    parsed = JSON.parse(event.data) as LiveFeedEvent;
+  } catch {
+    return;
+  }
+  setLiveRuns((prev) => {
+    if (parsed.type === "run") {
+      return prev.some((r) => r.id === parsed.run.id)
+        ? prev
+        : [parsed.run, ...prev];
+    }
+    return prev.map((r) =>
+      r.id === parsed.id
+        ? { ...r, status: parsed.status, durationMs: parsed.durationMs }
+        : r,
+    );
+  });
+};
+```
+
+Import `LiveFeedEvent` from `@/lib/observe/api` (type-only) and `RunStatus` is not needed directly. Keep the `[enabled]` dep and cleanup.
+
+- [ ] **Step 5: Cross-fade the status cell**
+
+In `runs-columns.tsx`, wrap the status `StatusPill` in a keyed span so a status change remounts it with a fade:
+
+```tsx
+    cell: (r) => (
+      <span key={r.status} className="runs-status-cell">
+        <StatusPill status={r.status} size="sm">
+          {statusLabel(r.status)}
+        </StatusPill>
+      </span>
+    ),
+```
+
+Append to `runs-feed.css`:
+
+```css
+.runs-status-cell {
+  display: inline-flex;
+  animation: runs-status-in var(--semantic-motion-duration-feedback, 200ms)
+    var(--semantic-motion-easing-enter, ease) both;
+}
+@keyframes runs-status-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .runs-status-cell {
+    animation: none;
+  }
+}
+```
+
+Opacity-only → zero layout shift. Confirm `--semantic-motion-duration-feedback` / `--semantic-motion-easing-enter` are the real token names used elsewhere in this file; the `var(…, fallback)` keeps it safe regardless.
+
+- [ ] **Step 6: Typecheck, full unit suite, browser verify**
+
+`pnpm --filter observe typecheck` (pass); `pnpm --filter observe test` (all pass). Then start the dev server, open `/runs` (default view), and confirm a live-appended row appears as **Running** and, a few seconds later, flips to **Success**/**Error** in place with a cross-fade and no row jump. Capture a screenshot/observation in the report.
+
+- [ ] **Step 7: Commit**
+
+```bash
+git add apps/observe/src/lib/observe/api.ts apps/observe/src/lib/observe/api.test.ts apps/observe/src/app/api/runs/stream/route.ts apps/observe/src/app/runs/use-live-runs.ts apps/observe/src/app/runs/runs-columns.tsx apps/observe/src/app/runs/runs-feed.css
+git commit -m "feat(observe): in-place run status transition over SSE"
+```
+
+---
+
+## Task 15: aria-live announcement of settled new runs
+
+**Files:**
+- Modify: `apps/observe/src/app/runs/use-live-runs.ts` (return `{ liveRuns, announcement }`, debounced)
+- Modify: `apps/observe/src/app/runs/runs-table.tsx` (destructure + render sr-only live region)
+- Modify: `apps/observe/src/app/runs/runs-feed.css` (add `.sr-only`)
+- Create/Modify: `apps/observe/tests/live-feed.spec.ts` (append an announcement test)
+
+**Interfaces:**
+- Produces: `useLiveRuns(...)` returns `{ liveRuns: Run[]; announcement: string }` (breaking change to its one consumer, `runs-table.tsx`).
+
+- [ ] **Step 1: Add a debounced announcement to `use-live-runs`**
+
+Change the hook to track a settled announcement. Use `useRef` for the pending counter + debounce timer; announce ~800ms after arrivals pause (so it is per-settlement, not per-event):
+
+```ts
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+
+import type { Run } from "@/lib/observe/domain";
+import type { LiveFeedEvent } from "@/lib/observe/api";
+
+export interface LiveRunsState {
+  liveRuns: Run[];
+  announcement: string;
+}
+
+export function useLiveRuns({ enabled }: { enabled: boolean }): LiveRunsState {
+  const [liveRuns, setLiveRuns] = useState<Run[]>([]);
+  const [announcement, setAnnouncement] = useState("");
+  const pendingRef = useRef(0);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    if (!enabled) return;
+    const source = new EventSource("/api/runs/stream");
+    source.onmessage = (event) => {
+      let parsed: LiveFeedEvent;
+      try {
+        parsed = JSON.parse(event.data) as LiveFeedEvent;
+      } catch {
+        return;
+      }
+      if (parsed.type === "run") {
+        setLiveRuns((prev) =>
+          prev.some((r) => r.id === parsed.run.id)
+            ? prev
+            : [parsed.run, ...prev],
+        );
+        pendingRef.current += 1;
+        if (timerRef.current) clearTimeout(timerRef.current);
+        timerRef.current = setTimeout(() => {
+          const n = pendingRef.current;
+          pendingRef.current = 0;
+          setAnnouncement(
+            `${n} new ${n === 1 ? "run" : "runs"} added to the feed.`,
+          );
+        }, 800);
+      } else {
+        setLiveRuns((prev) =>
+          prev.map((r) =>
+            r.id === parsed.id
+              ? { ...r, status: parsed.status, durationMs: parsed.durationMs }
+              : r,
+          ),
+        );
+      }
+    };
+    source.onerror = () => source.close();
+    return () => {
+      source.close();
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, [enabled]);
+
+  return { liveRuns, announcement };
+}
+```
+
+(This supersedes Task 14's Step 4 edit to the same file — the parse/status logic is folded in here. If Task 14 already shipped the `Run[]`-returning version, this task changes the return type and updates the consumer in Step 2.)
+
+- [ ] **Step 2: Consume the new shape + render the live region in `runs-table.tsx`**
+
+Change the hook call to `const { liveRuns, announcement } = useLiveRuns({ enabled: isDefaultView });`. Add, as the first child inside `<div className="runs-table-wrap" ...>`:
+
+```tsx
+      <div
+        className="sr-only"
+        role="status"
+        aria-live="polite"
+        data-testid="runs-live-announcer"
+      >
+        {announcement}
+      </div>
+```
+
+- [ ] **Step 3: Add the `.sr-only` utility**
+
+Append to `runs-feed.css` (no such utility exists in the app yet):
+
+```css
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+```
+
+- [ ] **Step 4: E2E for the announcement**
+
+Append to `apps/observe/tests/live-feed.spec.ts`:
+
+```ts
+test("announces settled new runs to assistive technology", async ({ page }) => {
+  await page.goto("/runs");
+  const announcer = page.getByTestId("runs-live-announcer");
+  await expect(announcer).toHaveAttribute("aria-live", "polite");
+  // In test mode the SSE burst completes in a few seconds; the announcer
+  // updates once the arrivals settle (debounced), not per event.
+  await expect(announcer).toContainText(/new runs? added to the feed/, {
+    timeout: 15000,
+  });
+});
+```
+
+- [ ] **Step 5: Typecheck, unit, E2E**
+
+`pnpm --filter observe typecheck` (pass); `pnpm --filter observe test` (pass); `pnpm --filter observe test:e2e` (all pass incl. the new announcement test).
+
+- [ ] **Step 6: Commit**
+
+```bash
+git add apps/observe/src/app/runs/use-live-runs.ts apps/observe/src/app/runs/runs-table.tsx apps/observe/src/app/runs/runs-feed.css apps/observe/tests/live-feed.spec.ts
+git commit -m "feat(observe): aria-live announcement of settled new runs"
+```
