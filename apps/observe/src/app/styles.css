@@ -56,6 +56,9 @@ a {
 .dashboard-shell {
   --sidebar-width: 16rem;
   --sidebar-label-opacity: 1;
+  --sidebar-label-max-inline-size: 12rem;
+  --sidebar-item-gap: var(--semantic-space-gap-sm);
+  --sidebar-nav-item-size: 100%;
 
   min-height: 100vh;
   display: grid;
@@ -68,6 +71,9 @@ a {
 .dashboard-shell--collapsed {
   --sidebar-width: 4rem;
   --sidebar-label-opacity: 0;
+  --sidebar-label-max-inline-size: 0;
+  --sidebar-item-gap: 0;
+  --sidebar-nav-item-size: var(--component-button-height-sm);
 }
 
 .dashboard-sidebar {
@@ -86,17 +92,24 @@ a {
 }
 
 .dashboard-sidebar__label {
+  flex: 1 1 auto;
   min-width: 0;
+  max-inline-size: var(--sidebar-label-max-inline-size);
   overflow: hidden;
   opacity: var(--sidebar-label-opacity);
-  transition: opacity var(--semantic-motion-duration-feedback)
-    var(--semantic-motion-easing-enter);
+  transition:
+    max-inline-size var(--semantic-motion-duration-settle)
+      var(--semantic-motion-easing-settle),
+    opacity var(--semantic-motion-duration-feedback)
+      var(--semantic-motion-easing-enter);
   white-space: nowrap;
 }
 
-.dashboard-brand {
+.dashboard-sidebar .dashboard-brand {
   min-height: 2.5rem;
-  flex-wrap: nowrap;
+  gap: var(--sidebar-item-gap);
+  flex-flow: row nowrap;
+  justify-content: flex-start;
   overflow: hidden;
 }
 
@@ -119,15 +132,17 @@ a {
 
 .dashboard-nav {
   display: grid;
+  justify-items: stretch;
   gap: var(--semantic-space-stack-sm);
 }
 
 .dashboard-nav__link {
   min-width: 0;
+  inline-size: var(--sidebar-nav-item-size);
   height: 2rem;
   display: flex;
   align-items: center;
-  gap: var(--semantic-space-gap-sm);
+  gap: var(--sidebar-item-gap);
   padding-inline: var(--semantic-space-inset-sm);
   overflow: hidden;
   border-radius: var(--semantic-radius-control);
@@ -168,6 +183,16 @@ a {
 .dashboard-shell--collapsed .dashboard-nav__link {
   justify-content: center;
   padding-inline: 0;
+}
+
+.dashboard-shell--collapsed .dashboard-sidebar__label {
+  flex: 0 0 0;
+}
+
+.dashboard-shell--collapsed .dashboard-brand,
+.dashboard-shell--collapsed .dashboard-nav {
+  justify-content: center;
+  justify-items: center;
 }
 
 .dashboard-main {

@@ -437,6 +437,31 @@ test("collapses the sidebar from the keyboard and persists the rail", async ({
     "white-space",
     "nowrap",
   );
+  await expect(page.locator(".dashboard-sidebar__label").first()).toHaveCSS(
+    "inline-size",
+    "0px",
+  );
+
+  const brandHeight = await page
+    .locator(".dashboard-brand")
+    .evaluate((element) => element.getBoundingClientRect().height);
+  const brandMarkHeight = await page
+    .locator(".dashboard-brand__mark")
+    .evaluate((element) => element.getBoundingClientRect().height);
+  expect(brandHeight).toBe(brandMarkHeight);
+
+  const collapsedNavLinkBox = await page
+    .locator(".dashboard-nav__link")
+    .first()
+    .evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      return { height: rect.height, width: rect.width };
+    });
+  expect(collapsedNavLinkBox).toEqual({ height: 32, width: 32 });
+
+  await expect(
+    page.getByRole("button", { name: "Switch to dark theme" }),
+  ).toHaveCSS("padding", "0px");
   await expect
     .poll(() =>
       page.evaluate(() => localStorage.getItem("observe-sidebar-collapsed")),
