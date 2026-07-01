@@ -63,7 +63,7 @@ export function RunsTable() {
 
   const isDefaultView =
     !hasActiveFilters && query.sortField === "time" && query.sortDir === "desc";
-  const liveRuns = useLiveRuns({ enabled: isDefaultView });
+  const { liveRuns, announcement } = useLiveRuns({ enabled: isDefaultView });
   const tagRun = useTagRun();
 
   const fetchedRuns = data?.pages.flatMap((p) => p.runs) ?? [];
@@ -91,6 +91,14 @@ export function RunsTable() {
 
   return (
     <div className="runs-table-wrap" data-testid="runs-table">
+      <div
+        className="sr-only"
+        role="status"
+        aria-live="polite"
+        data-testid="runs-live-announcer"
+      >
+        {announcement}
+      </div>
       <Table density="compact" aria-label="Runs">
         <thead>
           <TableRow>

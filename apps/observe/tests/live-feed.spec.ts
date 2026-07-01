@@ -102,3 +102,14 @@ test("has no detectable accessibility violations", async ({ page }) => {
 
   expect(violations).toEqual([]);
 });
+
+test("announces settled new runs to assistive technology", async ({ page }) => {
+  await page.goto("/runs");
+  const announcer = page.getByTestId("runs-live-announcer");
+  await expect(announcer).toHaveAttribute("aria-live", "polite");
+  // In test mode the SSE burst completes in a few seconds; the announcer
+  // updates once the arrivals settle (debounced), not per event.
+  await expect(announcer).toContainText(/new runs? added to the feed/, {
+    timeout: 15000,
+  });
+});
