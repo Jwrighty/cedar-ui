@@ -1,6 +1,10 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  type InfiniteData,
+} from "@tanstack/react-query";
 
 import { useToast } from "@jwrighty/cedar-react";
 
@@ -16,6 +20,25 @@ interface RunsPage {
   runs: Run[];
   nextCursor: string | null;
   generatedAt: string;
+}
+
+type RunsCache = InfiniteData<RunsPage, string | null>;
+
+function updateRunTags(
+  data: RunsCache | undefined,
+  id: string,
+  updater: (tags: string[]) => string[],
+): RunsCache | undefined {
+  if (!data) return data;
+  return {
+    ...data,
+    pages: data.pages.map((page) => ({
+      ...page,
+      runs: page.runs.map((run) =>
+        run.id === id ? { ...run, tags: updater(run.tags) } : run,
+      ),
+    })),
+  };
 }
 
 export function useTagRun() {
@@ -34,28 +57,18 @@ export function useTagRun() {
     },
     onMutate: async ({ id, tag, op }) => {
       await queryClient.cancelQueries({ queryKey: ["runs"] });
-      const snapshots = queryClient.getQueriesData<{ pages: RunsPage[] }>({
+      const snapshots = queryClient.getQueriesData<RunsCache>({
         queryKey: ["runs"],
       });
       for (const [key, data] of snapshots) {
-        if (!data) continue;
-        queryClient.setQueryData(key, {
-          ...data,
-          pages: data.pages.map((page) => ({
-            ...page,
-            runs: page.runs.map((run) =>
-              run.id === id
-                ? {
-                    ...run,
-                    tags:
-                      op === "add"
-                        ? Array.from(new Set([...run.tags, tag]))
-                        : run.tags.filter((t) => t !== tag),
-                  }
-                : run,
-            ),
-          })),
-        });
+        queryClient.setQueryData(
+          key,
+          updateRunTags(data, id, (tags) =>
+            op === "add"
+              ? Array.from(new Set([...tags, tag]))
+              : tags.filter((t) => t !== tag),
+          ),
+        );
       }
       return { snapshots };
     },
@@ -68,7 +81,16 @@ export function useTagRun() {
         description: "Change reverted.",
       });
     },
-    onSuccess: () => {
+    onSuccess: ({ id, tags }) => {
+      const snapshots = queryClient.getQueriesData<RunsCache>({
+        queryKey: ["runs"],
+      });
+      for (const [key, data] of snapshots) {
+        queryClient.setQueryData(
+          key,
+          updateRunTags(data, id, () => tags),
+        );
+      }
       toast.success({ title: "Tag updated" });
     },
   });
