@@ -53,3 +53,26 @@
 @media (prefers-reduced-motion: reduce) {
   .runs-row { animation: none; }
 }
+
+.runs-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--semantic-space-gap-md);
+}
+
+.runs-filter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--semantic-space-stack-sm);
+}
+
+.runs-filter__label {
+  font-size: 0.75rem;
+  color: var(--semantic-color-text-muted, inherit);
+}
+
+.runs-range {
+  display: inline-flex;
+  gap: var(--semantic-space-gap-sm);
+}
