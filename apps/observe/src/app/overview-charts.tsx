@@ -33,15 +33,15 @@ const chartMeta: Record<
 > = {
   "runs-over-time": {
     title: "Runs over time",
-    description: "Request volume across the current operating window.",
+    description: "Run volume across the current 12-hour operating window.",
   },
   "cost-by-model": {
     title: "Cost by model",
-    description: "Spend concentration across active model traffic.",
+    description: "Spend distribution across the active model mix.",
   },
   "latency-distribution": {
     title: "Latency distribution",
-    description: "Completed runs grouped by response time.",
+    description: "Completed run latency clustered into response-time bands.",
   },
 };
 
@@ -57,16 +57,12 @@ export function OverviewRunsChart({
   testMode?: boolean;
   slowMoMultiplier?: SlowMoMultiplier;
 }) {
-  const chart: OverviewChartKey = "runs-over-time";
-
   return (
-    <Suspense fallback={<OverviewChartSkeleton chart={chart} />}>
-      <OverviewChartCard
-        chart={chart}
-        testMode={testMode}
-        slowMoMultiplier={slowMoMultiplier}
-      />
-    </Suspense>
+    <OverviewChartShell
+      chart="runs-over-time"
+      testMode={testMode}
+      slowMoMultiplier={slowMoMultiplier}
+    />
   );
 }
 
@@ -80,22 +76,51 @@ export function OverviewCharts({
   return (
     <section className="overview-charts" aria-label="Overview charts">
       {secondaryCharts.map((chart) => (
-        <Suspense
+        <OverviewChartShell
           key={chart}
-          fallback={<OverviewChartSkeleton chart={chart} />}
-        >
-          <OverviewChartCard
-            chart={chart}
-            testMode={testMode}
-            slowMoMultiplier={slowMoMultiplier}
-          />
-        </Suspense>
+          chart={chart}
+          testMode={testMode}
+          slowMoMultiplier={slowMoMultiplier}
+        />
       ))}
     </section>
   );
 }
 
-async function OverviewChartCard({
+// The header is known up front (title/description never depend on the
+// fetched payload), so it renders once, outside the Suspense boundary. Only
+// the plot re-renders when data resolves — otherwise Suspense would unmount
+// and remount the whole card, replaying its entrance animation over a header
+// that hadn't actually changed and producing a visible flash.
+function OverviewChartShell({
+  chart,
+  testMode,
+  slowMoMultiplier,
+}: {
+  chart: OverviewChartKey;
+  testMode?: boolean;
+  slowMoMultiplier?: SlowMoMultiplier;
+}) {
+  const { title, description } = chartMeta[chart];
+
+  return (
+    <article
+      className={`overview-chart-card overview-chart-card--${chart}`}
+      data-testid={`overview-chart-${chart}`}
+    >
+      <ChartHeader title={title} description={description} />
+      <Suspense fallback={<OverviewChartBodySkeleton chart={chart} />}>
+        <OverviewChartBody
+          chart={chart}
+          testMode={testMode}
+          slowMoMultiplier={slowMoMultiplier}
+        />
+      </Suspense>
+    </article>
+  );
+}
+
+async function OverviewChartBody({
   chart,
   testMode,
   slowMoMultiplier,
@@ -109,34 +134,24 @@ async function OverviewChartCard({
     slowMoMultiplier,
   });
 
-  return (
-    <article
-      className={`overview-chart-card overview-chart-card--${payload.key}`}
-      data-testid={`overview-chart-${payload.key}`}
-    >
-      <ChartHeader title={payload.title} description={payload.summary} />
-      {renderChart(payload)}
-    </article>
-  );
+  return renderChart(payload);
 }
 
-function OverviewChartSkeleton({ chart }: { chart: OverviewChartKey }) {
-  const { title, description } = chartMeta[chart];
-
+function OverviewChartBodySkeleton({ chart }: { chart: OverviewChartKey }) {
   return (
-    <article
-      className={`overview-chart-card overview-chart-card--${chart} overview-chart-card--skeleton`}
-      data-testid={`overview-chart-skeleton-${chart}`}
-      aria-label={`Loading ${title}`}
-    >
-      <ChartHeader title={title} description={description} />
-      <Skeleton className="overview-chart-skeleton__plot" shape="rounded" />
+    <>
+      <span className="sr-only">Loading {chartMeta[chart].title}</span>
+      <Skeleton
+        className="overview-chart-skeleton__plot"
+        shape="rounded"
+        data-testid={`overview-chart-skeleton-${chart}`}
+      />
       <div className="overview-chart-skeleton__legend" aria-hidden="true">
         <Skeleton shape="text" />
         <Skeleton shape="text" />
         <Skeleton shape="text" />
       </div>
-    </article>
+    </>
   );
 }
 
