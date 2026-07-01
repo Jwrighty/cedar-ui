@@ -7,6 +7,7 @@ import {
   createOverviewCharts,
   createTraceStreamEvents,
   createOverviewMetrics,
+  liveFeedEvents,
   overviewRecentRunsPayload,
   listRunsPayload,
   overviewChartPayload,
@@ -367,6 +368,37 @@ describe("appendedRuns", () => {
       );
       expect(run.id).toMatch(/^run_appended_/);
     }
+  });
+});
+
+describe("liveFeedEvents", () => {
+  it("emits running run events, then deterministic status settlements", () => {
+    const a = liveFeedEvents(4);
+    expect(liveFeedEvents(4)).toEqual(a); // deterministic
+    const runEvents = a.filter((e) => e.type === "run");
+    const statusEvents = a.filter((e) => e.type === "status");
+    expect(runEvents).toHaveLength(4);
+    expect(statusEvents).toHaveLength(4);
+    for (const e of runEvents) {
+      if (e.type === "run") {
+        expect(e.run.status).toBe("running");
+        expect(e.run.durationMs).toBeNull();
+      }
+    }
+    const ids = new Set(
+      runEvents.flatMap((e) => (e.type === "run" ? [e.run.id] : [])),
+    );
+    for (const e of statusEvents) {
+      if (e.type === "status") {
+        expect(ids.has(e.id)).toBe(true);
+        expect(["success", "error"]).toContain(e.status);
+        expect(e.durationMs).toBeGreaterThan(0);
+      }
+    }
+    // every run event precedes every status event
+    const firstStatus = a.findIndex((e) => e.type === "status");
+    const lastRun = a.map((e) => e.type).lastIndexOf("run");
+    expect(lastRun).toBeLessThan(firstStatus);
   });
 });
 

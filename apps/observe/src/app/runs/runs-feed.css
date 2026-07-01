@@ -97,3 +97,22 @@
   background: none;
   cursor: pointer;
 }
+
+.runs-status-cell {
+  display: inline-flex;
+  animation: runs-status-in var(--semantic-motion-duration-feedback, 200ms)
+    var(--semantic-motion-easing-enter, ease) both;
+}
+@keyframes runs-status-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .runs-status-cell {
+    animation: none;
+  }
+}

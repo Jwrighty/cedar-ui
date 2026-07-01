@@ -1,4 +1,4 @@
-import { appendedRuns } from "@/lib/observe/api";
+import { liveFeedEvents } from "@/lib/observe/api";
 import { isObserveTestMode } from "@/lib/observe/latency";
 
 export const dynamic = "force-dynamic";
@@ -8,20 +8,20 @@ export function GET(request: Request) {
     new URL(request.url).searchParams.get("testMode") === "1" ||
     isObserveTestMode();
   const intervalMs = testMode ? 150 : 4000;
-  const runs = appendedRuns(12);
+  const events = liveFeedEvents(12);
 
   const stream = new ReadableStream({
     start(controller) {
       const encoder = new TextEncoder();
       let i = 0;
       const timer = setInterval(() => {
-        if (i >= runs.length) {
+        if (i >= events.length) {
           clearInterval(timer);
           controller.close();
           return;
         }
         controller.enqueue(
-          encoder.encode(`data: ${JSON.stringify(runs[i])}\n\n`),
+          encoder.encode(`data: ${JSON.stringify(events[i])}\n\n`),
         );
         i += 1;
       }, intervalMs);

@@ -574,9 +574,26 @@ export function appendedRuns(count: number): Run[] {
       ...source,
       id: `run_appended_${String(i + 1).padStart(4, "0")}`,
       label: `${source.agentName} #${String(9000 + i)}`,
-      status: "success",
+      status: "running",
+      durationMs: null,
       startedAt: new Date(baseMs + (i + 1) * 1000).toISOString(),
       tags: [],
     };
   });
+}
+
+export type LiveFeedEvent =
+  | { type: "run"; run: Run }
+  | { type: "status"; id: string; status: RunStatus; durationMs: number };
+
+export function liveFeedEvents(count: number): LiveFeedEvent[] {
+  const runs = appendedRuns(count);
+  const runEvents: LiveFeedEvent[] = runs.map((run) => ({ type: "run", run }));
+  const statusEvents: LiveFeedEvent[] = runs.map((run, i) => ({
+    type: "status",
+    id: run.id,
+    status: i % 4 === 3 ? "error" : "success", // deterministic settle
+    durationMs: 1200 + i * 300,
+  }));
+  return [...runEvents, ...statusEvents]; // all rows arrive, then settle
 }

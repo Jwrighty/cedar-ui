@@ -60,9 +60,11 @@ export const RUN_COLUMNS: RunColumn[] = [
     header: "Status",
     isNumeric: false,
     cell: (r) => (
-      <StatusPill status={r.status} size="sm">
-        {statusLabel(r.status)}
-      </StatusPill>
+      <span key={r.status} className="runs-status-cell">
+        <StatusPill status={r.status} size="sm">
+          {statusLabel(r.status)}
+        </StatusPill>
+      </span>
     ),
   },
   {
