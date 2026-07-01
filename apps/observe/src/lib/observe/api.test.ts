@@ -10,6 +10,7 @@ import {
   overviewChartPayload,
   overviewMetricPayload,
   runTracePayload,
+  runsFacets,
 } from "./api";
 import type { Run } from "./domain";
 
@@ -253,5 +254,81 @@ describe("createTraceStreamEvents", () => {
       type: "complete",
       result: `${trace!.run.label} settled as ${trace!.run.status}.`,
     });
+  });
+});
+
+describe("listRunsPayload filtering + sorting", () => {
+  it("filters by status", async () => {
+    const { runs } = await listRunsPayload({ status: "error", limit: 100, testMode: true });
+    expect(runs.length).toBeGreaterThan(0);
+    expect(runs.every((r) => r.status === "error")).toBe(true);
+  });
+
+  it("filters by model and environment", async () => {
+    const { runs } = await listRunsPayload({
+      model: "o4-mini",
+      environment: "staging",
+      limit: 100,
+      testMode: true,
+    });
+    expect(runs.every((r) => r.model === "o4-mini" && r.environment === "staging")).toBe(true);
+  });
+
+  it("sorts by cost ascending", async () => {
+    const { runs } = await listRunsPayload({
+      sortField: "cost",
+      sortDir: "asc",
+      limit: 100,
+      testMode: true,
+    });
+    const costs = runs.map((r) => r.costUsd);
+    expect([...costs].sort((a, b) => a - b)).toEqual(costs);
+  });
+
+  it("defaults to newest-first by time", async () => {
+    const { runs } = await listRunsPayload({ limit: 5, testMode: true });
+    const times = runs.map((r) => Date.parse(r.startedAt));
+    expect([...times].sort((a, b) => b - a)).toEqual(times);
+  });
+
+  it("paginates the filtered+sorted set via cursor", async () => {
+    const first = await listRunsPayload({ status: "success", limit: 10, testMode: true });
+    expect(first.nextCursor).not.toBeNull();
+    const second = await listRunsPayload({
+      status: "success",
+      cursor: first.nextCursor,
+      limit: 10,
+      testMode: true,
+    });
+    const overlap = first.runs.filter((r) => second.runs.some((s) => s.id === r.id));
+    expect(overlap).toHaveLength(0);
+  });
+
+  it("returns an empty page when nothing matches", async () => {
+    const { runs, nextCursor } = await listRunsPayload({
+      status: "error",
+      model: "does-not-exist",
+      limit: 100,
+      testMode: true,
+    });
+    expect(runs).toHaveLength(0);
+    expect(nextCursor).toBeNull();
+  });
+
+  it("filters by from/to on startedAt", async () => {
+    const facets = runsFacets();
+    const from = new Date(Date.parse(facets.referenceTime) - 60 * 60 * 1000).toISOString();
+    const { runs } = await listRunsPayload({ from, limit: 100, testMode: true });
+    expect(runs.every((r) => Date.parse(r.startedAt) >= Date.parse(from))).toBe(true);
+  });
+});
+
+describe("runsFacets", () => {
+  it("returns distinct models, environments, and a reference time", () => {
+    const facets = runsFacets();
+    expect(facets.models.length).toBeGreaterThan(1);
+    expect(new Set(facets.models).size).toBe(facets.models.length);
+    expect(facets.environments).toEqual(expect.arrayContaining(["production", "staging"]));
+    expect(Number.isNaN(Date.parse(facets.referenceTime))).toBe(false);
   });
 });

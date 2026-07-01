@@ -3,6 +3,7 @@ import { waitForEndpointLatency } from "./latency";
 import type { SlowMoMultiplier } from "./latency";
 import type {
   CostByModelChart,
+  Environment,
   LatencyDistributionChart,
   OverviewChart,
   OverviewChartKey,
@@ -10,13 +11,23 @@ import type {
   OverviewMetricKey,
   Run,
   RunsOverTimeChart,
+  RunStatus,
   RunTrace,
   TraceStreamEvent,
 } from "./domain";
+import type { RunSortField, SortDir } from "./runs-query";
+import { DEFAULT_SORT } from "./runs-query";
 
 export interface ListRunsOptions {
   cursor?: string | null;
   limit?: number;
+  status?: RunStatus | null;
+  model?: string | null;
+  environment?: Environment | null;
+  from?: string | null;
+  to?: string | null;
+  sortField?: RunSortField;
+  sortDir?: SortDir;
   testMode?: boolean;
   slowMoMultiplier?: SlowMoMultiplier;
 }
@@ -49,28 +60,45 @@ export interface OverviewRecentRunsOptions {
 export async function listRunsPayload({
   cursor,
   limit = 10,
+  status = null,
+  model = null,
+  environment = null,
+  from = null,
+  to = null,
+  sortField = DEFAULT_SORT.field,
+  sortDir = DEFAULT_SORT.dir,
   testMode,
   slowMoMultiplier,
 }: ListRunsOptions = {}) {
-  await waitForEndpointLatency({
-    endpoint: "runs",
-    testMode,
-    slowMoMultiplier,
-  });
+  await waitForEndpointLatency({ endpoint: "runs", testMode, slowMoMultiplier });
 
   const start = Number(cursor ?? 0);
   const safeStart = Number.isFinite(start) && start > 0 ? start : 0;
   const safeLimit =
     Number.isFinite(limit) && limit > 0 ? Math.min(limit, 100) : 10;
-  const corpus = createObserveCorpus();
-  const runs = corpus.runs.slice(safeStart, safeStart + safeLimit);
+
+  const fromMs = from ? Date.parse(from) : null;
+  const toMs = to ? Date.parse(to) : null;
+
+  const filtered = createObserveCorpus().runs.filter((run) => {
+    if (status && run.status !== status) return false;
+    if (model && run.model !== model) return false;
+    if (environment && run.environment !== environment) return false;
+    const startedMs = Date.parse(run.startedAt);
+    if (fromMs !== null && startedMs < fromMs) return false;
+    if (toMs !== null && startedMs > toMs) return false;
+    return true;
+  });
+
+  const sorted = sortRuns(filtered, sortField, sortDir);
+  const page = sorted.slice(safeStart, safeStart + safeLimit);
   const nextCursor =
-    safeStart + runs.length < corpus.runs.length
-      ? String(safeStart + runs.length)
+    safeStart + page.length < sorted.length
+      ? String(safeStart + page.length)
       : null;
 
   return {
-    runs,
+    runs: page,
     nextCursor,
     generatedAt: new Date("2026-02-24T12:00:00.000Z").toISOString(),
   };
@@ -457,4 +485,54 @@ function roundCurrency(value: number) {
 function tokenizeAssistantOutput(content: string) {
   const tokens = content.match(/\S+\s*/g);
   return tokens && tokens.length > 0 ? tokens : [content];
+}
+
+function sortValue(run: Run, field: RunSortField): number | string {
+  switch (field) {
+    case "time":
+      return Date.parse(run.startedAt);
+    case "label":
+      return run.label;
+    case "model":
+      return run.model;
+    case "status":
+      return run.status;
+    case "tokens":
+      return run.tokensIn + run.tokensOut;
+    case "cost":
+      return run.costUsd;
+    case "latency":
+      return run.durationMs ?? -1; // running runs sort as lowest latency
+  }
+}
+
+function sortRuns(runs: Run[], field: RunSortField, dir: SortDir): Run[] {
+  const factor = dir === "asc" ? 1 : -1;
+  // Stable sort with id as a deterministic tie-breaker.
+  return [...runs].sort((a, b) => {
+    const av = sortValue(a, field);
+    const bv = sortValue(b, field);
+    let cmp: number;
+    if (typeof av === "number" && typeof bv === "number") cmp = av - bv;
+    else cmp = String(av).localeCompare(String(bv));
+    if (cmp !== 0) return cmp * factor;
+    return a.id.localeCompare(b.id) * factor;
+  });
+}
+
+export function runsFacets(): {
+  models: string[];
+  environments: Environment[];
+  referenceTime: string;
+} {
+  const runs = createObserveCorpus().runs;
+  const models = Array.from(new Set(runs.map((r) => r.model))).sort();
+  const environments = Array.from(
+    new Set(runs.map((r) => r.environment)),
+  ) as Environment[];
+  const referenceTime = runs.reduce(
+    (latest, r) => (Date.parse(r.startedAt) > Date.parse(latest) ? r.startedAt : latest),
+    runs[0]!.startedAt,
+  );
+  return { models, environments: environments.sort(), referenceTime };
 }
