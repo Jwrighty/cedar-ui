@@ -29,6 +29,7 @@ test("filters and sort are reconstructable from the URL", async ({ page }) => {
   // Back button restores prior state.
   await page.goBack();
   await expect(page).not.toHaveURL(/sort=cost/);
+  await expect(page).toHaveURL(/status=error/);
 });
 
 test("empty state appears for an impossible filter and resets", async ({
