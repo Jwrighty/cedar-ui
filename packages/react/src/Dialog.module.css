@@ -15,6 +15,23 @@
   background: var(--semantic-color-overlay-scrim);
 }
 
+/*
+ * Entry/exit motion. React Aria keeps the overlay mounted while [data-exiting]
+ * is set and waits for these animations to finish before unmounting, so the
+ * dialog fades/settles in and out instead of snapping. The scrim cross-fades;
+ * the panel additionally rises and scales a touch on the way in. All timings
+ * and curves come from the motion tokens.
+ */
+.overlay[data-entering] {
+  animation: cedar-dialog-scrim-in var(--semantic-motion-duration-settle)
+    var(--semantic-motion-easing-enter) both;
+}
+
+.overlay[data-exiting] {
+  animation: cedar-dialog-scrim-out var(--semantic-motion-duration-feedback)
+    var(--semantic-motion-easing-settle) both;
+}
+
 .modal {
   width: 100%;
   max-width: var(--component-dialog-max-width);
@@ -25,6 +42,70 @@
     var(--semantic-color-border-default);
   border-radius: var(--semantic-radius-overlay);
   box-shadow: 0 10px 38px -10px rgb(0 0 0 / 35%);
+}
+
+.modal[data-entering] {
+  animation: cedar-dialog-panel-in var(--semantic-motion-duration-settle)
+    var(--semantic-motion-easing-emphasized) both;
+}
+
+.modal[data-exiting] {
+  animation: cedar-dialog-panel-out var(--semantic-motion-duration-feedback)
+    var(--semantic-motion-easing-settle) both;
+}
+
+@keyframes cedar-dialog-scrim-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes cedar-dialog-scrim-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes cedar-dialog-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--semantic-space-stack-md)) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes cedar-dialog-panel-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(calc(var(--semantic-space-stack-sm) * -1)) scale(0.99);
+  }
+}
+
+/*
+ * Reduced motion: keep a calm cross-fade but drop all movement/scale, per the
+ * house rule that every moment has a reduced variant.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .modal[data-entering] {
+    animation-name: cedar-dialog-scrim-in;
+  }
+
+  .modal[data-exiting] {
+    animation-name: cedar-dialog-scrim-out;
+  }
 }
 
 .dialog {

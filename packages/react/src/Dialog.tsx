@@ -65,6 +65,14 @@ export interface DialogContentProps extends Pick<
   children: ReactNode;
   /** Dialog ARIA role. @default "dialog" */
   role?: AriaDialogProps["role"];
+  /**
+   * Labels the dialog by the id of an existing element (e.g. a heading rendered
+   * inside `children`). Use instead of {@link Dialog.Title} when the visible
+   * title lives in your own content rather than a `Dialog.Title` slot.
+   */
+  "aria-labelledby"?: string;
+  /** Labels the dialog with a literal string when there is no visible title. */
+  "aria-label"?: string;
   /** Extra class names, merged onto the dialog panel. */
   className?: string;
   style?: CSSProperties;
@@ -92,6 +100,8 @@ function Content({
   isOpen,
   defaultOpen,
   onOpenChange,
+  "aria-labelledby": ariaLabelledby,
+  "aria-label": ariaLabel,
   ...dataAttrs
 }: DialogContentProps) {
   return (
@@ -107,6 +117,8 @@ function Content({
       <Modal className={styles.modal}>
         <AriaDialog
           role={role}
+          aria-labelledby={ariaLabelledby}
+          aria-label={ariaLabel}
           className={
             className ? `${styles.dialog} ${className}` : styles.dialog
           }
