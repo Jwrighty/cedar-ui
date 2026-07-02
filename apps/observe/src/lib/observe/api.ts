@@ -162,6 +162,17 @@ export async function overviewChartPayload({
   return createOverviewCharts().find((item) => item.key === chart)!;
 }
 
+/**
+ * Run summary (header/facts) with no simulated latency. The trace overlay
+ * renders its identity from this synchronously so the shared-element morph is
+ * never held waiting on a fetch — the heavier span payload streams in behind a
+ * Suspense boundary via {@link runTracePayload}.
+ */
+export function runSummary(id: string): Run | null {
+  const corpus = createObserveCorpus();
+  return corpus.runs.find((item) => item.id === id) ?? null;
+}
+
 export async function runTracePayload({
   id,
   testMode,

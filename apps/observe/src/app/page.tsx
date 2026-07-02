@@ -1,13 +1,12 @@
 import { Heading, Text } from "@jwrighty/cedar-react";
-import type { CSSProperties } from "react";
 
 import type { OverviewMetricKey } from "@/lib/observe/domain";
 import {
   isObserveTestMode,
   parseSlowMoMultiplier,
-  type SlowMoMultiplier,
 } from "@/lib/observe/latency";
 
+import { demoMotionStyle } from "./demo-motion";
 import { DashboardShell } from "./dashboard-shell";
 import { MotionStatus } from "./motion-status";
 import { OverviewCharts, OverviewRunsChart } from "./overview-charts";
@@ -99,20 +98,4 @@ function asOverviewMetricKey(value: string | string[] | undefined) {
 
 function firstParam(value: string | string[] | undefined) {
   return Array.isArray(value) ? value[0] : value;
-}
-
-function demoMotionStyle(
-  slowMoMultiplier: SlowMoMultiplier,
-): CSSProperties &
-  Record<
-    | "--semantic-motion-duration-feedback"
-    | "--semantic-motion-duration-settle"
-    | "--semantic-motion-duration-draw",
-    string
-  > {
-  return {
-    "--semantic-motion-duration-feedback": `calc(var(--base-motion-duration-fast) * ${slowMoMultiplier})`,
-    "--semantic-motion-duration-settle": `calc(var(--base-motion-duration-base) * ${slowMoMultiplier})`,
-    "--semantic-motion-duration-draw": `calc(var(--base-motion-duration-draw) * ${slowMoMultiplier})`,
-  };
 }

@@ -12,6 +12,15 @@
     var(--semantic-color-surface-sunken) 50%,
     var(--semantic-color-surface-page)
   );
+
+  /*
+   * Trace surfaces intentionally exceed the 60rem primary-content contract
+   * (see PRD "Page layout conventions"): the span waterfall needs the extra
+   * horizontal room to stay legible along the timeline. The full page and the
+   * intercepting-route overlay share this one token so the two framings of the
+   * same trace view never disagree on width.
+   */
+  --trace-content-max-inline-size: 90rem;
 }
 
 [data-theme="dark"] {
@@ -111,6 +120,10 @@ a {
   flex-flow: row nowrap;
   justify-content: flex-start;
   overflow: hidden;
+}
+
+.dashboard-shell--collapsed .dashboard-brand {
+  min-height: 2rem;
 }
 
 .dashboard-brand__mark {
@@ -760,9 +773,14 @@ a {
 }
 
 .trace-page {
-  width: min(100%, 90rem);
+  width: min(100%, var(--trace-content-max-inline-size));
   display: grid;
   gap: var(--semantic-space-stack-xl);
+}
+
+.trace-page--overlay {
+  width: 100%;
+  gap: var(--semantic-space-stack-lg);
 }
 
 .trace-back-link {
@@ -806,6 +824,15 @@ a {
 
 .trace-hero[data-status="error"] {
   border-color: var(--semantic-color-status-error-border);
+}
+
+.trace-identity {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--semantic-space-gap-lg);
+  contain: layout;
 }
 
 .trace-run-facts,
@@ -993,6 +1020,72 @@ a {
   font-size: var(--semantic-font-size-sm);
 }
 
+/*
+ * The trace overlay is Cedar's Dialog, rendered controlled by the intercepting
+ * route (focus trap, scroll lock, background aria-hidden, dismiss and entry/exit
+ * motion all come from Cedar/React Aria). We only re-point the dialog's width
+ * token on the portalled scrim so the trace — with its waterfall — gets more
+ * room than a default dialog, and anchor it to the top rather than centring.
+ */
+[data-trace-overlay] {
+  --component-dialog-max-width: var(--trace-content-max-inline-size);
+
+  align-items: flex-start;
+  padding: var(--semantic-space-inset-xl);
+}
+
+.trace-overlay-dialog {
+  gap: var(--semantic-space-stack-lg);
+}
+
+.trace-overlay-dialog__chrome {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/*
+ * Waterfall placeholder shown while the span payload streams in behind Suspense.
+ * It reuses the real `.trace-layout` shells and renders one fixed-height row per
+ * span, so it reserves the loaded waterfall's exact height and nothing shifts.
+ */
+.trace-skeleton-span-label {
+  block-size: 0.85rem;
+  inline-size: min(100%, 9rem);
+}
+
+.trace-skeleton-span-bar {
+  block-size: 1.1rem;
+  inline-size: var(--trace-skeleton-width, 50%);
+  margin-inline-start: var(--trace-skeleton-offset, 0);
+}
+
+/*
+ * The loaded span-detail card settles to a stable height (tabs + messages +
+ * result), which dominates the layout for low-span runs. Reserve that height in
+ * the skeleton so the taller column matches whether it's the waterfall or this.
+ */
+.trace-skeleton-detail {
+  min-block-size: 25rem;
+}
+
+.trace-skeleton-detail-title {
+  block-size: 1.1rem;
+  inline-size: 9rem;
+  margin-block-start: var(--semantic-space-stack-xs);
+}
+
+.trace-skeleton-lines {
+  display: grid;
+  gap: var(--semantic-space-stack-md);
+}
+
+.trace-skeleton-lines > * {
+  block-size: 0.85rem;
+}
+
 @keyframes trace-bar-draw {
   from {
     opacity: 0;
@@ -1072,6 +1165,10 @@ a {
   }
 
   .trace-hero {
+    flex-direction: column;
+  }
+
+  .trace-identity {
     flex-direction: column;
   }
 

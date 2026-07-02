@@ -17,6 +17,11 @@ test("renders the dashboard shell around seeded observe data", async ({
     page.getByRole("heading", { name: "Recent runs" }),
   ).toBeVisible();
   await expect(
+    page.getByRole("navigation", { name: "Primary" }).getByRole("link", {
+      name: "Trace detail",
+    }),
+  ).toHaveCount(0);
+  await expect(
     page.getByText(/deterministic seed data with tuned Suspense boundaries/),
   ).toBeVisible();
   await expect(page.getByTestId("overview-metric-runs")).toBeVisible();
@@ -531,4 +536,76 @@ test("renders a deep-linked trace with a streaming waterfall", async ({
   await expect(page.locator(".trace-settled-result")).toContainText(
     /settled as|still running/,
   );
+});
+
+test("opens a feed trace as an overlay and restores focus on close", async ({
+  page,
+}) => {
+  await page.goto("/runs?status=success&slowMo=4");
+
+  const firstRun = page
+    .getByTestId("runs-table")
+    .getByRole("link", { name: /Open trace for/ })
+    .first();
+  await expect(firstRun).toBeVisible();
+  const openedRunId = await firstRun.getAttribute("data-run-id");
+  expect(openedRunId).toBeTruthy();
+  const openedRun = page.locator(`[data-run-id="${openedRunId}"]`);
+
+  await openedRun.focus();
+  await expect(openedRun).toBeFocused();
+  await openedRun.press("Enter");
+
+  // Opens as a Cedar Dialog at the intercepting route, preserving feed URL state.
+  await expect(page).toHaveURL(/\/runs\/run_/);
+  expect(new URL(page.url()).searchParams.get("slowMo")).toBe("4");
+  await expect(page.getByTestId("trace-overlay")).toBeVisible();
+
+  const dialog = page.getByRole("dialog");
+  await expect(dialog).toBeVisible();
+  // The dialog is labelled by the trace heading (Cedar forwards aria-labelledby).
+  await expect(dialog).toHaveAccessibleName(
+    (await page.locator(".trace-identity__title").innerText()).trim(),
+  );
+  // React Aria moves focus into the dialog on open.
+  await expect
+    .poll(() =>
+      page.evaluate(() => {
+        const dialogEl = document.querySelector('[role="dialog"]');
+        return !!dialogEl && dialogEl.contains(document.activeElement);
+      }),
+    )
+    .toBe(true);
+
+  // The feed stays mounted, but React Aria marks everything outside the dialog
+  // `inert`, so the background is unreachable by pointer, keyboard, or AT.
+  await expect(page.getByTestId("runs-table")).toBeAttached();
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          !!document
+            .querySelector('[data-testid="runs-table"]')
+            ?.closest("[inert]"),
+      ),
+    )
+    .toBe(true);
+
+  await page.getByRole("button", { name: "Close trace overlay" }).click();
+
+  // Closing returns to the feed with filters intact, tears the dialog down,
+  // un-hides the background, and restores focus to the originating row.
+  await expect.poll(() => new URL(page.url()).pathname).toBe("/runs");
+  expect(new URL(page.url()).searchParams.get("status")).toBe("success");
+  expect(new URL(page.url()).searchParams.get("slowMo")).toBe("4");
+  await expect(page.getByTestId("trace-overlay")).toHaveCount(0);
+  expect(
+    await page.evaluate(
+      () =>
+        !!document
+          .querySelector('[data-testid="runs-table"]')
+          ?.closest("[inert]"),
+    ),
+  ).toBe(false);
+  await expect(openedRun).toBeFocused();
 });

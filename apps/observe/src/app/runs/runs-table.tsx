@@ -1,7 +1,7 @@
 "use client";
 
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef } from "react";
 
 import {
@@ -17,6 +17,7 @@ import {
 
 import type { Run } from "@/lib/observe/domain";
 import { RUN_COLUMNS } from "./runs-columns";
+import { TRACE_ORIGIN_ROW_STORAGE_KEY } from "./trace-transition";
 import { useLiveRuns } from "./use-live-runs";
 import { useTagRun } from "./use-tag-run";
 import { runsQueryString, useRunsSearchParams } from "./use-runs-search-params";
@@ -43,6 +44,8 @@ async function fetchRunsPage(
 
 export function RunsTable() {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { query, toggleSort, reset, hasActiveFilters } = useRunsSearchParams();
   const qs = runsQueryString(query);
 
@@ -106,6 +109,20 @@ export function RunsTable() {
   const seen = new Set(fetchedRuns.map((r) => r.id));
   const runs = [...liveRuns.filter((r) => !seen.has(r.id)), ...fetchedRuns];
 
+  useEffect(() => {
+    if (pathname !== "/runs") return;
+
+    const runId = window.sessionStorage.getItem(TRACE_ORIGIN_ROW_STORAGE_KEY);
+    if (!runId) return;
+
+    window.sessionStorage.removeItem(TRACE_ORIGIN_ROW_STORAGE_KEY);
+    window.requestAnimationFrame(() => {
+      document
+        .querySelector<HTMLElement>(`[data-run-id="${cssEscape(runId)}"]`)
+        ?.focus();
+    });
+  }, [pathname, runs.length]);
+
   // Infinite-scroll sentinel.
   const sentinelRef = useRef<HTMLTableRowElement | null>(null);
   useEffect(() => {
@@ -122,7 +139,10 @@ export function RunsTable() {
   }, [fetchNextPage, hasNextPage, isFetchingNextPage, runs.length]);
 
   function openRun(id: string) {
-    router.push(`/runs/${id}`);
+    // Remember the origin row so focus can be restored to it when the overlay
+    // closes; the overlay itself is the intercepting `/runs/[id]` modal route.
+    window.sessionStorage.setItem(TRACE_ORIGIN_ROW_STORAGE_KEY, id);
+    router.push(traceHref(id, searchParams));
   }
 
   return (
@@ -189,59 +209,73 @@ export function RunsTable() {
                   </TableCell>
                 </TableRow>
               ))
-            : runs.map((run) => (
-                <TableRow
-                  key={run.id}
-                  isInteractive
-                  data-status={run.status}
-                  tabIndex={0}
-                  role="link"
-                  aria-label={`Open trace for ${run.label}`}
-                  className="runs-row runs-row--enter"
-                  onClick={() => openRun(run.id)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      e.preventDefault();
-                      openRun(run.id);
-                    }
-                  }}
-                >
-                  {RUN_COLUMNS.map((col) => (
-                    <TableCell
-                      key={col.id}
-                      isNumeric={col.isNumeric}
-                      align={col.isNumeric ? "end" : "start"}
-                    >
-                      {col.cell(run)}
-                    </TableCell>
-                  ))}
-                  <TableCell onClick={(e) => e.stopPropagation()}>
-                    <span
-                      className="runs-tags"
-                      data-testid={`run-tags-${run.id}`}
-                    >
-                      {run.tags.map((tag) => (
-                        <button
-                          key={tag}
-                          type="button"
-                          className="runs-tag"
-                          onClick={() => handleTag(run.id, tag, "remove")}
-                        >
-                          {tag} ×
-                        </button>
-                      ))}
-                      <button
-                        type="button"
-                        className="runs-tag runs-tag--add"
-                        data-testid={`run-tag-add-${run.id}`}
-                        onClick={() => handleTag(run.id, "flagged", "add")}
+            : runs.map((run) => {
+                return (
+                  <TableRow
+                    key={run.id}
+                    isInteractive
+                    data-run-id={run.id}
+                    data-status={run.status}
+                    tabIndex={0}
+                    role="link"
+                    aria-label={`Open trace for ${run.label}`}
+                    className="runs-row runs-row--enter"
+                    onClick={() => openRun(run.id)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        openRun(run.id);
+                      }
+                    }}
+                  >
+                    {RUN_COLUMNS.map((col) => (
+                      <TableCell
+                        key={col.id}
+                        isNumeric={col.isNumeric}
+                        align={col.isNumeric ? "end" : "start"}
                       >
-                        + flag
-                      </button>
-                    </span>
-                  </TableCell>
-                </TableRow>
-              ))}
+                        {col.id === "label" ? (
+                          <span className="runs-row-identity">
+                            <span className="runs-row-identity__label">
+                              {run.label}
+                            </span>
+                            <span className="runs-row-identity__meta">
+                              {run.id} · {run.model} · {run.status}
+                            </span>
+                          </span>
+                        ) : (
+                          col.cell(run)
+                        )}
+                      </TableCell>
+                    ))}
+                    <TableCell onClick={(e) => e.stopPropagation()}>
+                      <span
+                        className="runs-tags"
+                        data-testid={`run-tags-${run.id}`}
+                      >
+                        {run.tags.map((tag) => (
+                          <button
+                            key={tag}
+                            type="button"
+                            className="runs-tag"
+                            onClick={() => handleTag(run.id, tag, "remove")}
+                          >
+                            {tag} ×
+                          </button>
+                        ))}
+                        <button
+                          type="button"
+                          className="runs-tag runs-tag--add"
+                          data-testid={`run-tag-add-${run.id}`}
+                          onClick={() => handleTag(run.id, "flagged", "add")}
+                        >
+                          + flag
+                        </button>
+                      </span>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
           {hasNextPage ? <tr ref={sentinelRef} aria-hidden="true" /> : null}
         </tbody>
       </Table>
@@ -273,4 +307,17 @@ export function RunsTable() {
       ) : null}
     </div>
   );
+}
+
+function cssEscape(value: string) {
+  if (typeof CSS !== "undefined" && CSS.escape) {
+    return CSS.escape(value);
+  }
+
+  return value.replace(/"/g, '\\"');
+}
+
+function traceHref(id: string, searchParams: { toString(): string }) {
+  const queryString = searchParams.toString();
+  return `/runs/${id}${queryString ? `?${queryString}` : ""}`;
 }

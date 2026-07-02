@@ -9,7 +9,6 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Sun,
-  Waypoints,
   type LucideIcon,
 } from "lucide-react";
 import { Suspense, useEffect, useMemo, useState, type ReactNode } from "react";
@@ -30,7 +29,6 @@ const navigationItems: Array<{
 }> = [
   { href: "/", label: "Overview", Icon: LayoutDashboard },
   { href: "/runs", label: "Live feed", Icon: Activity },
-  { href: "/runs/run_0001", label: "Trace detail", Icon: Waypoints },
 ];
 
 export function DashboardShell({ children }: { children: ReactNode }) {
@@ -77,6 +75,16 @@ export function DashboardShell({ children }: { children: ReactNode }) {
             {navigationItems.map(({ href, label, Icon }) => {
               const isCurrent =
                 href === "/" ? pathname === href : pathname.startsWith(href);
+              const contents = (
+                <>
+                  <Icon
+                    className="dashboard-nav__icon"
+                    size={16}
+                    aria-hidden="true"
+                  />
+                  <span className="dashboard-sidebar__label">{label}</span>
+                </>
+              );
 
               return (
                 <Tooltip.Trigger key={label} delay={500}>
@@ -85,12 +93,7 @@ export function DashboardShell({ children }: { children: ReactNode }) {
                     href={href}
                     aria-current={isCurrent ? "page" : undefined}
                   >
-                    <Icon
-                      className="dashboard-nav__icon"
-                      size={16}
-                      aria-hidden="true"
-                    />
-                    <span className="dashboard-sidebar__label">{label}</span>
+                    {contents}
                   </Link>
                   <Tooltip placement="right">{label}</Tooltip>
                 </Tooltip.Trigger>

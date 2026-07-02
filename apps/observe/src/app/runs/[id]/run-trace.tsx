@@ -1,5 +1,6 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 
 import {
@@ -26,6 +27,9 @@ interface RunTraceViewProps {
 }
 
 export function RunTraceView({ trace }: RunTraceViewProps) {
+  const searchParams = useSearchParams();
+  const slowMo = searchParams.get("slowMo");
+  const testMode = searchParams.get("testMode");
   const [revealedSpanIds, setRevealedSpanIds] = useState<Set<string>>(
     () => new Set(),
   );
@@ -43,8 +47,14 @@ export function RunTraceView({ trace }: RunTraceViewProps) {
     setStreamedMessages({});
     setSettledResult("");
 
+    const streamParams = new URLSearchParams();
+    if (slowMo) streamParams.set("slowMo", slowMo);
+    if (testMode) streamParams.set("testMode", testMode);
+    const streamQuery = streamParams.toString();
     const source = new EventSource(
-      `/api/runs/${encodeURIComponent(trace.run.id)}/stream`,
+      `/api/runs/${encodeURIComponent(trace.run.id)}/stream${
+        streamQuery ? `?${streamQuery}` : ""
+      }`,
     );
 
     source.onmessage = (event: MessageEvent<string>) => {
@@ -76,7 +86,7 @@ export function RunTraceView({ trace }: RunTraceViewProps) {
     };
 
     return () => source.close();
-  }, [trace.run.id, trace.spans]);
+  }, [slowMo, testMode, trace.run.id, trace.spans]);
 
   const spanDepths = useMemo(
     () => createSpanDepths(trace.spans),

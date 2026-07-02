@@ -31,6 +31,26 @@
   max-width: 8rem;
 }
 
+.runs-row-identity {
+  display: grid;
+  gap: var(--semantic-space-stack-sm);
+  width: fit-content;
+  max-width: 100%;
+  contain: layout;
+}
+
+.runs-row-identity__label,
+.runs-row-identity__meta {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.runs-row-identity__meta {
+  color: var(--semantic-color-text-muted);
+  font-size: var(--semantic-font-size-xs);
+}
+
 .runs-row {
   animation: runs-row-enter var(--semantic-motion-duration-feedback, 160ms)
     var(--semantic-motion-easing-enter, ease) both;
@@ -57,6 +77,11 @@
 @media (prefers-reduced-motion: reduce) {
   .runs-row {
     animation: none;
+  }
+
+  .runs-row-identity,
+  .runs-row-identity__label {
+    view-transition-name: none !important;
   }
 }
 
