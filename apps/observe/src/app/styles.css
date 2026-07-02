@@ -78,7 +78,7 @@ a {
 }
 
 .dashboard-shell--collapsed {
-  --sidebar-width: 4rem;
+  --sidebar-width: 3.6rem;
   --sidebar-label-opacity: 0;
   --sidebar-label-max-inline-size: 0;
   --sidebar-item-gap: 0;
@@ -127,9 +127,9 @@ a {
 }
 
 .dashboard-brand__mark {
-  width: 2.5rem;
-  height: 2.5rem;
-  flex: 0 0 2.5rem;
+  width: 2rem;
+  height: 2rem;
+  flex: 0 0 2rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -200,12 +200,6 @@ a {
 
 .dashboard-shell--collapsed .dashboard-sidebar__label {
   flex: 0 0 0;
-}
-
-.dashboard-shell--collapsed .dashboard-brand,
-.dashboard-shell--collapsed .dashboard-nav {
-  justify-content: center;
-  justify-items: center;
 }
 
 .dashboard-main {

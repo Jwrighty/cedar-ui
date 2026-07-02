@@ -430,11 +430,35 @@ test("collapses the sidebar from the keyboard and persists the rail", async ({
   const content = page.locator(".dashboard-content");
   const before = await content.boundingBox();
   const toggle = page.getByRole("button", { name: "Collapse sidebar" });
+  const brandMark = page.locator(".dashboard-brand__mark");
+  const firstNavIcon = page.locator(".dashboard-nav__icon").first();
+  const centerX = (locator: typeof brandMark) =>
+    locator.evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      return rect.x + rect.width / 2;
+    });
+  const expandedBrandMarkCenter = await centerX(brandMark);
+  const expandedNavIconCenter = await centerX(firstNavIcon);
 
   await toggle.focus();
   await page.keyboard.press("Enter");
 
   await expect(shell).toHaveClass(/dashboard-shell--collapsed/);
+  await page.waitForFunction(() => {
+    const sidebar = document.querySelector(".dashboard-sidebar");
+    return sidebar
+      ? sidebar.getBoundingClientRect().width > 200 &&
+          document
+            .querySelector(".dashboard-shell")
+            ?.classList.contains("dashboard-shell--collapsed")
+      : false;
+  });
+  expect(
+    Math.abs((await centerX(brandMark)) - expandedBrandMarkCenter),
+  ).toBeLessThanOrEqual(1);
+  expect(
+    Math.abs((await centerX(firstNavIcon)) - expandedNavIconCenter),
+  ).toBeLessThanOrEqual(1);
   await expect(
     page.getByRole("button", { name: "Expand sidebar" }),
   ).toBeVisible();
@@ -463,6 +487,7 @@ test("collapses the sidebar from the keyboard and persists the rail", async ({
       return { height: rect.height, width: rect.width };
     });
   expect(collapsedNavLinkBox).toEqual({ height: 32, width: 32 });
+  await expect(firstNavIcon).toHaveCSS("width", "16px");
 
   await expect(
     page.getByRole("button", { name: "Switch to dark theme" }),
