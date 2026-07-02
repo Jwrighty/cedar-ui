@@ -1,5 +1,22 @@
 # @jwrighty/cedar-react
 
+## 0.4.0
+
+### Minor Changes
+
+- 4b100a4: Dialog: add tokenized entrance/exit motion — the scrim cross-fades and the panel rises and settles in via React Aria's `data-entering`/`data-exiting` hooks, with a calm cross-fade-only variant under `prefers-reduced-motion`. Also forward `aria-labelledby`/`aria-label` to the underlying dialog so it can be labelled by an existing heading in your content rather than only a `Dialog.Title` slot.
+- 55a54be: Add `IconButton`, a square icon-only button built on React Aria Components. It
+  owns its square geometry and scales its icon child to the control size (sm 16,
+  md 20, lg 24), and requires `aria-label` at the type level since an icon has no
+  accessible name on its own. Unlike `Button`, the `ghost` and `secondary`
+  variants are neutral (text colour, not the accent) because icon-only controls
+  are usually chrome rather than the primary action.
+
+### Patch Changes
+
+- Updated dependencies [a3dd641]
+  - @jwrighty/cedar-tokens@0.4.0
+
 ## 0.3.0
 
 ### Minor Changes
