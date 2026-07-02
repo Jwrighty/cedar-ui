@@ -482,6 +482,18 @@
               "description": "Dialog ARIA role."
             },
             {
+              "name": "aria-labelledby",
+              "type": "string | undefined",
+              "required": false,
+              "description": "Labels the dialog by the id of an existing element (e.g. a heading rendered\ninside `children`). Use instead of {@link Dialog.Title} when the visible\ntitle lives in your own content rather than a `Dialog.Title` slot."
+            },
+            {
+              "name": "aria-label",
+              "type": "string | undefined",
+              "required": false,
+              "description": "Labels the dialog with a literal string when there is no visible title."
+            },
+            {
               "name": "className",
               "type": "string | undefined",
               "required": false,
