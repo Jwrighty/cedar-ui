@@ -107,9 +107,16 @@ test("announces settled new runs to assistive technology", async ({ page }) => {
   await page.goto("/runs");
   const announcer = page.getByTestId("runs-live-announcer");
   await expect(announcer).toHaveAttribute("aria-live", "polite");
+  await expect(announcer).toHaveAttribute("aria-atomic", "true");
   // In test mode the SSE burst completes in a few seconds; the announcer
   // updates once the arrivals settle (debounced), not per event.
   await expect(announcer).toContainText(/new runs? added to the feed/, {
     timeout: 15000,
   });
+
+  await page
+    .getByTestId("runs-filter-bar")
+    .getByLabel("Status")
+    .selectOption("success");
+  await expect(announcer).toBeEmpty();
 });

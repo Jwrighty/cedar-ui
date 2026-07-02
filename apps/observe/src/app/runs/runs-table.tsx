@@ -151,6 +151,7 @@ export function RunsTable() {
         className="sr-only"
         role="status"
         aria-live="polite"
+        aria-atomic="true"
         data-testid="runs-live-announcer"
       >
         {announcement}

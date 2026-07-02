@@ -24,7 +24,15 @@ export function useLiveRuns({ enabled }: { enabled: boolean }): LiveRunsState {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      pendingRef.current = 0;
+      setAnnouncement("");
+      setLiveRuns([]);
+      return;
+    }
+
+    setAnnouncement("");
     const source = new EventSource("/api/runs/stream");
     source.onmessage = (event) => {
       let parsed: LiveFeedEvent;
@@ -62,6 +70,7 @@ export function useLiveRuns({ enabled }: { enabled: boolean }): LiveRunsState {
     return () => {
       source.close();
       if (timerRef.current) clearTimeout(timerRef.current);
+      pendingRef.current = 0;
     };
   }, [enabled]);
 

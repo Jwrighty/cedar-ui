@@ -7,9 +7,14 @@ real dependency — not a pile of components copied between projects.
 
 **[View the hosted Storybook →](https://main--6a393989afa7ada24819272a.chromatic.com/)**
 
-Themed, documented, interactive Button, TextField, and Dialog — from one link,
-nothing to clone. Use the **Theme** control in the toolbar to re-skin every
-component live across light, dark, and the Cedar brand theme.
+Themed, documented, interactive Cedar components — from one link, nothing to
+clone. Use the **Theme** control in the toolbar to re-skin every component live
+across light, dark, and the Cedar brand theme.
+
+The flagship consumer is **observe**, an LLM/agent observability dashboard that
+shows Cedar under dense data, streaming, motion, and accessibility pressure. The
+case study with embedded motion captures is
+[**Making Data Arrival Visible in observe**](docs/case-studies/observe-dashboard-case-study.md).
 
 Cedar is published to npm as two packages:
 
