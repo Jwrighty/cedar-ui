@@ -1,5 +1,19 @@
 # @jwrighty/cedar-mcp
 
+## 0.2.2
+
+### Patch Changes
+
+- d8d9129: Add the generated composition template surface with a tested form-dialog template.
+- 58d32bd: Add canonical agent examples to Cedar's manifest
+- Updated dependencies [4b100a4]
+- Updated dependencies [55a54be]
+- Updated dependencies [c6652a8]
+- Updated dependencies [986a015]
+- Updated dependencies [d8d9129]
+- Updated dependencies [58d32bd]
+  - @jwrighty/cedar-react@0.4.0
+
 ## 0.2.1
 
 ### Patch Changes
