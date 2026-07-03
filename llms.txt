@@ -567,7 +567,7 @@ function AsyncStatePanelTemplateExample() {
                   Start a run to populate this panel with live activity.
                 </Text>
               </Stack>
-              <Button variant="primary" style={{ width: "100%" }}>
+              <Button variant="primary" style={{ alignSelf: "flex-start" }}>
                 Start run
               </Button>
             </Stack>
@@ -582,7 +582,7 @@ function AsyncStatePanelTemplateExample() {
                   Keep the panel in place and offer a retry path.
                 </Text>
               </Stack>
-              <Button variant="secondary" style={{ width: "100%" }}>
+              <Button variant="secondary" style={{ alignSelf: "flex-start" }}>
                 Retry
               </Button>
             </Stack>
@@ -603,11 +603,14 @@ function AsyncStatePanelTemplateExample() {
 - **Skeleton:**
 
 ```tsx
-<Stack gap="md">
-  <Inline gap="sm">
-    <TextField label="Search" />
-    <Button variant="secondary">Filter</Button>
-  </Inline>
+<Stack gap="lg">
+  <Stack gap="sm">
+    <Inline gap="sm">
+      <TextField label="Search" />
+      <Button variant="secondary">Clear</Button>
+    </Inline>
+    <Text tone="muted">Result count</Text>
+  </Stack>
   <Table>
     <thead>
       <TableRow>
@@ -773,7 +776,7 @@ function FormDialogTemplateExample() {
   <Card>
     <CardHeader><Heading level={2}>Section title</Heading></CardHeader>
     <CardBody>
-      <Stack gap="md">
+      <Stack gap="lg">
         <Switch>Immediate setting</Switch>
         <TextField label="Saved field" />
       </Stack>
