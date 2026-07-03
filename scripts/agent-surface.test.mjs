@@ -3,6 +3,7 @@ import { test } from "node:test";
 import {
   buildComponentCatalog,
   buildTemplateCatalog,
+  renderConsumerAgentRules,
   renderLlmsTxt,
   renderManifest,
   renderManifestSchema,
@@ -70,6 +71,54 @@ test("renders llms.txt from component metadata", () => {
   assert.match(rendered, /\*\*Components:\*\* `Dialog`, `TextField`, `Inline`/);
   assert.match(rendered, /\*\*Skeleton:\*\*/);
   assert.match(rendered, /```tsx\nfunction FormDialogTemplateExample\(\)/);
+});
+
+test("renders generated consumer agent rules for supported targets", () => {
+  const rules = renderConsumerAgentRules({
+    packages: {
+      react: { name: "@jwrighty/cedar-react", version: "0.3.0" },
+      tokens: { name: "@jwrighty/cedar-tokens", version: "0.3.0" },
+      mcp: {
+        name: "@jwrighty/cedar-mcp",
+        version: "0.2.1",
+        command: "cedar-mcp",
+      },
+    },
+  });
+
+  assert.deepEqual(
+    rules.map((rule) => rule.fileName),
+    ["CLAUDE.md", ".cursorrules", "AGENTS.md"],
+  );
+  assert.match(rules[0].content, /^# CLAUDE\.md for Cedar consumers/m);
+  assert.match(rules[1].content, /^# \.cursorrules for Cedar consumers/m);
+  assert.match(rules[2].content, /^# AGENTS\.md for Cedar consumers/m);
+
+  for (const rule of rules) {
+    assert.match(
+      rule.content,
+      /generated rules for projects that consume Cedar/i,
+    );
+    assert.match(
+      rule.content,
+      /Do not confuse it with Cedar's repo-internal contributor `AGENTS\.md`/,
+    );
+    assert.match(
+      rule.content,
+      /Import Cedar React components only from `@jwrighty\/cedar-react`/,
+    );
+    assert.match(
+      rule.content,
+      /Import Cedar token utilities only from `@jwrighty\/cedar-tokens`/,
+    );
+    assert.match(rule.content, /Do not use inline styles/);
+    assert.match(rule.content, /Use Cedar tokens instead of magic values/);
+    assert.match(rule.content, /Use `onPress`, not `onClick`/);
+    assert.match(rule.content, /Use `isDisabled`, not `disabled`/);
+    assert.match(rule.content, /generated `llms\.txt`/);
+    assert.match(rule.content, /MCP server from `@jwrighty\/cedar-mcp`/);
+    assert.match(rule.content, /"command": "cedar-mcp"/);
+  }
 });
 
 test("fails when required metadata exports are missing from the package build", () => {
