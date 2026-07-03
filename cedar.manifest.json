@@ -2356,6 +2356,62 @@
   ],
   "templates": [
     {
+      "id": "async-state-panel",
+      "status": "experimental",
+      "summary": "A consistent loading, empty, and error state set for a data-backed panel or page section.",
+      "useWhen": [
+        "Representing the lifecycle of a query or mutation-backed surface without changing the surrounding layout.",
+        "Keeping loading geometry, empty guidance, and recoverable errors visually related instead of designing each state differently.",
+        "Giving agents a complete state pattern before they wire real data, retries, and creation actions."
+      ],
+      "components": [
+        "Card",
+        "CardHeader",
+        "CardBody",
+        "CardFooter",
+        "Stack",
+        "Inline",
+        "Heading",
+        "Text",
+        "Skeleton",
+        "Badge",
+        "Button",
+        "Tabs"
+      ],
+      "skeleton": "<Card>\n  <CardHeader>\n    <Heading level={2}>Panel title</Heading>\n  </CardHeader>\n  <CardBody>\n    <Stack gap=\"md\">\n      <Skeleton shape=\"text\" />\n      <Skeleton shape=\"rounded\" />\n      <Text tone=\"muted\">Empty or error copy replaces skeletons.</Text>\n    </Stack>\n  </CardBody>\n  <CardFooter>\n    <Inline gap=\"sm\">\n      <Button variant=\"primary\">Primary action</Button>\n      <Button variant=\"secondary\">Retry</Button>\n    </Inline>\n  </CardFooter>\n</Card>",
+      "canonicalExample": {
+        "source": "packages/react/src/composition-templates.tsx#AsyncStatePanelTemplateExample",
+        "code": "function AsyncStatePanelTemplateExample() {\n  return (\n    <Card>\n      <CardHeader>\n        <Inline gap=\"sm\">\n          <Heading level={2} size=\"sm\">\n            Recent runs\n          </Heading>\n          <Badge status=\"running\">Loading</Badge>\n        </Inline>\n      </CardHeader>\n      <CardBody>\n        <Tabs.Root defaultSelectedKey=\"loading\">\n          <Tabs.List aria-label=\"Panel states\">\n            <Tabs.Tab id=\"loading\">Loading</Tabs.Tab>\n            <Tabs.Tab id=\"empty\">Empty</Tabs.Tab>\n            <Tabs.Tab id=\"error\">Error</Tabs.Tab>\n          </Tabs.List>\n          <Tabs.Panel id=\"loading\">\n            <Stack gap=\"sm\" aria-label=\"Loading recent runs\">\n              <Skeleton shape=\"text\" />\n              <Skeleton shape=\"text\" />\n              <Skeleton shape=\"rounded\" style={{ height: 96 }} />\n            </Stack>\n          </Tabs.Panel>\n          <Tabs.Panel id=\"empty\">\n            <Stack gap=\"sm\">\n              <Heading level={3} size=\"sm\">\n                No runs yet\n              </Heading>\n              <Text tone=\"muted\">\n                Start a run to populate this panel with live activity.\n              </Text>\n              <Button variant=\"primary\">Start run</Button>\n            </Stack>\n          </Tabs.Panel>\n          <Tabs.Panel id=\"error\">\n            <Stack gap=\"sm\">\n              <Heading level={3} size=\"sm\" tone=\"danger\">\n                Could not load runs\n              </Heading>\n              <Text tone=\"muted\">\n                Keep the panel in place and offer a retry path.\n              </Text>\n              <Button variant=\"secondary\">Retry</Button>\n            </Stack>\n          </Tabs.Panel>\n        </Tabs.Root>\n      </CardBody>\n    </Card>\n  );\n}"
+      }
+    },
+    {
+      "id": "filterable-table",
+      "status": "experimental",
+      "summary": "A searchable data table with filters, status context, and row-level actions owned by app state.",
+      "useWhen": [
+        "Building a list view where users scan rows, filter by text or status, and act on individual records.",
+        "Keeping Cedar responsible for table presentation while the product owns query state, sorting, pagination, and row navigation.",
+        "Pairing filter controls and result metadata with a native table instead of inventing a card grid for tabular data."
+      ],
+      "components": [
+        "Stack",
+        "Inline",
+        "TextField",
+        "Button",
+        "Badge",
+        "Table",
+        "TableRow",
+        "TableHeaderCell",
+        "TableCell",
+        "Text"
+      ],
+      "skeleton": "<Stack gap=\"md\">\n  <Inline gap=\"sm\">\n    <TextField label=\"Search\" />\n    <Button variant=\"secondary\">Filter</Button>\n  </Inline>\n  <Table>\n    <thead>\n      <TableRow>\n        <TableHeaderCell>Primary label</TableHeaderCell>\n        <TableHeaderCell>Status</TableHeaderCell>\n        <TableHeaderCell align=\"end\">Action</TableHeaderCell>\n      </TableRow>\n    </thead>\n    <tbody>\n      <TableRow isInteractive>\n        <TableCell>Row label</TableCell>\n        <TableCell><Badge>Status</Badge></TableCell>\n        <TableCell align=\"end\"><Button variant=\"ghost\">Open</Button></TableCell>\n      </TableRow>\n    </tbody>\n  </Table>\n</Stack>",
+      "canonicalExample": {
+        "source": "packages/react/src/composition-templates.tsx#FilterableTableTemplateExample",
+        "code": "function FilterableTableTemplateExample() {\n  return (\n    <Stack gap=\"md\">\n      <Inline gap=\"sm\">\n        <TextField\n          label=\"Search runs\"\n          placeholder=\"Trace id or owner\"\n          description=\"Filter the visible rows before opening a detail view.\"\n        />\n        <Button variant=\"secondary\">Apply filters</Button>\n      </Inline>\n      <Text size=\"sm\" tone=\"muted\">\n        Showing 2 of 18 runs\n      </Text>\n      <Table density=\"compact\">\n        <thead>\n          <TableRow>\n            <TableHeaderCell>Run</TableHeaderCell>\n            <TableHeaderCell>Status</TableHeaderCell>\n            <TableHeaderCell align=\"end\" isNumeric>\n              Latency\n            </TableHeaderCell>\n            <TableHeaderCell align=\"end\">Action</TableHeaderCell>\n          </TableRow>\n        </thead>\n        <tbody>\n          <TableRow isInteractive>\n            <TableCell>run_1842</TableCell>\n            <TableCell>\n              <Badge status=\"success\">Complete</Badge>\n            </TableCell>\n            <TableCell align=\"end\" isNumeric>\n              842 ms\n            </TableCell>\n            <TableCell align=\"end\">\n              <Button variant=\"ghost\" size=\"sm\">\n                Open\n              </Button>\n            </TableCell>\n          </TableRow>\n          <TableRow isInteractive>\n            <TableCell>run_1843</TableCell>\n            <TableCell>\n              <Badge status=\"running\">Running</Badge>\n            </TableCell>\n            <TableCell align=\"end\" isNumeric>\n              1.2 s\n            </TableCell>\n            <TableCell align=\"end\">\n              <Button variant=\"ghost\" size=\"sm\">\n                Open\n              </Button>\n            </TableCell>\n          </TableRow>\n        </tbody>\n      </Table>\n    </Stack>\n  );\n}"
+      }
+    },
+    {
       "id": "form-dialog",
       "status": "experimental",
       "summary": "A modal form for collecting a short set of fields before confirming or cancelling.",
@@ -2376,6 +2432,37 @@
       "canonicalExample": {
         "source": "packages/react/src/composition-templates.tsx#FormDialogTemplateExample",
         "code": "function FormDialogTemplateExample() {\n  return (\n    <Dialog.Root>\n      <Dialog.Trigger>Create project</Dialog.Trigger>\n      <Dialog.Content>\n        <Dialog.Title>Create project</Dialog.Title>\n        <Stack as=\"form\" gap=\"md\">\n          <Text tone=\"muted\">\n            Add the project details. You can change these later.\n          </Text>\n          <TextField\n            label=\"Project name\"\n            description=\"Use the name your team will recognize.\"\n            placeholder=\"Platform migration\"\n          />\n          <TextField\n            label=\"Owner email\"\n            type=\"email\"\n            placeholder=\"owner@example.com\"\n          />\n          <Inline gap=\"sm\">\n            <Dialog.Close>Cancel</Dialog.Close>\n            <Button variant=\"primary\">Create project</Button>\n          </Inline>\n        </Stack>\n      </Dialog.Content>\n    </Dialog.Root>\n  );\n}"
+      }
+    },
+    {
+      "id": "settings-page",
+      "status": "experimental",
+      "summary": "A settings screen with sectioned cards, immediate toggles, form fields, and explicit save actions.",
+      "useWhen": [
+        "Building account, workspace, billing, or notification settings that need grouped sections and repeat visits.",
+        "Separating immediate settings such as switches from form settings that require an explicit save action.",
+        "Keeping page hierarchy, helper copy, and controls predictable instead of scattering settings in unrelated panels."
+      ],
+      "components": [
+        "Stack",
+        "Inline",
+        "Heading",
+        "Text",
+        "Card",
+        "CardHeader",
+        "CardBody",
+        "CardFooter",
+        "Switch",
+        "Checkbox",
+        "RadioGroup",
+        "Radio",
+        "TextField",
+        "Button"
+      ],
+      "skeleton": "<Stack gap=\"lg\">\n  <Stack gap=\"sm\">\n    <Heading level={1}>Settings</Heading>\n    <Text tone=\"muted\">Describe what these settings control.</Text>\n  </Stack>\n  <Card>\n    <CardHeader><Heading level={2}>Section title</Heading></CardHeader>\n    <CardBody>\n      <Stack gap=\"md\">\n        <Switch>Immediate setting</Switch>\n        <TextField label=\"Saved field\" />\n      </Stack>\n    </CardBody>\n    <CardFooter>\n      <Inline gap=\"sm\">\n        <Button variant=\"primary\">Save changes</Button>\n        <Button variant=\"secondary\">Cancel</Button>\n      </Inline>\n    </CardFooter>\n  </Card>\n</Stack>",
+      "canonicalExample": {
+        "source": "packages/react/src/composition-templates.tsx#SettingsPageTemplateExample",
+        "code": "function SettingsPageTemplateExample() {\n  return (\n    <Stack gap=\"lg\">\n      <Stack gap=\"sm\">\n        <Heading level={1} size=\"xl\">\n          Workspace settings\n        </Heading>\n        <Text tone=\"muted\">\n          Manage notifications, defaults, and billing contacts for this\n          workspace.\n        </Text>\n      </Stack>\n      <Card>\n        <CardHeader>\n          <Heading level={2} size=\"sm\">\n            Notifications\n          </Heading>\n        </CardHeader>\n        <CardBody>\n          <Stack gap=\"md\">\n            <Switch defaultSelected>Email run failures</Switch>\n            <Checkbox defaultSelected>Include weekly summary</Checkbox>\n            <RadioGroup label=\"Digest cadence\" defaultValue=\"daily\">\n              <Radio value=\"daily\">Daily</Radio>\n              <Radio value=\"weekly\">Weekly</Radio>\n            </RadioGroup>\n          </Stack>\n        </CardBody>\n      </Card>\n      <Card>\n        <CardHeader>\n          <Heading level={2} size=\"sm\">\n            Billing contact\n          </Heading>\n        </CardHeader>\n        <CardBody>\n          <TextField\n            label=\"Billing email\"\n            type=\"email\"\n            placeholder=\"billing@example.com\"\n          />\n        </CardBody>\n        <CardFooter>\n          <Inline gap=\"sm\">\n            <Button variant=\"primary\">Save changes</Button>\n            <Button variant=\"secondary\">Cancel</Button>\n          </Inline>\n        </CardFooter>\n      </Card>\n    </Stack>\n  );\n}"
       }
     }
   ],
