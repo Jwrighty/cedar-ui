@@ -1,12 +1,18 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { getComponentUsage, getTokens, listComponents } from "./catalog.js";
+import {
+  getComponentExample,
+  getComponentUsage,
+  getTokens,
+  listComponents,
+} from "./catalog.js";
 import type { CedarManifest } from "./types.js";
 
 /**
  * Build the Cedar MCP server over a loaded {@link CedarManifest}, registering
- * the `list_components`, `get_component_usage`, and `get_tokens` tools. The
- * caller is responsible for connecting it to a transport (see `cli.ts`).
+ * the `list_components`, `get_component_usage`, `get_example`, and
+ * `get_tokens` tools. The caller is responsible for connecting it to a
+ * transport (see `cli.ts`).
  */
 export function createCedarMcpServer(manifest: CedarManifest): McpServer {
   const server = new McpServer({
@@ -40,6 +46,23 @@ export function createCedarMcpServer(manifest: CedarManifest): McpServer {
       },
     },
     async ({ name }) => jsonResult(getComponentUsage(manifest, name)),
+  );
+
+  server.registerTool(
+    "get_example",
+    {
+      title: "Get Cedar component example",
+      description:
+        "Return the tested canonical TSX example for a Cedar component from the generated manifest.",
+      inputSchema: {
+        name: z
+          .string()
+          .describe(
+            "Component name or public export, for example Button or Dialog.",
+          ),
+      },
+    },
+    async ({ name }) => jsonResult(getComponentExample(manifest, name)),
   );
 
   server.registerTool(

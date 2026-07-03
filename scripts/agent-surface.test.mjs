@@ -20,6 +20,10 @@ test("renders llms.txt from component metadata", () => {
         relatedComponents: ["Link"],
         status: "experimental",
       },
+      canonicalExample: {
+        source: "packages/react/src/canonical-examples.tsx#ButtonExample",
+        code: 'function ButtonExample() {\n  return <Button>Save</Button>;\n}',
+      },
     },
   ]);
 
@@ -38,6 +42,8 @@ test("renders llms.txt from component metadata", () => {
     rendered,
     /\*\*Accessibility:\*\* Keyboard activation is supported\./,
   );
+  assert.match(rendered, /\*\*Canonical example:\*\*/);
+  assert.match(rendered, /```tsx\nfunction ButtonExample\(\)/);
 });
 
 test("fails when required metadata exports are missing from the package build", () => {
@@ -155,6 +161,10 @@ test("renders a manifest from component metadata, props, variants, and tokens", 
           relatedComponents: ["Link"],
           status: "experimental",
         },
+        canonicalExample: {
+          source: "packages/react/src/canonical-examples.tsx#ButtonExample",
+          code: 'function ButtonExample() {\n  return <Button>Save</Button>;\n}',
+        },
       },
     ],
     componentDocs: {
@@ -196,6 +206,10 @@ test("renders a manifest from component metadata, props, variants, and tokens", 
 
   assert.equal(manifest.schemaVersion, 1);
   assert.equal(manifest.components[0].name, "Button");
+  assert.deepEqual(manifest.components[0].canonicalExample, {
+    source: "packages/react/src/canonical-examples.tsx#ButtonExample",
+    code: 'function ButtonExample() {\n  return <Button>Save</Button>;\n}',
+  });
   assert.deepEqual(manifest.components[0].variants[0].options, [
     "primary",
     "secondary",
@@ -220,5 +234,13 @@ test("renders a schema for the manifest contract", () => {
     "tokens",
   ]);
   assert.ok(schema.$defs.component);
+  assert.ok(
+    schema.$defs.component.required.includes("canonicalExample"),
+    "component entries require a canonical example",
+  );
+  assert.equal(
+    schema.$defs.component.properties.canonicalExample.$ref,
+    "#/$defs/canonicalExample",
+  );
   assert.ok(schema.$defs.prop);
 });

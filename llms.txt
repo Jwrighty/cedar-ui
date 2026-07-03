@@ -22,6 +22,13 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Avoid when:** Triggering a user action; use Button instead. Displaying long prose or helper text; use Text instead.
 - **Accessibility:** Badge is rendered as text, so do not rely on colour alone; include readable label text. Use aria-label only when the visible label is abbreviated.
 - **Related:** Text, Button
+- **Canonical example:**
+
+```tsx
+function BadgeExample() {
+  return <Badge status="running">Syncing</Badge>;
+}
+```
 
 ### Box
 
@@ -32,6 +39,17 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Avoid when:** Children need a consistent vertical rhythm; use Stack instead. Children need a wrapping horizontal flow; use Inline instead.
 - **Accessibility:** Box adds no role or interactive behaviour; choose an `as` element that matches the content semantics. Native ARIA attributes and refs pass through to the selected element.
 - **Related:** Stack, Inline
+- **Canonical example:**
+
+```tsx
+function BoxExample() {
+  return (
+    <Box as="section" padding="lg" aria-label="Billing summary">
+      <Text>Next invoice: $128.00</Text>
+    </Box>
+  );
+}
+```
 
 ### Button
 
@@ -42,6 +60,13 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Avoid when:** Navigating to a URL or route; use Link instead. (Link not currently listed in Cedar public components.) Toggling a binary on/off state; use Switch or ToggleButton instead. (ToggleButton not currently listed in Cedar public components.) Choosing one of several options; use RadioGroup or Select instead. (Select not currently listed in Cedar public components.)
 - **Accessibility:** Renders a native <button>; keyboard- and screen-reader-operable by default. Use onPress (not onClick) so pointer, keyboard, and touch are unified. Disable with isDisabled; focus is managed by React Aria. Focus-visible ring is driven by [data-focus-visible], shown only for keyboard focus.
 - **Related:** Link, ToggleButton
+- **Canonical example:**
+
+```tsx
+function ButtonExample() {
+  return <Button variant="primary">Save changes</Button>;
+}
+```
 
 ### Card
 
@@ -52,6 +77,27 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Avoid when:** Only spacing children in a layout; use Stack, Inline, or Box instead. Creating a modal or popover surface; use Dialog or Popover instead.
 - **Accessibility:** Card has no default landmark role; choose section/article and an accessible name when the group needs navigation semantics. Header, body, and footer slots are structural only and do not change reading order.
 - **Related:** Box, Stack, Dialog, Popover
+- **Canonical example:**
+
+```tsx
+function CardExample() {
+  return (
+    <Card>
+      <CardHeader>
+        <Heading level={2} size="sm">
+          Project health
+        </Heading>
+      </CardHeader>
+      <CardBody>
+        <Text tone="muted">All checks passed in the last run.</Text>
+      </CardBody>
+      <CardFooter>
+        <Button variant="secondary">View details</Button>
+      </CardFooter>
+    </Card>
+  );
+}
+```
 
 ### Checkbox
 
@@ -62,6 +108,13 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Avoid when:** A setting takes effect immediately when toggled; use Switch instead. Exactly one option must be chosen from a set; use RadioGroup instead.
 - **Accessibility:** The visible label is associated with a native checkbox input by React Aria. Pointer and Space-key interaction are supported; selection may be controlled or uncontrolled. Indeterminate is a visual mixed state and does not replace the selected value submitted by a form. Use isInvalid and isDisabled so React Aria exposes the corresponding accessible state.
 - **Related:** Switch, RadioGroup
+- **Canonical example:**
+
+```tsx
+function CheckboxExample() {
+  return <Checkbox defaultSelected>Include archived runs</Checkbox>;
+}
+```
 
 ### Dialog
 
@@ -72,6 +125,25 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Avoid when:** Showing a brief, non-blocking notification; use Toast instead. Anchored, dismissible content next to a trigger; use Popover instead. Non-essential supplementary info on hover/focus; use Tooltip instead.
 - **Accessibility:** Focus is trapped while open and returns to the trigger on close (React Aria). Escape and outside-click dismiss by default; set isDismissable={false} to block. Always include a Dialog.Title — React Aria uses it for aria-labelledby. Scroll on the page behind the dialog is locked while it is open.
 - **Related:** Popover, Tooltip, Button
+- **Canonical example:**
+
+```tsx
+function DialogExample() {
+  return (
+    <Dialog.Root>
+      <Dialog.Trigger>Delete project</Dialog.Trigger>
+      <Dialog.Content>
+        <Dialog.Title>Delete project?</Dialog.Title>
+        <Text>This action cannot be undone.</Text>
+        <Inline gap="sm">
+          <Dialog.Close>Cancel</Dialog.Close>
+          <Dialog.Close variant="primary">Delete</Dialog.Close>
+        </Inline>
+      </Dialog.Content>
+    </Dialog.Root>
+  );
+}
+```
 
 ### Heading
 
@@ -82,6 +154,17 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Avoid when:** Rendering body copy, captions, or inline prose; use Text instead. Rendering a dialog title inside Cedar Dialog; use Dialog.Title instead. Making a heading itself perform an action; use Button or a composed disclosure primitive instead.
 - **Accessibility:** `level` renders a real h1–h6 element; keep levels in logical document order. Visual `size` does not change the semantic level exposed to assistive technology. Do not skip heading levels just to get a smaller or larger visual style.
 - **Related:** Text, Dialog, Button
+- **Canonical example:**
+
+```tsx
+function HeadingExample() {
+  return (
+    <Heading level={2} size="lg">
+      Billing details
+    </Heading>
+  );
+}
+```
 
 ### IconButton
 
@@ -92,6 +175,17 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Avoid when:** The action needs a visible text label to be understood; use Button instead. Toggling a binary on/off state; use Switch or ToggleButton instead. (ToggleButton not currently listed in Cedar public components.) Navigating to a URL or route; use Link instead. (Link not currently listed in Cedar public components.)
 - **Accessibility:** aria-label is required — an icon conveys no accessible name on its own. Renders a native <button>; keyboard- and screen-reader-operable by default. Use onPress (not onClick) so pointer, keyboard, and touch are unified. Mark the icon itself aria-hidden so the label is the only accessible name. Focus-visible ring is driven by [data-focus-visible], shown only for keyboard focus.
 - **Related:** Button, Tooltip
+- **Canonical example:**
+
+```tsx
+function IconButtonExample() {
+  return (
+    <IconButton aria-label="Close" variant="ghost" size="sm">
+      <span aria-hidden="true">x</span>
+    </IconButton>
+  );
+}
+```
 
 ### Inline
 
@@ -102,6 +196,18 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Avoid when:** Children need a vertical rhythm; use Stack instead. Only inset padding is needed; use Box instead.
 - **Accessibility:** Inline adds no role or interaction; choose `as` and ARIA attributes for the content's semantics. Wrapping does not alter DOM or keyboard focus order.
 - **Related:** Box, Stack
+- **Canonical example:**
+
+```tsx
+function InlineExample() {
+  return (
+    <Inline as="nav" gap="sm" aria-label="Pagination">
+      <Button variant="secondary">Previous</Button>
+      <Button variant="secondary">Next</Button>
+    </Inline>
+  );
+}
+```
 
 ### Popover
 
@@ -112,6 +218,21 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Avoid when:** Showing brief, non-interactive help on hover or focus; use Tooltip instead. Requiring the user to acknowledge or complete a blocking task; use Dialog instead. Presenting a list of commands or actions; use Menu instead. (Menu not currently listed in Cedar public components.) Choosing one value from a predefined list; use Select instead. (Select not currently listed in Cedar public components.)
 - **Accessibility:** React Aria labels the popover from its trigger and moves focus into the overlay when it opens. Escape and outside interaction dismiss the popover, then focus returns to the trigger. Keep interactive content keyboard operable and use a concise trigger label that also names the popover. Positioning and collision avoidance are delegated to React Aria and adapt to the available viewport space.
 - **Related:** Tooltip, Dialog, Menu, Select
+- **Canonical example:**
+
+```tsx
+function PopoverExample() {
+  return (
+    <Popover.Root>
+      <Popover.Trigger>View details</Popover.Trigger>
+      <Popover.Content aria-label="Project details">
+        <Text>Last updated today.</Text>
+        <Button variant="secondary">Open project</Button>
+      </Popover.Content>
+    </Popover.Root>
+  );
+}
+```
 
 ### RadioGroup
 
@@ -122,6 +243,18 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Avoid when:** The option list is long or space is constrained; use Select instead. (Select not currently listed in Cedar public components.) The user may choose multiple independent options; use Checkbox instead. Representing one immediate on/off setting; use Switch instead.
 - **Accessibility:** Always provide a visible group label; React Aria associates it with the radiogroup. Arrow keys move roving focus and selection between enabled options. Description and error text are associated with the group automatically. Use isDisabled on the group or an individual Radio, and isInvalid on the group.
 - **Related:** Checkbox, Select, Switch
+- **Canonical example:**
+
+```tsx
+function RadioGroupExample() {
+  return (
+    <RadioGroup label="Plan" defaultValue="pro">
+      <Radio value="free">Free</Radio>
+      <Radio value="pro">Pro</Radio>
+    </RadioGroup>
+  );
+}
+```
 
 ### Skeleton
 
@@ -132,6 +265,13 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Avoid when:** Communicating progress or completion percentage; use A labelled progress indicator instead. Representing absent or empty data; use A designed empty state instead.
 - **Accessibility:** Skeleton is aria-hidden by default so assistive technology does not announce decorative placeholders. Use nearby text or live regions when the loading state itself needs to be announced. Shimmer animation is removed under prefers-reduced-motion.
 - **Related:** Card, Stat
+- **Canonical example:**
+
+```tsx
+function SkeletonExample() {
+  return <Skeleton shape="rounded" style={{ height: 96, width: 240 }} />;
+}
+```
 
 ### Stack
 
@@ -142,6 +282,19 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Avoid when:** Children should flow horizontally and wrap; use Inline instead. Only inset padding is needed; use Box instead.
 - **Accessibility:** Stack adds no role; use `as` to preserve list, section, or other document semantics. Visual order follows DOM order and should not replace meaningful semantic structure.
 - **Related:** Box, Inline
+- **Canonical example:**
+
+```tsx
+function StackExample() {
+  return (
+    <Stack as="ul" gap="sm">
+      <li>Queued</li>
+      <li>Running</li>
+      <li>Complete</li>
+    </Stack>
+  );
+}
+```
 
 ### Stat
 
@@ -152,6 +305,19 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Avoid when:** Displaying arbitrary content without metric hierarchy; use Card instead. Rendering a table of many metrics; use Table primitives with Text instead.
 - **Accessibility:** Stat does not add a landmark role; give the card a label when it should be navigable as a region. Delta direction is expressed with text plus semantic colour, not colour alone.
 - **Related:** Card, Skeleton, Text
+- **Canonical example:**
+
+```tsx
+function StatExample() {
+  return (
+    <Stat
+      label="Runs"
+      value="1,248"
+      delta={{ direction: "positive", value: "+8%" }}
+    />
+  );
+}
+```
 
 ### Switch
 
@@ -162,6 +328,13 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Avoid when:** Selecting an option for later form submission or agreement; use Checkbox instead. Choosing exactly one option from a group; use RadioGroup or Select instead. (Select not currently listed in Cedar public components.)
 - **Accessibility:** Renders a labelled switch input with pointer and keyboard support from React Aria. Provide a concise visible label through children; it becomes the accessible name. Use isSelected/onChange for controlled state or defaultSelected for uncontrolled state. Focus-visible styling is shown for keyboard focus through [data-focus-visible].
 - **Related:** Checkbox
+- **Canonical example:**
+
+```tsx
+function SwitchExample() {
+  return <Switch defaultSelected>Enable notifications</Switch>;
+}
+```
 
 ### Table
 
@@ -172,6 +345,32 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Avoid when:** Needing sorting, filtering, selection, or virtualisation; use TanStack Table in the consuming app instead. Laying out non-tabular content; use Stack, Inline, or Box instead.
 - **Accessibility:** These primitives render native table elements and preserve browser table semantics. Sorting and interactive row behaviour must be implemented by the app with appropriate labels and keyboard support. Use isNumeric for numeric columns so tabular numerals line up across rows.
 - **Related:** Text, Badge
+- **Canonical example:**
+
+```tsx
+function TableExample() {
+  return (
+    <Table>
+      <thead>
+        <TableRow>
+          <TableHeaderCell>Run</TableHeaderCell>
+          <TableHeaderCell align="end" isNumeric>
+            Latency
+          </TableHeaderCell>
+        </TableRow>
+      </thead>
+      <tbody>
+        <TableRow isInteractive>
+          <TableCell>run_123</TableCell>
+          <TableCell align="end" isNumeric>
+            842 ms
+          </TableCell>
+        </TableRow>
+      </tbody>
+    </Table>
+  );
+}
+```
 
 ### Tabs
 
@@ -182,6 +381,22 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Avoid when:** Choosing one value from a form field set; use RadioGroup or Select instead. (Select not currently listed in Cedar public components.) Navigating between app routes or unrelated destinations; use Link or navigation primitives instead. (Link not currently listed in Cedar public components.) Revealing a single optional section inline; use Disclosure or Accordion instead. (Disclosure, Accordion not currently listed in Cedar public components.)
 - **Accessibility:** Built on React Aria Components Tabs, TabList, Tab, and TabPanel. React Aria wires role=tablist, role=tab, role=tabpanel, aria-controls, and aria-labelledby. Provide an aria-label or aria-labelledby on Tabs.List to name the tab strip. Arrow-key navigation and disabled tabs are handled by React Aria; style focus with [data-focus-visible].
 - **Related:** RadioGroup, Select, Disclosure
+- **Canonical example:**
+
+```tsx
+function TabsExample() {
+  return (
+    <Tabs.Root defaultSelectedKey="details">
+      <Tabs.List aria-label="Project sections">
+        <Tabs.Tab id="details">Details</Tabs.Tab>
+        <Tabs.Tab id="activity">Activity</Tabs.Tab>
+      </Tabs.List>
+      <Tabs.Panel id="details">Project details</Tabs.Panel>
+      <Tabs.Panel id="activity">Recent activity</Tabs.Panel>
+    </Tabs.Root>
+  );
+}
+```
 
 ### Text
 
@@ -192,6 +407,17 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Avoid when:** Rendering a page, section, or card heading; use Heading instead. Triggering an action or navigation; use Button or Link instead. (Link not currently listed in Cedar public components.) Labelling or validating an input field; use TextField or a composed form-field primitive instead.
 - **Accessibility:** Choose the semantic element with `as`; the default is a paragraph. Do not use Text to fake headings visually — use Heading so assistive technology gets the document outline. Tone changes colour only; do not rely on colour alone to communicate required or error state.
 - **Related:** Heading, TextField, Button
+- **Canonical example:**
+
+```tsx
+function TextExample() {
+  return (
+    <Text as="span" size="sm" tone="muted">
+      Optional
+    </Text>
+  );
+}
+```
 
 ### TextField
 
@@ -202,6 +428,20 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Avoid when:** Capturing multiple lines of text; use TextArea instead. (TextArea not currently listed in Cedar public components.) Choosing from a fixed set of options; use Select or RadioGroup instead. (Select not currently listed in Cedar public components.) Toggling a single boolean; use Checkbox or Switch instead.
 - **Accessibility:** Label is associated with the input automatically — always pass `label`. Description and error are linked via aria-describedby by React Aria. Mark invalid state with isInvalid + errorMessage; the input gets aria-invalid. Focus ring is driven by [data-focused]; styling reflects keyboard and pointer focus.
 - **Related:** TextArea, SearchField, Select
+- **Canonical example:**
+
+```tsx
+function TextFieldExample() {
+  return (
+    <TextField
+      label="Email"
+      description="We will never share it."
+      type="email"
+      placeholder="you@example.com"
+    />
+  );
+}
+```
 
 ### Toast
 
@@ -212,6 +452,27 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Avoid when:** The message requires a decision, destructive confirmation, or blocking acknowledgement; use Dialog instead. The feedback belongs to a specific form field or control; use Inline validation or visible helper text instead. The information must remain available for later review; use Persistent page content or an activity log instead.
 - **Accessibility:** Toast items use polite live-region semantics (`role=status`) so announcements do not interrupt the user's current task. Every toast includes a keyboard-accessible manual dismiss button. Do not move focus into the toast for routine success or recoverable error feedback. Keep copy concise; use persistent content when users need to inspect details after dismissal.
 - **Related:** Button, Dialog, Popover
+- **Canonical example:**
+
+```tsx
+function ToastExample() {
+  return (
+    <Toast.Provider
+      defaultToasts={[
+        {
+          id: "saved",
+          variant: "success",
+          title: "Tags saved",
+          description: "The trace now has 3 tags.",
+          duration: null,
+        },
+      ]}
+    >
+      <Toast.Region />
+    </Toast.Provider>
+  );
+}
+```
 
 ### Tooltip
 
@@ -222,3 +483,15 @@ Cedar is a React + TypeScript design system built from a framework-neutral token
 - **Avoid when:** Showing interactive controls, links, or rich structured content; use Popover instead. Providing instructions that are required to complete a task; use Persistent visible help text instead. Attaching supplementary text to a non-focusable element; use Visible text or make the trigger genuinely interactive instead.
 - **Accessibility:** React Aria opens the tooltip on both pointer hover and keyboard focus, with shared warmup/cooldown delays. The trigger receives aria-describedby while the tooltip is open, so its text is discoverable to assistive technology. Escape, blur, pointer exit, and trigger press dismiss the tooltip as appropriate. Tooltip content must remain non-interactive; use Popover when users need to act inside the overlay.
 - **Related:** Popover, Button, Dialog
+- **Canonical example:**
+
+```tsx
+function TooltipExample() {
+  return (
+    <Tooltip.Trigger>
+      <Button variant="secondary">Save</Button>
+      <Tooltip>Save changes</Tooltip>
+    </Tooltip.Trigger>
+  );
+}
+```

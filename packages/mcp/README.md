@@ -56,7 +56,9 @@ When running from a checkout before publishing:
 
 - `list_components` returns component names, summaries, status, and public exports.
 - `get_component_usage` returns the full generated component entry, including
-  `useWhen`, `avoidWhen`, `a11yNotes`, `relatedComponents`, `props`, and `variants`.
+  `useWhen`, `avoidWhen`, `a11yNotes`, `relatedComponents`,
+  `canonicalExample`, `props`, and `variants`.
+- `get_example` returns the tested canonical TSX example for one component.
 - `get_tokens` returns the manifest token reference, optionally filtered with
   `query`.
 
@@ -73,12 +75,13 @@ Agent calls:
 ```text
 list_components
 get_component_usage({ "name": "Button" })
+get_example({ "name": "Button" })
 ```
 
 Agent answer:
 
 ```text
-Use Button for confirming a decision or triggering an in-page action. Avoid it when navigating to a route; use Link instead. Avoid it for binary on/off state; use Switch or ToggleButton instead. Avoid it for choosing one of several options; use RadioGroup or Select instead. Button's response also includes prop signatures, variants, and accessibility notes, so implementation can stay aligned with the shipped React package.
+Use Button for confirming a decision or triggering an in-page action. Avoid it when navigating to a route; use Link instead. Avoid it for binary on/off state; use Switch or ToggleButton instead. Avoid it for choosing one of several options; use RadioGroup or Select instead. Button's response also includes prop signatures, variants, accessibility notes, and a tested canonical example, so implementation can stay aligned with the shipped React package.
 ```
 
 The key point: the answer comes from `cedar.manifest.json`, not a separate MCP

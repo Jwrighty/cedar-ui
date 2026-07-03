@@ -1,5 +1,6 @@
 import type {
   CedarManifest,
+  ComponentExample,
   ComponentSummary,
   ManifestComponent,
   TokenMatch,
@@ -49,6 +50,23 @@ export function getComponentUsage(
   }
 
   return component;
+}
+
+/**
+ * Look up the canonical TSX example for a component by name or export. This is
+ * the narrow MCP response an agent can request when it already knows which
+ * component it wants to use.
+ */
+export function getComponentExample(
+  manifest: CedarManifest,
+  name: string,
+): ComponentExample {
+  const component = getComponentUsage(manifest, name);
+
+  return {
+    component: component.name,
+    ...component.canonicalExample,
+  };
 }
 
 /**

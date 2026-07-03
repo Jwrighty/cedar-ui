@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  getComponentExample,
   getComponentUsage,
   getTokens,
   listComponents,
@@ -29,6 +30,10 @@ const manifest: CedarManifest = {
       ],
       a11yNotes: ["Always provide a clear accessible name."],
       relatedComponents: [],
+      canonicalExample: {
+        source: "packages/react/src/canonical-examples.tsx#ButtonExample",
+        code: 'function ButtonExample() {\n  return <Button>Save</Button>;\n}',
+      },
       props: [],
       variants: [
         {
@@ -75,6 +80,14 @@ describe("catalog", () => {
 
   it("returns full usage metadata by component name", () => {
     expect(getComponentUsage(manifest, "button").name).toBe("Button");
+  });
+
+  it("returns a component's canonical example by export name", () => {
+    expect(getComponentExample(manifest, "Button")).toEqual({
+      component: "Button",
+      source: "packages/react/src/canonical-examples.tsx#ButtonExample",
+      code: 'function ButtonExample() {\n  return <Button>Save</Button>;\n}',
+    });
   });
 
   it("reports available components for unknown usage lookups", () => {

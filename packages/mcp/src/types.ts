@@ -35,7 +35,14 @@ export interface ManifestComponentMeta {
   avoidWhen: { situation: string; useInstead: string }[];
   a11yNotes: string[];
   relatedComponents: string[];
+  canonicalExample: ManifestCanonicalExample;
   status: "experimental" | "stable" | "deprecated";
+}
+
+/** Tested TSX snippet for the canonical way to use a component. */
+export interface ManifestCanonicalExample {
+  source: string;
+  code: string;
 }
 
 /**
@@ -105,6 +112,11 @@ export interface ComponentSummary {
   summary: string;
   status: ManifestComponentMeta["status"];
   exports: string[];
+}
+
+/** The MCP-facing canonical example response for one component. */
+export interface ComponentExample extends ManifestCanonicalExample {
+  component: string;
 }
 
 /** A single token flattened out of a {@link TokenSource} tree by a query. */

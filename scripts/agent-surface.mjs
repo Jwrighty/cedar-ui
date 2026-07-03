@@ -17,6 +17,10 @@ const packageManifestSchemaPath = path.join(
 );
 const catalogModulePath = path.join(repoRoot, "packages/react/dist/index.js");
 const reactSourceDir = path.join(repoRoot, "packages/react/src");
+const canonicalExamplesPath = path.join(
+  reactSourceDir,
+  "canonical-examples.tsx",
+);
 const tokenSourceDir = path.join(repoRoot, "packages/tokens/src");
 
 const componentBindings = [
@@ -250,6 +254,11 @@ export function renderLlmsTxt(componentCatalog) {
         meta.relatedComponents.length > 0
           ? `- **Related:** ${meta.relatedComponents.join(", ")}`
           : "- **Related:** None",
+        "- **Canonical example:**",
+        "",
+        "```tsx",
+        component.canonicalExample.code,
+        "```",
         "",
       ];
     }),
@@ -295,6 +304,8 @@ export function renderManifest({
       components:
         "packages/react/src/*.meta.ts via packages/react/dist/index.js",
       props: "packages/react/src/*.tsx TSDoc and TypeScript signatures",
+      examples:
+        "packages/react/src/canonical-examples.tsx exported example functions",
       tokens: "packages/tokens/src/**/*.json",
     },
     components: componentCatalog
@@ -310,6 +321,7 @@ export function renderManifest({
           avoidWhen: component.meta.avoidWhen,
           a11yNotes: component.meta.a11yNotes,
           relatedComponents: component.meta.relatedComponents,
+          canonicalExample: component.canonicalExample,
           source: docs?.source,
           props: docs?.props ?? [],
           variants: docs?.variants ?? [],
@@ -390,6 +402,7 @@ export function renderManifestSchema() {
           "avoidWhen",
           "a11yNotes",
           "relatedComponents",
+          "canonicalExample",
           "props",
           "variants",
         ],
@@ -412,6 +425,7 @@ export function renderManifestSchema() {
           },
           a11yNotes: { type: "array", items: { type: "string" } },
           relatedComponents: { type: "array", items: { type: "string" } },
+          canonicalExample: { $ref: "#/$defs/canonicalExample" },
           source: { type: "string" },
           props: {
             type: "array",
@@ -421,6 +435,15 @@ export function renderManifestSchema() {
             type: "array",
             items: { $ref: "#/$defs/variant" },
           },
+        },
+      },
+      canonicalExample: {
+        type: "object",
+        required: ["source", "code"],
+        additionalProperties: false,
+        properties: {
+          source: { type: "string" },
+          code: { type: "string" },
         },
       },
       propSignature: {
@@ -475,13 +498,50 @@ export function renderManifestSchema() {
 
 async function readBuiltCatalog() {
   try {
-    const reactPackage = await import(pathToFileURL(catalogModulePath).href);
-    return buildComponentCatalog(reactPackage);
+    const [reactPackage, canonicalExamples] = await Promise.all([
+      import(pathToFileURL(catalogModulePath).href),
+      readCanonicalExamples(),
+    ]);
+    return buildComponentCatalog(reactPackage, canonicalExamples);
   } catch (error) {
     throw new Error(
       `Could not load ${path.relative(repoRoot, catalogModulePath)}. Run \`pnpm build\` before generating agent artifacts.\n${error.message}`,
     );
   }
+}
+
+async function readCanonicalExamples() {
+  const sourceText = await readFile(canonicalExamplesPath, "utf8");
+  const sourceFile = ts.createSourceFile(
+    canonicalExamplesPath,
+    sourceText,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TSX,
+  );
+  const examples = {};
+
+  visit(sourceFile, (node) => {
+    if (!ts.isFunctionDeclaration(node) || !node.name) {
+      return;
+    }
+
+    const componentName = node.name.text.replace(/Example$/, "");
+
+    if (componentName === node.name.text) {
+      return;
+    }
+
+    examples[componentName] = {
+      source: `${path.relative(repoRoot, canonicalExamplesPath)}#${node.name.text}`,
+      code: node
+        .getText(sourceFile)
+        .replace(/^export\s+/, "")
+        .trim(),
+    };
+  });
+
+  return examples;
 }
 
 async function readComponentDocs() {
@@ -783,7 +843,7 @@ function stripUndefinedValues(value) {
   );
 }
 
-export function buildComponentCatalog(reactPackage) {
+export function buildComponentCatalog(reactPackage, canonicalExamples) {
   const catalog = componentBindings.map((binding) => {
     const meta = reactPackage[binding.metaExport];
 
@@ -795,12 +855,31 @@ export function buildComponentCatalog(reactPackage) {
       name: binding.name,
       exports: binding.exports,
       meta,
+      canonicalExample: canonicalExamples?.[binding.name],
     };
   });
 
   assertPublicComponentCoverage(reactPackage, catalog);
 
+  if (canonicalExamples) {
+    assertCanonicalExampleCoverage(catalog);
+  }
+
   return catalog;
+}
+
+function assertCanonicalExampleCoverage(catalog) {
+  const missingExamples = catalog
+    .filter((component) => !component.canonicalExample)
+    .map((component) => component.name);
+
+  if (missingExamples.length > 0) {
+    throw new Error(
+      `Agent component catalog is missing canonical examples: ${missingExamples.join(
+        ", ",
+      )}`,
+    );
+  }
 }
 
 function assertPublicComponentCoverage(reactPackage, catalog) {

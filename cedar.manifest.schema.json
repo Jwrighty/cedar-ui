@@ -99,6 +99,7 @@
         "avoidWhen",
         "a11yNotes",
         "relatedComponents",
+        "canonicalExample",
         "props",
         "variants"
       ],
@@ -158,6 +159,9 @@
             "type": "string"
           }
         },
+        "canonicalExample": {
+          "$ref": "#/$defs/canonicalExample"
+        },
         "source": {
           "type": "string"
         },
@@ -172,6 +176,22 @@
           "items": {
             "$ref": "#/$defs/variant"
           }
+        }
+      }
+    },
+    "canonicalExample": {
+      "type": "object",
+      "required": [
+        "source",
+        "code"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "source": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
         }
       }
     },
