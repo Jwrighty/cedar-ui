@@ -1,4 +1,4 @@
-import { readdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import path from "node:path";
 import ts from "typescript";
@@ -7,6 +7,7 @@ const repoRoot = path.resolve(fileURLToPath(new URL("..", import.meta.url)));
 const llmsTxtPath = path.join(repoRoot, "llms.txt");
 const manifestPath = path.join(repoRoot, "cedar.manifest.json");
 const manifestSchemaPath = path.join(repoRoot, "cedar.manifest.schema.json");
+const consumerAgentRulesDir = path.join(repoRoot, "agent-rules");
 const packageManifestPath = path.join(
   repoRoot,
   "packages/react/cedar.manifest.json",
@@ -26,6 +27,27 @@ const templateExamplesPath = path.join(
   "composition-templates.tsx",
 );
 const tokenSourceDir = path.join(repoRoot, "packages/tokens/src");
+
+const consumerAgentRuleTargets = [
+  {
+    id: "claude",
+    agent: "Claude Code",
+    fileName: "CLAUDE.md",
+    title: "CLAUDE.md for Cedar consumers",
+  },
+  {
+    id: "cursor",
+    agent: "Cursor",
+    fileName: ".cursorrules",
+    title: ".cursorrules for Cedar consumers",
+  },
+  {
+    id: "codex",
+    agent: "Codex",
+    fileName: "AGENTS.md",
+    title: "AGENTS.md for Cedar consumers",
+  },
+];
 
 const componentBindings = [
   {
@@ -293,6 +315,80 @@ export function renderLlmsTxt(componentCatalog, templateCatalog = []) {
       "```",
       "",
     ]),
+  ].join("\n");
+}
+
+export function renderConsumerAgentRules({ packages }) {
+  return consumerAgentRuleTargets.map((target) => ({
+    ...target,
+    path: path.join(consumerAgentRulesDir, target.fileName),
+    content: renderConsumerAgentRule({ target, packages }),
+  }));
+}
+
+function renderConsumerAgentRule({ target, packages }) {
+  const reactPackage = packages.react.name;
+  const tokensPackage = packages.tokens.name;
+  const mcpPackage = packages.mcp.name;
+  const mcpCommand = packages.mcp.command;
+
+  return [
+    `# ${target.title}`,
+    "",
+    "These are generated rules for projects that consume Cedar. Copy this file to the matching root file in a consumer repo. Do not confuse it with Cedar's repo-internal contributor `AGENTS.md` or other maintainer instructions.",
+    "",
+    "## Source of Truth",
+    "",
+    `- Use Cedar's generated \`llms.txt\` for component summaries, usage guidance, accessibility notes, and tested examples.`,
+    `- Use the Cedar MCP server from \`${mcpPackage}\` for live API detail while coding. Register the \`${mcpCommand}\` command with your MCP client when available.`,
+    `- Prefer MCP tools or \`llms.txt\` over guessing component props, variants, token names, or template structure.`,
+    "",
+    "```json",
+    "{",
+    '  "mcpServers": {',
+    '    "cedar": {',
+    `      "command": "${mcpCommand}"`,
+    "    }",
+    "  }",
+    "}",
+    "```",
+    "",
+    "## Imports",
+    "",
+    `- Import Cedar React components only from \`${reactPackage}\`.`,
+    `- Import Cedar token utilities only from \`${tokensPackage}\`.`,
+    "- Import Cedar CSS once near the app root:",
+    "",
+    "```tsx",
+    `import "${tokensPackage}/tokens.css";`,
+    `import "${reactPackage}/styles.css";`,
+    `import { Button } from "${reactPackage}";`,
+    "```",
+    "",
+    "- Do not import from Cedar source files, package internals, generated `dist` paths, or copied component code.",
+    "",
+    "## Styling",
+    "",
+    "- Do not use inline styles to customize Cedar components.",
+    "- Use CSS classes, app stylesheets, and Cedar CSS custom properties for layout and presentation.",
+    "- Use Cedar tokens instead of magic values for color, spacing, radius, typography, motion, and component-level styling.",
+    "- Prefer semantic or component tokens before reaching for base tokens.",
+    "",
+    "## React Aria Props",
+    "",
+    "- Preserve React Aria prop names on Cedar components.",
+    "- Use `onPress`, not `onClick`, for Cedar press interactions such as `Button` and `IconButton`.",
+    "- Use `isDisabled`, not `disabled`, for disabled Cedar controls.",
+    "- Check `llms.txt`, the generated manifest, or the MCP server before renaming props to DOM-style alternatives.",
+    "",
+    "## Component Choice",
+    "",
+    "- Choose components from Cedar's public catalog before inventing local UI primitives.",
+    "- Read each component's `useWhen`, `avoidWhen`, accessibility notes, and canonical example before composing new UI.",
+    "- If a needed component is not in Cedar's public catalog, build the smallest app-local wrapper and keep it styled with Cedar tokens.",
+    "",
+    `Generated for ${target.agent}; source packages: \`${reactPackage}\`, \`${tokensPackage}\`, \`${mcpPackage}\`.`,
+    "",
   ].join("\n");
 }
 
@@ -852,6 +948,26 @@ async function readPackageSummary(packageJsonPath) {
   };
 }
 
+async function readMcpPackageSummary(packageJsonPath) {
+  const pkg = JSON.parse(await readFile(packageJsonPath, "utf8"));
+  const commands = Object.keys(pkg.bin ?? {});
+
+  if (commands.length !== 1) {
+    throw new Error(
+      `${path.relative(
+        repoRoot,
+        packageJsonPath,
+      )} must expose exactly one MCP command for generated consumer agent rules.`,
+    );
+  }
+
+  return {
+    name: pkg.name,
+    version: pkg.version,
+    command: commands[0],
+  };
+}
+
 function visit(node, callback) {
   callback(node);
   ts.forEachChild(node, (child) => visit(child, callback));
@@ -1080,16 +1196,38 @@ export async function generateManifest() {
   });
 }
 
+export async function generateConsumerAgentRules() {
+  const [reactPackage, tokensPackage, mcpPackage] = await Promise.all([
+    readPackageSummary(path.join(repoRoot, "packages/react/package.json")),
+    readPackageSummary(path.join(repoRoot, "packages/tokens/package.json")),
+    readMcpPackageSummary(path.join(repoRoot, "packages/mcp/package.json")),
+  ]);
+
+  return renderConsumerAgentRules({
+    packages: {
+      react: reactPackage,
+      tokens: tokensPackage,
+      mcp: mcpPackage,
+    },
+  });
+}
+
 export async function writeAgentSurface() {
   const llmsTxt = await generateLlmsTxt();
   const manifest = stableJson(await generateManifest());
   const manifestSchema = stableJson(renderManifestSchema());
+  const consumerAgentRules = await generateConsumerAgentRules();
 
+  await mkdir(consumerAgentRulesDir, { recursive: true });
   await writeFile(llmsTxtPath, llmsTxt, "utf8");
   await writeFile(manifestPath, manifest, "utf8");
   await writeFile(packageManifestPath, manifest, "utf8");
   await writeFile(manifestSchemaPath, manifestSchema, "utf8");
   await writeFile(packageManifestSchemaPath, manifestSchema, "utf8");
+
+  for (const rule of consumerAgentRules) {
+    await writeFile(rule.path, rule.content, "utf8");
+  }
 }
 
 export async function checkAgentSurface() {
@@ -1099,6 +1237,10 @@ export async function checkAgentSurface() {
   await assertFileFresh(llmsTxtPath, await generateLlmsTxt());
   await assertFileFresh(manifestPath, stableJson(await generateManifest()));
   await assertFileFresh(manifestSchemaPath, stableJson(renderManifestSchema()));
+
+  for (const rule of await generateConsumerAgentRules()) {
+    await assertFileFresh(rule.path, rule.content);
+  }
 }
 
 async function assertFileFresh(filePath, expected) {
