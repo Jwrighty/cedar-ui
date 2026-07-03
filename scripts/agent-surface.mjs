@@ -21,6 +21,10 @@ const canonicalExamplesPath = path.join(
   reactSourceDir,
   "canonical-examples.tsx",
 );
+const templateExamplesPath = path.join(
+  reactSourceDir,
+  "composition-templates.tsx",
+);
 const tokenSourceDir = path.join(repoRoot, "packages/tokens/src");
 
 const componentBindings = [
@@ -210,9 +214,12 @@ const knownUnshippedAlternatives = new Set([
   "ToggleButton",
 ]);
 
-export function renderLlmsTxt(componentCatalog) {
+export function renderLlmsTxt(componentCatalog, templateCatalog = []) {
   const sortedComponents = [...componentCatalog].sort((a, b) =>
     a.name.localeCompare(b.name),
+  );
+  const sortedTemplates = [...templateCatalog].sort((a, b) =>
+    a.id.localeCompare(b.id),
   );
   const publicExports = new Set(
     sortedComponents.flatMap((component) => component.exports),
@@ -262,6 +269,30 @@ export function renderLlmsTxt(componentCatalog) {
         "",
       ];
     }),
+    "## Composition Templates",
+    "",
+    "Use these generated templates when assembling common multi-component Cedar layouts. Study the skeleton first, then fill in copy, fields, and handlers for the product context.",
+    "",
+    ...sortedTemplates.flatMap((template) => [
+      `### ${template.id}`,
+      "",
+      `- **Status:** \`${template.status}\``,
+      `- **Summary:** ${template.summary}`,
+      `- **Use when:** ${template.useWhen.join(" ")}`,
+      `- **Components:** ${template.components.map((name) => `\`${name}\``).join(", ")}`,
+      "- **Skeleton:**",
+      "",
+      "```tsx",
+      template.skeleton,
+      "```",
+      "",
+      "- **Tested example:**",
+      "",
+      "```tsx",
+      template.canonicalExample.code,
+      "```",
+      "",
+    ]),
   ].join("\n");
 }
 
@@ -289,6 +320,7 @@ function formatAvoidRule(rule, publicExports) {
 
 export function renderManifest({
   componentCatalog,
+  templateCatalog = [],
   componentDocs,
   tokenSources,
   packages,
@@ -306,6 +338,8 @@ export function renderManifest({
       props: "packages/react/src/*.tsx TSDoc and TypeScript signatures",
       examples:
         "packages/react/src/canonical-examples.tsx exported example functions",
+      templates:
+        "packages/react/src/composition-templates.tsx TemplateMeta entries and exported example functions",
       tokens: "packages/tokens/src/**/*.json",
     },
     components: componentCatalog
@@ -328,6 +362,17 @@ export function renderManifest({
         };
       })
       .sort((a, b) => a.name.localeCompare(b.name)),
+    templates: templateCatalog
+      .map((template) => ({
+        id: template.id,
+        status: template.status,
+        summary: template.summary,
+        useWhen: template.useWhen,
+        components: template.components,
+        skeleton: template.skeleton,
+        canonicalExample: template.canonicalExample,
+      }))
+      .sort((a, b) => a.id.localeCompare(b.id)),
     tokens: {
       sources: tokenSources,
     },
@@ -346,6 +391,7 @@ export function renderManifestSchema() {
       "packages",
       "generatedFrom",
       "components",
+      "templates",
       "tokens",
     ],
     properties: {
@@ -364,12 +410,16 @@ export function renderManifestSchema() {
       },
       generatedFrom: {
         type: "object",
-        required: ["components", "props", "tokens"],
+        required: ["components", "props", "templates", "tokens"],
         additionalProperties: { type: "string" },
       },
       components: {
         type: "array",
         items: { $ref: "#/$defs/component" },
+      },
+      templates: {
+        type: "array",
+        items: { $ref: "#/$defs/template" },
       },
       tokens: {
         type: "object",
@@ -437,6 +487,28 @@ export function renderManifestSchema() {
           },
         },
       },
+      template: {
+        type: "object",
+        required: [
+          "id",
+          "status",
+          "summary",
+          "useWhen",
+          "components",
+          "skeleton",
+          "canonicalExample",
+        ],
+        additionalProperties: false,
+        properties: {
+          id: { type: "string" },
+          status: { enum: ["experimental", "stable", "deprecated"] },
+          summary: { type: "string" },
+          useWhen: { type: "array", items: { type: "string" } },
+          components: { type: "array", items: { type: "string" } },
+          skeleton: { type: "string" },
+          canonicalExample: { $ref: "#/$defs/canonicalExample" },
+        },
+      },
       canonicalExample: {
         type: "object",
         required: ["source", "code"],
@@ -498,11 +570,16 @@ export function renderManifestSchema() {
 
 async function readBuiltCatalog() {
   try {
-    const [reactPackage, canonicalExamples] = await Promise.all([
-      import(pathToFileURL(catalogModulePath).href),
-      readCanonicalExamples(),
-    ]);
-    return buildComponentCatalog(reactPackage, canonicalExamples);
+    const [reactPackage, canonicalExamples, templateExamples] =
+      await Promise.all([
+        import(pathToFileURL(catalogModulePath).href),
+        readCanonicalExamples(),
+        readTemplateExamples(),
+      ]);
+    return {
+      componentCatalog: buildComponentCatalog(reactPackage, canonicalExamples),
+      templateCatalog: buildTemplateCatalog(reactPackage, templateExamples),
+    };
   } catch (error) {
     throw new Error(
       `Could not load ${path.relative(repoRoot, catalogModulePath)}. Run \`pnpm build\` before generating agent artifacts.\n${error.message}`,
@@ -511,9 +588,26 @@ async function readBuiltCatalog() {
 }
 
 async function readCanonicalExamples() {
-  const sourceText = await readFile(canonicalExamplesPath, "utf8");
+  return readExampleFunctions({
+    sourcePath: canonicalExamplesPath,
+    suffix: "Example",
+    toId: (functionName) => functionName.replace(/Example$/, ""),
+  });
+}
+
+async function readTemplateExamples() {
+  return readExampleFunctions({
+    sourcePath: templateExamplesPath,
+    suffix: "TemplateExample",
+    toId: (functionName) =>
+      toKebabCase(functionName.replace(/TemplateExample$/, "")),
+  });
+}
+
+async function readExampleFunctions({ sourcePath, suffix, toId }) {
+  const sourceText = await readFile(sourcePath, "utf8");
   const sourceFile = ts.createSourceFile(
-    canonicalExamplesPath,
+    sourcePath,
     sourceText,
     ts.ScriptTarget.Latest,
     true,
@@ -526,14 +620,14 @@ async function readCanonicalExamples() {
       return;
     }
 
-    const componentName = node.name.text.replace(/Example$/, "");
-
-    if (componentName === node.name.text) {
+    if (!node.name.text.endsWith(suffix)) {
       return;
     }
 
-    examples[componentName] = {
-      source: `${path.relative(repoRoot, canonicalExamplesPath)}#${node.name.text}`,
+    const id = toId(node.name.text);
+
+    examples[id] = {
+      source: `${path.relative(repoRoot, sourcePath)}#${node.name.text}`,
       code: node
         .getText(sourceFile)
         .replace(/^export\s+/, "")
@@ -868,6 +962,63 @@ export function buildComponentCatalog(reactPackage, canonicalExamples) {
   return catalog;
 }
 
+export function buildTemplateCatalog(reactPackage, templateExamples) {
+  const templates = reactPackage.compositionTemplates;
+
+  if (!Array.isArray(templates)) {
+    throw new Error("Missing template metadata export: compositionTemplates");
+  }
+
+  const catalog = templates.map((template) => ({
+    ...template,
+    canonicalExample: templateExamples?.[template.id],
+  }));
+
+  assertTemplateIds(catalog);
+
+  if (templateExamples) {
+    assertTemplateExampleCoverage(catalog);
+  }
+
+  return catalog;
+}
+
+function assertTemplateIds(catalog) {
+  const seen = new Set();
+  const duplicates = [];
+
+  for (const template of catalog) {
+    if (seen.has(template.id)) {
+      duplicates.push(template.id);
+      continue;
+    }
+
+    seen.add(template.id);
+  }
+
+  if (duplicates.length > 0) {
+    throw new Error(
+      `Agent template catalog has duplicate template ids: ${[
+        ...new Set(duplicates),
+      ].join(", ")}`,
+    );
+  }
+}
+
+function assertTemplateExampleCoverage(catalog) {
+  const missingExamples = catalog
+    .filter((template) => !template.canonicalExample)
+    .map((template) => template.id);
+
+  if (missingExamples.length > 0) {
+    throw new Error(
+      `Agent template catalog is missing canonical examples: ${missingExamples.join(
+        ", ",
+      )}`,
+    );
+  }
+}
+
 function assertCanonicalExampleCoverage(catalog) {
   const missingExamples = catalog
     .filter((component) => !component.canonicalExample)
@@ -903,12 +1054,12 @@ function assertPublicComponentCoverage(reactPackage, catalog) {
 }
 
 export async function generateLlmsTxt() {
-  const componentCatalog = await readBuiltCatalog();
-  return renderLlmsTxt(componentCatalog);
+  const { componentCatalog, templateCatalog } = await readBuiltCatalog();
+  return renderLlmsTxt(componentCatalog, templateCatalog);
 }
 
 export async function generateManifest() {
-  const componentCatalog = await readBuiltCatalog();
+  const { componentCatalog, templateCatalog } = await readBuiltCatalog();
   const [componentDocs, tokenSources, reactPackage, tokensPackage] =
     await Promise.all([
       readComponentDocs(),
@@ -919,6 +1070,7 @@ export async function generateManifest() {
 
   return renderManifest({
     componentCatalog,
+    templateCatalog,
     componentDocs,
     tokenSources,
     packages: {
@@ -964,6 +1116,13 @@ async function assertFileFresh(filePath, expected) {
 
 function stableJson(value) {
   return `${JSON.stringify(value, null, 2)}\n`;
+}
+
+function toKebabCase(value) {
+  return value
+    .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
+    .replace(/([A-Z])([A-Z][a-z])/g, "$1-$2")
+    .toLowerCase();
 }
 
 async function main() {

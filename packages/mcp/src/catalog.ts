@@ -3,6 +3,8 @@ import type {
   ComponentExample,
   ComponentSummary,
   ManifestComponent,
+  ManifestTemplate,
+  TemplateSummary,
   TokenMatch,
   TokenNode,
   TokenReference,
@@ -19,6 +21,19 @@ export function listComponents(manifest: CedarManifest): ComponentSummary[] {
     summary: component.summary,
     status: component.status,
     exports: component.exports,
+  }));
+}
+
+/**
+ * Condense every composition template to the fields an agent scans before
+ * requesting the full skeleton and example.
+ */
+export function listTemplates(manifest: CedarManifest): TemplateSummary[] {
+  return manifest.templates.map((template) => ({
+    id: template.id,
+    summary: template.summary,
+    status: template.status,
+    components: template.components,
   }));
 }
 
@@ -67,6 +82,31 @@ export function getComponentExample(
     component: component.name,
     ...component.canonicalExample,
   };
+}
+
+/**
+ * Look up a composition template by id. Throws with available ids when the
+ * requested template is not present in the manifest.
+ */
+export function getTemplate(
+  manifest: CedarManifest,
+  id: string,
+): ManifestTemplate {
+  const normalizedId = normalize(id);
+  const template = manifest.templates.find(
+    (candidate) => normalize(candidate.id) === normalizedId,
+  );
+
+  if (!template) {
+    const available = manifest.templates
+      .map((candidate) => candidate.id)
+      .join(", ");
+    throw new Error(
+      `Unknown Cedar template "${id}". Available templates: ${available}.`,
+    );
+  }
+
+  return template;
 }
 
 /**

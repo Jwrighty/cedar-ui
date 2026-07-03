@@ -2,30 +2,51 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
   buildComponentCatalog,
+  buildTemplateCatalog,
   renderLlmsTxt,
   renderManifest,
   renderManifestSchema,
 } from "./agent-surface.mjs";
 
 test("renders llms.txt from component metadata", () => {
-  const rendered = renderLlmsTxt([
-    {
-      name: "Button",
-      exports: ["Button"],
-      meta: {
-        summary: "Triggers an action.",
-        useWhen: ["A user confirms something."],
-        avoidWhen: [{ situation: "Navigating somewhere", useInstead: "Link" }],
-        a11yNotes: ["Keyboard activation is supported."],
-        relatedComponents: ["Link"],
+  const rendered = renderLlmsTxt(
+    [
+      {
+        name: "Button",
+        exports: ["Button"],
+        meta: {
+          summary: "Triggers an action.",
+          useWhen: ["A user confirms something."],
+          avoidWhen: [
+            { situation: "Navigating somewhere", useInstead: "Link" },
+          ],
+          a11yNotes: ["Keyboard activation is supported."],
+          relatedComponents: ["Link"],
+          status: "experimental",
+        },
+        canonicalExample: {
+          source: "packages/react/src/canonical-examples.tsx#ButtonExample",
+          code: "function ButtonExample() {\n  return <Button>Save</Button>;\n}",
+        },
+      },
+    ],
+    [
+      {
+        id: "form-dialog",
+        summary: "Collects a short form in a modal.",
+        useWhen: ["A user edits a focused set of fields."],
+        components: ["Dialog", "TextField", "Inline"],
+        skeleton:
+          "<Dialog.Root>\n  <Dialog.Trigger>Open</Dialog.Trigger>\n</Dialog.Root>",
         status: "experimental",
+        canonicalExample: {
+          source:
+            "packages/react/src/composition-templates.tsx#FormDialogTemplateExample",
+          code: "function FormDialogTemplateExample() {\n  return <Dialog.Root />;\n}",
+        },
       },
-      canonicalExample: {
-        source: "packages/react/src/canonical-examples.tsx#ButtonExample",
-        code: 'function ButtonExample() {\n  return <Button>Save</Button>;\n}',
-      },
-    },
-  ]);
+    ],
+  );
 
   assert.match(rendered, /^# Cedar/m);
   assert.match(rendered, /Generated from co-located `ComponentMeta`/i);
@@ -44,6 +65,11 @@ test("renders llms.txt from component metadata", () => {
   );
   assert.match(rendered, /\*\*Canonical example:\*\*/);
   assert.match(rendered, /```tsx\nfunction ButtonExample\(\)/);
+  assert.match(rendered, /## Composition Templates/);
+  assert.match(rendered, /### form-dialog/);
+  assert.match(rendered, /\*\*Components:\*\* `Dialog`, `TextField`, `Inline`/);
+  assert.match(rendered, /\*\*Skeleton:\*\*/);
+  assert.match(rendered, /```tsx\nfunction FormDialogTemplateExample\(\)/);
 });
 
 test("fails when required metadata exports are missing from the package build", () => {
@@ -163,7 +189,23 @@ test("renders a manifest from component metadata, props, variants, and tokens", 
         },
         canonicalExample: {
           source: "packages/react/src/canonical-examples.tsx#ButtonExample",
-          code: 'function ButtonExample() {\n  return <Button>Save</Button>;\n}',
+          code: "function ButtonExample() {\n  return <Button>Save</Button>;\n}",
+        },
+      },
+    ],
+    templateCatalog: [
+      {
+        id: "form-dialog",
+        summary: "Collects a short form in a modal.",
+        useWhen: ["A user edits a focused set of fields."],
+        components: ["Dialog", "TextField", "Inline"],
+        skeleton:
+          "<Dialog.Root>\n  <Dialog.Trigger>Open</Dialog.Trigger>\n</Dialog.Root>",
+        status: "experimental",
+        canonicalExample: {
+          source:
+            "packages/react/src/composition-templates.tsx#FormDialogTemplateExample",
+          code: "function FormDialogTemplateExample() {\n  return <Dialog.Root />;\n}",
         },
       },
     ],
@@ -206,9 +248,20 @@ test("renders a manifest from component metadata, props, variants, and tokens", 
 
   assert.equal(manifest.schemaVersion, 1);
   assert.equal(manifest.components[0].name, "Button");
+  assert.equal(manifest.templates[0].id, "form-dialog");
+  assert.deepEqual(manifest.templates[0].components, [
+    "Dialog",
+    "TextField",
+    "Inline",
+  ]);
+  assert.deepEqual(manifest.templates[0].canonicalExample, {
+    source:
+      "packages/react/src/composition-templates.tsx#FormDialogTemplateExample",
+    code: "function FormDialogTemplateExample() {\n  return <Dialog.Root />;\n}",
+  });
   assert.deepEqual(manifest.components[0].canonicalExample, {
     source: "packages/react/src/canonical-examples.tsx#ButtonExample",
-    code: 'function ButtonExample() {\n  return <Button>Save</Button>;\n}',
+    code: "function ButtonExample() {\n  return <Button>Save</Button>;\n}",
   });
   assert.deepEqual(manifest.components[0].variants[0].options, [
     "primary",
@@ -231,16 +284,78 @@ test("renders a schema for the manifest contract", () => {
     "packages",
     "generatedFrom",
     "components",
+    "templates",
     "tokens",
   ]);
   assert.ok(schema.$defs.component);
+  assert.ok(schema.$defs.template);
   assert.ok(
     schema.$defs.component.required.includes("canonicalExample"),
     "component entries require a canonical example",
+  );
+  assert.ok(
+    schema.$defs.template.required.includes("canonicalExample"),
+    "template entries require a canonical example",
   );
   assert.equal(
     schema.$defs.component.properties.canonicalExample.$ref,
     "#/$defs/canonicalExample",
   );
+  assert.equal(
+    schema.$defs.template.properties.canonicalExample.$ref,
+    "#/$defs/canonicalExample",
+  );
   assert.ok(schema.$defs.prop);
+});
+
+test("builds a template catalog from package metadata and tested examples", () => {
+  const catalog = buildTemplateCatalog(
+    {
+      compositionTemplates: [
+        {
+          id: "form-dialog",
+          summary: "Collects a short form in a modal.",
+          useWhen: ["A user edits a focused set of fields."],
+          components: ["Dialog", "TextField", "Inline"],
+          skeleton: "<Dialog.Root />",
+          status: "experimental",
+        },
+      ],
+    },
+    {
+      "form-dialog": {
+        source:
+          "packages/react/src/composition-templates.tsx#FormDialogTemplateExample",
+        code: "function FormDialogTemplateExample() {\n  return <Dialog.Root />;\n}",
+      },
+    },
+  );
+
+  assert.deepEqual(catalog[0].canonicalExample, {
+    source:
+      "packages/react/src/composition-templates.tsx#FormDialogTemplateExample",
+    code: "function FormDialogTemplateExample() {\n  return <Dialog.Root />;\n}",
+  });
+});
+
+test("fails when template examples are missing", () => {
+  assert.throws(
+    () =>
+      buildTemplateCatalog(
+        {
+          compositionTemplates: [
+            {
+              id: "form-dialog",
+              summary: "Collects a short form in a modal.",
+              useWhen: [],
+              components: ["Dialog"],
+              skeleton: "<Dialog.Root />",
+              status: "experimental",
+            },
+          ],
+        },
+        {},
+      ),
+    /Agent template catalog is missing canonical examples: form-dialog/,
+  );
 });

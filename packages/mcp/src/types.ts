@@ -13,6 +13,7 @@ export interface CedarManifest {
   };
   generatedFrom: Record<string, string>;
   components: ManifestComponent[];
+  templates: ManifestTemplate[];
   tokens: {
     sources: TokenSource[];
   };
@@ -58,6 +59,21 @@ export interface ManifestComponent extends ManifestComponentMeta {
   source?: string;
   props: PropSignature[];
   variants: VariantSignature[];
+}
+
+/** The manifest copy of Cedar's per-composition template metadata. */
+export interface ManifestTemplateMeta {
+  summary: string;
+  useWhen: string[];
+  components: string[];
+  skeleton: string;
+  canonicalExample: ManifestCanonicalExample;
+  status: "experimental" | "stable" | "deprecated";
+}
+
+/** A single composition template entry in the manifest. */
+export interface ManifestTemplate extends ManifestTemplateMeta {
+  id: string;
 }
 
 /** A generated type signature for a component's props. */
@@ -112,6 +128,14 @@ export interface ComponentSummary {
   summary: string;
   status: ManifestComponentMeta["status"];
   exports: string[];
+}
+
+/** The condensed view of a template returned by `list_templates`. */
+export interface TemplateSummary {
+  id: string;
+  summary: string;
+  status: ManifestTemplateMeta["status"];
+  components: string[];
 }
 
 /** The MCP-facing canonical example response for one component. */

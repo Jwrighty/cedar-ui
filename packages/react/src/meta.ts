@@ -20,3 +20,22 @@ export interface ComponentMeta {
   relatedComponents: string[];
   status: "experimental" | "stable" | "deprecated";
 }
+
+/**
+ * Per-composition usage metadata. Templates describe common multi-component
+ * layouts agents should copy structurally before filling in project-specific
+ * content.
+ */
+export interface TemplateMeta {
+  /** Kebab-case identifier, e.g. "form-dialog". */
+  id: string;
+  /** One-line purpose. */
+  summary: string;
+  /** Situations where this composition is the right choice. */
+  useWhen: string[];
+  /** Cedar components this template composes. */
+  components: string[];
+  /** Structural outline an agent studies before props. */
+  skeleton: string;
+  status: "experimental" | "stable" | "deprecated";
+}

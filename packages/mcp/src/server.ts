@@ -3,16 +3,17 @@ import { z } from "zod";
 import {
   getComponentExample,
   getComponentUsage,
+  getTemplate,
   getTokens,
   listComponents,
+  listTemplates,
 } from "./catalog.js";
 import type { CedarManifest } from "./types.js";
 
 /**
  * Build the Cedar MCP server over a loaded {@link CedarManifest}, registering
- * the `list_components`, `get_component_usage`, `get_example`, and
- * `get_tokens` tools. The caller is responsible for connecting it to a
- * transport (see `cli.ts`).
+ * the component, template, and token tools. The caller is responsible for
+ * connecting it to a transport (see `cli.ts`).
  */
 export function createCedarMcpServer(manifest: CedarManifest): McpServer {
   const server = new McpServer({
@@ -63,6 +64,30 @@ export function createCedarMcpServer(manifest: CedarManifest): McpServer {
       },
     },
     async ({ name }) => jsonResult(getComponentExample(manifest, name)),
+  );
+
+  server.registerTool(
+    "list_templates",
+    {
+      title: "List Cedar composition templates",
+      description:
+        "Return public Cedar composition template ids, summaries, status, and composed components.",
+      inputSchema: {},
+    },
+    async () => jsonResult(listTemplates(manifest)),
+  );
+
+  server.registerTool(
+    "get_template",
+    {
+      title: "Get Cedar composition template",
+      description:
+        "Return a generated Cedar composition template, including use cases, skeleton layout, composed components, and tested TSX example.",
+      inputSchema: {
+        id: z.string().describe("Template id, for example form-dialog."),
+      },
+    },
+    async ({ id }) => jsonResult(getTemplate(manifest, id)),
   );
 
   server.registerTool(

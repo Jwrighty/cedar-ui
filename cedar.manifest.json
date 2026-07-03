@@ -17,6 +17,7 @@
     "components": "packages/react/src/*.meta.ts via packages/react/dist/index.js",
     "props": "packages/react/src/*.tsx TSDoc and TypeScript signatures",
     "examples": "packages/react/src/canonical-examples.tsx exported example functions",
+    "templates": "packages/react/src/composition-templates.tsx TemplateMeta entries and exported example functions",
     "tokens": "packages/tokens/src/**/*.json"
   },
   "components": [
@@ -2351,6 +2352,31 @@
           ]
         }
       ]
+    }
+  ],
+  "templates": [
+    {
+      "id": "form-dialog",
+      "status": "experimental",
+      "summary": "A modal form for collecting a short set of fields before confirming or cancelling.",
+      "useWhen": [
+        "Opening a focused create, edit, or confirmation flow without navigating away from the current page.",
+        "Collecting a small number of fields where users need explicit primary and secondary actions.",
+        "Keeping form controls, helper text, and footer actions inside one accessible modal dialog."
+      ],
+      "components": [
+        "Dialog",
+        "Stack",
+        "TextField",
+        "Inline",
+        "Button",
+        "Text"
+      ],
+      "skeleton": "<Dialog.Root>\n  <Dialog.Trigger>Open form</Dialog.Trigger>\n  <Dialog.Content>\n    <Dialog.Title>Form title</Dialog.Title>\n    <Stack as=\"form\" gap=\"md\">\n      <TextField label=\"Field label\" />\n      <Inline gap=\"sm\">\n        <Dialog.Close>Cancel</Dialog.Close>\n        <Button variant=\"primary\">Submit</Button>\n      </Inline>\n    </Stack>\n  </Dialog.Content>\n</Dialog.Root>",
+      "canonicalExample": {
+        "source": "packages/react/src/composition-templates.tsx#FormDialogTemplateExample",
+        "code": "function FormDialogTemplateExample() {\n  return (\n    <Dialog.Root>\n      <Dialog.Trigger>Create project</Dialog.Trigger>\n      <Dialog.Content>\n        <Dialog.Title>Create project</Dialog.Title>\n        <Stack as=\"form\" gap=\"md\">\n          <Text tone=\"muted\">\n            Add the project details. You can change these later.\n          </Text>\n          <TextField\n            label=\"Project name\"\n            description=\"Use the name your team will recognize.\"\n            placeholder=\"Platform migration\"\n          />\n          <TextField\n            label=\"Owner email\"\n            type=\"email\"\n            placeholder=\"owner@example.com\"\n          />\n          <Inline gap=\"sm\">\n            <Dialog.Close>Cancel</Dialog.Close>\n            <Button variant=\"primary\">Create project</Button>\n          </Inline>\n        </Stack>\n      </Dialog.Content>\n    </Dialog.Root>\n  );\n}"
+      }
     }
   ],
   "tokens": {

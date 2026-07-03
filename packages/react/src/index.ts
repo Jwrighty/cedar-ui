@@ -87,7 +87,12 @@ export type {
   ToastVariant,
 } from "./Toast";
 export { toastMeta } from "./Toast.meta";
-export type { ComponentMeta } from "./meta";
+export {
+  compositionTemplates,
+  formDialogTemplate,
+  templateExamples,
+} from "./composition-templates";
+export type { ComponentMeta, TemplateMeta } from "./meta";
 export { recipe } from "./recipe";
 export type {
   VariantProps,

@@ -495,3 +495,65 @@ function TooltipExample() {
   );
 }
 ```
+
+## Composition Templates
+
+Use these generated templates when assembling common multi-component Cedar layouts. Study the skeleton first, then fill in copy, fields, and handlers for the product context.
+
+### form-dialog
+
+- **Status:** `experimental`
+- **Summary:** A modal form for collecting a short set of fields before confirming or cancelling.
+- **Use when:** Opening a focused create, edit, or confirmation flow without navigating away from the current page. Collecting a small number of fields where users need explicit primary and secondary actions. Keeping form controls, helper text, and footer actions inside one accessible modal dialog.
+- **Components:** `Dialog`, `Stack`, `TextField`, `Inline`, `Button`, `Text`
+- **Skeleton:**
+
+```tsx
+<Dialog.Root>
+  <Dialog.Trigger>Open form</Dialog.Trigger>
+  <Dialog.Content>
+    <Dialog.Title>Form title</Dialog.Title>
+    <Stack as="form" gap="md">
+      <TextField label="Field label" />
+      <Inline gap="sm">
+        <Dialog.Close>Cancel</Dialog.Close>
+        <Button variant="primary">Submit</Button>
+      </Inline>
+    </Stack>
+  </Dialog.Content>
+</Dialog.Root>
+```
+
+- **Tested example:**
+
+```tsx
+function FormDialogTemplateExample() {
+  return (
+    <Dialog.Root>
+      <Dialog.Trigger>Create project</Dialog.Trigger>
+      <Dialog.Content>
+        <Dialog.Title>Create project</Dialog.Title>
+        <Stack as="form" gap="md">
+          <Text tone="muted">
+            Add the project details. You can change these later.
+          </Text>
+          <TextField
+            label="Project name"
+            description="Use the name your team will recognize."
+            placeholder="Platform migration"
+          />
+          <TextField
+            label="Owner email"
+            type="email"
+            placeholder="owner@example.com"
+          />
+          <Inline gap="sm">
+            <Dialog.Close>Cancel</Dialog.Close>
+            <Button variant="primary">Create project</Button>
+          </Inline>
+        </Stack>
+      </Dialog.Content>
+    </Dialog.Root>
+  );
+}
+```

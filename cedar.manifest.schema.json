@@ -9,6 +9,7 @@
     "packages",
     "generatedFrom",
     "components",
+    "templates",
     "tokens"
   ],
   "properties": {
@@ -45,6 +46,7 @@
       "required": [
         "components",
         "props",
+        "templates",
         "tokens"
       ],
       "additionalProperties": {
@@ -55,6 +57,12 @@
       "type": "array",
       "items": {
         "$ref": "#/$defs/component"
+      }
+    },
+    "templates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/template"
       }
     },
     "tokens": {
@@ -176,6 +184,52 @@
           "items": {
             "$ref": "#/$defs/variant"
           }
+        }
+      }
+    },
+    "template": {
+      "type": "object",
+      "required": [
+        "id",
+        "status",
+        "summary",
+        "useWhen",
+        "components",
+        "skeleton",
+        "canonicalExample"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "experimental",
+            "stable",
+            "deprecated"
+          ]
+        },
+        "summary": {
+          "type": "string"
+        },
+        "useWhen": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "skeleton": {
+          "type": "string"
+        },
+        "canonicalExample": {
+          "$ref": "#/$defs/canonicalExample"
         }
       }
     },

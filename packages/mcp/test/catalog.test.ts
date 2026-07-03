@@ -2,8 +2,10 @@ import { describe, expect, it } from "vitest";
 import {
   getComponentExample,
   getComponentUsage,
+  getTemplate,
   getTokens,
   listComponents,
+  listTemplates,
 } from "../src/catalog.js";
 import type { CedarManifest } from "../src/types.js";
 
@@ -32,7 +34,7 @@ const manifest: CedarManifest = {
       relatedComponents: [],
       canonicalExample: {
         source: "packages/react/src/canonical-examples.tsx#ButtonExample",
-        code: 'function ButtonExample() {\n  return <Button>Save</Button>;\n}',
+        code: "function ButtonExample() {\n  return <Button>Save</Button>;\n}",
       },
       props: [],
       variants: [
@@ -41,6 +43,22 @@ const manifest: CedarManifest = {
           options: ["neutral", "accent"],
         },
       ],
+    },
+  ],
+  templates: [
+    {
+      id: "form-dialog",
+      status: "experimental",
+      summary: "Collects a short form in a modal.",
+      useWhen: ["A user edits a focused set of fields."],
+      components: ["Dialog", "TextField", "Inline"],
+      skeleton:
+        "<Dialog.Root>\n  <Dialog.Trigger>Open</Dialog.Trigger>\n</Dialog.Root>",
+      canonicalExample: {
+        source:
+          "packages/react/src/composition-templates.tsx#FormDialogTemplateExample",
+        code: "function FormDialogTemplateExample() {\n  return <Dialog.Root />;\n}",
+      },
     },
   ],
   tokens: {
@@ -86,8 +104,29 @@ describe("catalog", () => {
     expect(getComponentExample(manifest, "Button")).toEqual({
       component: "Button",
       source: "packages/react/src/canonical-examples.tsx#ButtonExample",
-      code: 'function ButtonExample() {\n  return <Button>Save</Button>;\n}',
+      code: "function ButtonExample() {\n  return <Button>Save</Button>;\n}",
     });
+  });
+
+  it("lists template ids and summaries", () => {
+    expect(listTemplates(manifest)).toEqual([
+      {
+        id: "form-dialog",
+        summary: "Collects a short form in a modal.",
+        status: "experimental",
+        components: ["Dialog", "TextField", "Inline"],
+      },
+    ]);
+  });
+
+  it("returns a template by id", () => {
+    expect(getTemplate(manifest, "FORM-DIALOG")).toEqual(manifest.templates[0]);
+  });
+
+  it("reports available templates for unknown template lookups", () => {
+    expect(() => getTemplate(manifest, "settings-page")).toThrow(
+      /Unknown Cedar template "settings-page". Available templates: form-dialog./,
+    );
   });
 
   it("reports available components for unknown usage lookups", () => {

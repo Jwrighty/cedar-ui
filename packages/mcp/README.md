@@ -2,8 +2,8 @@
 
 MCP server for Cedar's agent-consumable surface. It exposes the generated
 `cedar.manifest.json` as tools an MCP client can call while coding, so component
-usage guidance, accessibility notes, props, variants, and tokens all come from
-the same source of truth as `llms.txt`.
+usage guidance, accessibility notes, props, variants, composition templates, and
+tokens all come from the same source of truth as `llms.txt`.
 
 ## Install
 
@@ -59,6 +59,10 @@ When running from a checkout before publishing:
   `useWhen`, `avoidWhen`, `a11yNotes`, `relatedComponents`,
   `canonicalExample`, `props`, and `variants`.
 - `get_example` returns the tested canonical TSX example for one component.
+- `list_templates` returns composition template ids, summaries, status, and
+  composed components.
+- `get_template` returns a template's use cases, skeleton layout, components,
+  and tested TSX example.
 - `get_tokens` returns the manifest token reference, optionally filtered with
   `query`.
 
@@ -76,6 +80,8 @@ Agent calls:
 list_components
 get_component_usage({ "name": "Button" })
 get_example({ "name": "Button" })
+list_templates
+get_template({ "id": "form-dialog" })
 ```
 
 Agent answer:
@@ -85,4 +91,4 @@ Use Button for confirming a decision or triggering an in-page action. Avoid it w
 ```
 
 The key point: the answer comes from `cedar.manifest.json`, not a separate MCP
-copy of Cedar's component guidance.
+copy of Cedar's component and template guidance.

@@ -32,6 +32,12 @@ function assertManifest(manifest: CedarManifest, source: string) {
     );
   }
 
+  if (!Array.isArray(manifest.templates)) {
+    throw new Error(
+      `Cedar manifest at ${source} does not include a templates array.`,
+    );
+  }
+
   if (!Array.isArray(manifest.tokens?.sources)) {
     throw new Error(
       `Cedar manifest at ${source} does not include token sources.`,
