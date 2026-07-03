@@ -8,6 +8,7 @@
   "scripts": {
     "agent:surface": "node scripts/agent-surface.mjs generate",
     "agent:surface:check": "node scripts/agent-surface.mjs check",
+    "verify:agent-surface": "pnpm agent:surface:check && node --test scripts/agent-surface.test.mjs && pnpm --filter @jwrighty/cedar-mcp exec vitest run test/catalog.test.ts && pnpm --filter @jwrighty/cedar-react exec vitest run src/canonical-examples.test.tsx",
     "build": "pnpm -r --filter=./packages/* run build",
     "dev": "pnpm -r --parallel run dev",
     "storybook": "pnpm --filter docs dev",

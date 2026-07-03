@@ -49,13 +49,13 @@ function run(command, args, options = {}) {
 }
 
 function getChangedFiles(since) {
-  const diff = run("git", ["diff", "--name-only", `${since}...HEAD`]);
+  const committed = run("git", ["diff", "--name-only", `${since}...HEAD`]);
 
-  if (diff.status !== 0) {
+  if (committed.status !== 0) {
     throw new Error(
       [
         `Unable to compare this branch with ${since}.`,
-        diff.stderr.trim(),
+        committed.stderr.trim(),
         "Fetch the base branch first, then rerun this check.",
       ]
         .filter(Boolean)
@@ -63,10 +63,27 @@ function getChangedFiles(since) {
     );
   }
 
-  return diff.stdout
+  const workingTree = run("git", ["diff", "--name-only"]);
+  const staged = run("git", ["diff", "--cached", "--name-only"]);
+  const untracked = run("git", ["ls-files", "--others", "--exclude-standard"]);
+
+  return uniqueFiles([
+    ...parseFileList(committed.stdout),
+    ...parseFileList(workingTree.stdout),
+    ...parseFileList(staged.stdout),
+    ...parseFileList(untracked.stdout),
+  ]);
+}
+
+export function parseFileList(output) {
+  return output
     .split("\n")
     .map((file) => file.trim())
     .filter(Boolean);
+}
+
+export function uniqueFiles(files) {
+  return [...new Set(files)].sort();
 }
 
 function printList(label, files) {

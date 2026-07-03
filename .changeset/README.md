@@ -15,6 +15,19 @@ Pick the affected packages, choose `patch` / `minor` / `major`, and write a
 one-line summary. This drops a markdown file in `.changeset/` — commit it with
 your change.
 
+For straightforward agent work where the affected package(s), bump type, and
+summary are obvious, it is also fine to create the `.changeset/*.md` file
+directly. Use the same frontmatter shape that `pnpm changeset` emits, for
+example:
+
+```md
+---
+"@jwrighty/cedar-react": patch
+---
+
+Add canonical examples to the agent manifest.
+```
+
 ## Agent and CI check
 
 Any diff that touches `packages/tokens/**` or `packages/react/**` must include a
@@ -24,8 +37,9 @@ new `.changeset/*.md` file. Before handing off that work, run:
 pnpm changeset:check --since=origin/main
 ```
 
-That command verifies the diff includes a changeset for published package
-changes, then runs `pnpm changeset status --since=origin/main`.
+That command verifies committed, staged, unstaged, and untracked files include a
+changeset for published package changes, then runs
+`pnpm changeset status --since=origin/main`.
 
 ## How it ships
 

@@ -4,7 +4,9 @@ import {
   getChangesetFiles,
   getChangesetRequirement,
   getPublishedPackageChanges,
+  parseFileList,
   parseSinceArg,
+  uniqueFiles,
 } from "./check-changeset.mjs";
 
 test("detects changes under published packages", () => {
@@ -68,4 +70,26 @@ test("parses since arguments", () => {
   assert.equal(parseSinceArg([]), "origin/main");
   assert.equal(parseSinceArg(["--since", "upstream/main"]), "upstream/main");
   assert.equal(parseSinceArg(["--since=origin/release"]), "origin/release");
+});
+
+test("parses git file lists", () => {
+  assert.deepEqual(parseFileList("packages/react/src/Button.tsx\n\n"), [
+    "packages/react/src/Button.tsx",
+  ]);
+});
+
+test("deduplicates and sorts changed files from committed and working tree diffs", () => {
+  assert.deepEqual(
+    uniqueFiles([
+      "packages/react/src/Button.tsx",
+      ".changeset/new-button.md",
+      "packages/react/src/Button.tsx",
+      "apps/docs/src/App.tsx",
+    ]),
+    [
+      ".changeset/new-button.md",
+      "apps/docs/src/App.tsx",
+      "packages/react/src/Button.tsx",
+    ],
+  );
 });
