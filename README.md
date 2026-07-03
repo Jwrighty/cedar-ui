@@ -60,6 +60,8 @@ Cedar treats AI coding agents as a first-class consumer. Every component ships
 co-located usage metadata that generates a curated [`llms.txt`](llms.txt), a
 machine-readable [`cedar.manifest.json`](cedar.manifest.json), and an
 [MCP server](packages/mcp/README.md) an agent can query live while coding.
+For paste-only workflows, `pnpm cedar:dense Button` prints compact component
+guidance and `pnpm cedar:dense token blue.600` prints a dense token reference.
 
 The case study — what was built, what it cost, and what I'd change — is
 [**Designing a Design System for AI Agents**](docs/essays/designing-a-design-system-for-ai-agents.md).
