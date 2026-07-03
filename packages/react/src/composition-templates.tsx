@@ -386,7 +386,7 @@ export function AsyncStatePanelTemplateExample() {
                   Start a run to populate this panel with live activity.
                 </Text>
               </Stack>
-              <Button variant="primary" style={{ width: "100%" }}>
+              <Button variant="primary" style={{ alignSelf: "flex-start" }}>
                 Start run
               </Button>
             </Stack>
@@ -401,7 +401,7 @@ export function AsyncStatePanelTemplateExample() {
                   Keep the panel in place and offer a retry path.
                 </Text>
               </Stack>
-              <Button variant="secondary" style={{ width: "100%" }}>
+              <Button variant="secondary" style={{ alignSelf: "flex-start" }}>
                 Retry
               </Button>
             </Stack>
