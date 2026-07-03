@@ -1,6 +1,6 @@
 {
   "name": "@jwrighty/cedar-mcp",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "MCP server exposing Cedar's agent-consumable component manifest and token reference.",
   "license": "MIT",
   "author": "Jason Wright <jason.wrighty@gmail.com>",
