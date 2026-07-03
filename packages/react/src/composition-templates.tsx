@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { Badge } from "./Badge";
 import { Button } from "./Button";
 import { Card, CardBody, CardFooter, CardHeader } from "./Card";
@@ -28,9 +31,11 @@ export const formDialogTemplate: TemplateMeta = {
   skeleton: `<Dialog.Root>
   <Dialog.Trigger>Open form</Dialog.Trigger>
   <Dialog.Content>
-    <Dialog.Title>Form title</Dialog.Title>
-    <Stack as="form" gap="md">
-      <TextField label="Field label" />
+    <Stack gap="lg">
+      <Dialog.Title>Form title</Dialog.Title>
+      <Stack as="form" gap="lg">
+        <TextField label="Field label" />
+      </Stack>
       <Inline gap="sm">
         <Dialog.Close>Cancel</Dialog.Close>
         <Button variant="primary">Submit</Button>
@@ -46,21 +51,23 @@ export function FormDialogTemplateExample() {
     <Dialog.Root>
       <Dialog.Trigger>Create project</Dialog.Trigger>
       <Dialog.Content>
-        <Dialog.Title>Create project</Dialog.Title>
-        <Stack as="form" gap="md">
-          <Text tone="muted">
-            Add the project details. You can change these later.
-          </Text>
-          <TextField
-            label="Project name"
-            description="Use the name your team will recognize."
-            placeholder="Platform migration"
-          />
-          <TextField
-            label="Owner email"
-            type="email"
-            placeholder="owner@example.com"
-          />
+        <Stack gap="lg">
+          <Dialog.Title>Create project</Dialog.Title>
+          <Stack as="form" gap="lg">
+            <Text tone="muted">
+              Add the project details. You can change these later.
+            </Text>
+            <TextField
+              label="Project name"
+              description="Use the name your team will recognize."
+              placeholder="Platform migration"
+            />
+            <TextField
+              label="Owner email"
+              type="email"
+              placeholder="owner@example.com"
+            />
+          </Stack>
           <Inline gap="sm">
             <Dialog.Close>Cancel</Dialog.Close>
             <Button variant="primary">Create project</Button>
@@ -92,11 +99,14 @@ export const filterableTableTemplate: TemplateMeta = {
     "TableCell",
     "Text",
   ],
-  skeleton: `<Stack gap="md">
-  <Inline gap="sm">
-    <TextField label="Search" />
-    <Button variant="secondary">Filter</Button>
-  </Inline>
+  skeleton: `<Stack gap="lg">
+  <Stack gap="sm">
+    <Inline gap="sm">
+      <TextField label="Search" />
+      <Button variant="secondary">Clear</Button>
+    </Inline>
+    <Text tone="muted">Result count</Text>
+  </Stack>
   <Table>
     <thead>
       <TableRow>
@@ -117,20 +127,50 @@ export const filterableTableTemplate: TemplateMeta = {
   status: "experimental",
 };
 
+const filterableTableRuns = [
+  {
+    id: "run_1842",
+    status: "success" as const,
+    statusLabel: "Complete",
+    latency: "842 ms",
+  },
+  {
+    id: "run_1843",
+    status: "running" as const,
+    statusLabel: "Running",
+    latency: "1.2 s",
+  },
+];
+
 export function FilterableTableTemplateExample() {
+  const [query, setQuery] = useState("");
+  const visibleRuns = filterableTableRuns.filter((run) =>
+    run.id.toLowerCase().includes(query.trim().toLowerCase()),
+  );
+
   return (
-    <Stack gap="md">
-      <Inline gap="sm">
-        <TextField
-          label="Search runs"
-          placeholder="Trace id or owner"
-          description="Filter the visible rows before opening a detail view."
-        />
-        <Button variant="secondary">Apply filters</Button>
-      </Inline>
-      <Text size="sm" tone="muted">
-        Showing 2 of 18 runs
-      </Text>
+    <Stack gap="lg">
+      <Stack gap="sm">
+        <Inline gap="sm">
+          <TextField
+            label="Search runs"
+            placeholder="Trace id or owner"
+            description="Filter the visible rows before opening a detail view."
+            value={query}
+            onChange={setQuery}
+          />
+          <Button
+            variant="secondary"
+            isDisabled={query.trim() === ""}
+            onPress={() => setQuery("")}
+          >
+            Clear
+          </Button>
+        </Inline>
+        <Text size="sm" tone="muted">
+          Showing {visibleRuns.length} of {filterableTableRuns.length} runs
+        </Text>
+      </Stack>
       <Table density="compact">
         <thead>
           <TableRow>
@@ -143,34 +183,22 @@ export function FilterableTableTemplateExample() {
           </TableRow>
         </thead>
         <tbody>
-          <TableRow isInteractive>
-            <TableCell>run_1842</TableCell>
-            <TableCell>
-              <Badge status="success">Complete</Badge>
-            </TableCell>
-            <TableCell align="end" isNumeric>
-              842 ms
-            </TableCell>
-            <TableCell align="end">
-              <Button variant="ghost" size="sm">
-                Open
-              </Button>
-            </TableCell>
-          </TableRow>
-          <TableRow isInteractive>
-            <TableCell>run_1843</TableCell>
-            <TableCell>
-              <Badge status="running">Running</Badge>
-            </TableCell>
-            <TableCell align="end" isNumeric>
-              1.2 s
-            </TableCell>
-            <TableCell align="end">
-              <Button variant="ghost" size="sm">
-                Open
-              </Button>
-            </TableCell>
-          </TableRow>
+          {visibleRuns.map((run) => (
+            <TableRow key={run.id} isInteractive>
+              <TableCell>{run.id}</TableCell>
+              <TableCell>
+                <Badge status={run.status}>{run.statusLabel}</Badge>
+              </TableCell>
+              <TableCell align="end" isNumeric>
+                {run.latency}
+              </TableCell>
+              <TableCell align="end">
+                <Button variant="ghost" size="sm">
+                  Open
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
         </tbody>
       </Table>
     </Stack>
@@ -210,7 +238,7 @@ export const settingsPageTemplate: TemplateMeta = {
   <Card>
     <CardHeader><Heading level={2}>Section title</Heading></CardHeader>
     <CardBody>
-      <Stack gap="md">
+      <Stack gap="lg">
         <Switch>Immediate setting</Switch>
         <TextField label="Saved field" />
       </Stack>
@@ -245,7 +273,7 @@ export function SettingsPageTemplateExample() {
           </Heading>
         </CardHeader>
         <CardBody>
-          <Stack gap="md">
+          <Stack gap="lg">
             <Switch defaultSelected>Email run failures</Switch>
             <Checkbox defaultSelected>Include weekly summary</Checkbox>
             <RadioGroup label="Digest cadence" defaultValue="daily">
@@ -349,25 +377,33 @@ export function AsyncStatePanelTemplateExample() {
             </Stack>
           </Tabs.Panel>
           <Tabs.Panel id="empty">
-            <Stack gap="sm">
-              <Heading level={3} size="sm">
-                No runs yet
-              </Heading>
-              <Text tone="muted">
-                Start a run to populate this panel with live activity.
-              </Text>
-              <Button variant="primary">Start run</Button>
+            <Stack gap="md">
+              <Stack gap="sm">
+                <Heading level={3} size="sm">
+                  No runs yet
+                </Heading>
+                <Text tone="muted">
+                  Start a run to populate this panel with live activity.
+                </Text>
+              </Stack>
+              <Button variant="primary" style={{ width: "100%" }}>
+                Start run
+              </Button>
             </Stack>
           </Tabs.Panel>
           <Tabs.Panel id="error">
-            <Stack gap="sm">
-              <Heading level={3} size="sm" tone="danger">
-                Could not load runs
-              </Heading>
-              <Text tone="muted">
-                Keep the panel in place and offer a retry path.
-              </Text>
-              <Button variant="secondary">Retry</Button>
+            <Stack gap="md">
+              <Stack gap="sm">
+                <Heading level={3} size="sm" tone="danger">
+                  Could not load runs
+                </Heading>
+                <Text tone="muted">
+                  Keep the panel in place and offer a retry path.
+                </Text>
+              </Stack>
+              <Button variant="secondary" style={{ width: "100%" }}>
+                Retry
+              </Button>
             </Stack>
           </Tabs.Panel>
         </Tabs.Root>
