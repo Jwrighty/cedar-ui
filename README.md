@@ -57,14 +57,24 @@ properties, and a theme can be scoped to any subtree.
 ## For AI agents
 
 Cedar treats AI coding agents as a first-class consumer. Every component ships
-co-located usage metadata that generates a curated [`llms.txt`](llms.txt), a
-machine-readable [`cedar.manifest.json`](cedar.manifest.json), and an
-[MCP server](packages/mcp/README.md) an agent can query live while coding.
-For paste-only workflows, `pnpm cedar:dense Button` prints compact component
-guidance and `pnpm cedar:dense token blue.600` prints a dense token reference.
+co-located usage metadata — plus a tested canonical example — that generates a
+curated [`llms.txt`](llms.txt), a machine-readable
+[`cedar.manifest.json`](cedar.manifest.json), and an
+[MCP server](packages/mcp/README.md) an agent can query live while coding. The
+same pipeline emits composition templates for the whole-page patterns agents
+assemble wrong (form dialog, filterable table, settings page, async states), so
+guidance covers screens and not just individual components.
+
+For paste-only workflows (web ChatGPT/Claude, no MCP), `pnpm cedar:dense Button`
+prints compact component guidance and `pnpm cedar:dense token blue.600` prints a
+dense token reference. Consumers can also drop Cedar's generated
+[agent-rules files](agent-rules/) — a `CLAUDE.md`, `AGENTS.md`, and
+`.cursorrules` — into their own repo to keep agent-written code aligned with
+Cedar's conventions (import paths, tokens over magic values, preserved React
+Aria prop names).
 
 The case study — what was built, what it cost, and what I'd change — is
-[**Designing a Design System for AI Agents**](docs/essays/designing-a-design-system-for-ai-agents.md).
+[**Designing a Design System for AI Agents**](docs/case-studies/designing-a-design-system-for-ai-agents.md).
 
 ## Development
 
