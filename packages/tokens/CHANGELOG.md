@@ -1,5 +1,11 @@
 # @jwrighty/cedar-tokens
 
+## 0.4.1
+
+### Patch Changes
+
+- c8d3572: Improve ds-bench coverage with alias canonical examples and typed motion tokens.
+
 ## 0.4.0
 
 ### Minor Changes

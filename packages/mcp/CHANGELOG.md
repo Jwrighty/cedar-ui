@@ -1,5 +1,12 @@
 # @jwrighty/cedar-mcp
 
+## 0.2.3
+
+### Patch Changes
+
+- Updated dependencies [c8d3572]
+  - @jwrighty/cedar-react@0.4.1
+
 ## 0.2.2
 
 ### Patch Changes
