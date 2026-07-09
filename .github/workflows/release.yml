@@ -25,18 +25,18 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v4
 
-      # OIDC trusted publishing needs Node >= 22.14 and npm >= 11.5.1. Node 22
-      # ships an older npm, so upgrade it explicitly — `pnpm publish` shells out
-      # to the system npm, so it must be the version that understands OIDC.
+      # OIDC trusted publishing needs npm >= 11.5.1. Node 22 bundles npm 10.x,
+      # and self-upgrading it in place (`npm install -g npm@latest`) intermittently
+      # corrupts the global install by pruning bundled deps like `sigstore`, which
+      # breaks provenance publishing (MODULE_NOT_FOUND). Node 24 (Active LTS)
+      # bundles npm 11.x natively, so no self-upgrade is needed — `pnpm publish`
+      # shells out to this npm and it already understands OIDC.
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
           registry-url: https://registry.npmjs.org
-
-      - name: Upgrade npm for OIDC support
-        run: npm install -g npm@latest
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
