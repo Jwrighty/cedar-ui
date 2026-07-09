@@ -289,6 +289,7 @@ export function renderLlmsTxt(componentCatalog, templateCatalog = []) {
         component.canonicalExample.code,
         "```",
         "",
+        ...renderExportExamples(component),
       ];
     }),
     "## Composition Templates",
@@ -452,6 +453,7 @@ export function renderManifest({
           a11yNotes: component.meta.a11yNotes,
           relatedComponents: component.meta.relatedComponents,
           canonicalExample: component.canonicalExample,
+          exportExamples: component.exportExamples,
           source: docs?.source,
           props: docs?.props ?? [],
           variants: docs?.variants ?? [],
@@ -572,6 +574,10 @@ export function renderManifestSchema() {
           a11yNotes: { type: "array", items: { type: "string" } },
           relatedComponents: { type: "array", items: { type: "string" } },
           canonicalExample: { $ref: "#/$defs/canonicalExample" },
+          exportExamples: {
+            type: "object",
+            additionalProperties: { $ref: "#/$defs/canonicalExample" },
+          },
           source: { type: "string" },
           props: {
             type: "array",
@@ -1056,6 +1062,11 @@ function stripUndefinedValues(value) {
 export function buildComponentCatalog(reactPackage, canonicalExamples) {
   const catalog = componentBindings.map((binding) => {
     const meta = reactPackage[binding.metaExport];
+    const exportExamples = Object.fromEntries(
+      binding.exports
+        .map((exportName) => [exportName, canonicalExamples?.[exportName]])
+        .filter(([, example]) => example),
+    );
 
     if (!meta) {
       throw new Error(`Missing metadata export: ${binding.metaExport}`);
@@ -1065,7 +1076,8 @@ export function buildComponentCatalog(reactPackage, canonicalExamples) {
       name: binding.name,
       exports: binding.exports,
       meta,
-      canonicalExample: canonicalExamples?.[binding.name],
+      canonicalExample: exportExamples[binding.name],
+      exportExamples,
     };
   });
 
@@ -1076,6 +1088,29 @@ export function buildComponentCatalog(reactPackage, canonicalExamples) {
   }
 
   return catalog;
+}
+
+function renderExportExamples(component) {
+  return component.exports.flatMap((exportName) => {
+    if (exportName === component.name) {
+      return [];
+    }
+
+    const example = component.exportExamples?.[exportName];
+
+    if (!example) {
+      return [];
+    }
+
+    return [
+      `- **${exportName} example:**`,
+      "",
+      "```tsx",
+      example.code,
+      "```",
+      "",
+    ];
+  });
 }
 
 export function buildTemplateCatalog(reactPackage, templateExamples) {

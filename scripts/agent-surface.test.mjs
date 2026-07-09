@@ -29,6 +29,39 @@ test("renders llms.txt from component metadata", () => {
           source: "packages/react/src/canonical-examples.tsx#ButtonExample",
           code: "function ButtonExample() {\n  return <Button>Save</Button>;\n}",
         },
+        exportExamples: {
+          Button: {
+            source: "packages/react/src/canonical-examples.tsx#ButtonExample",
+            code: "function ButtonExample() {\n  return <Button>Save</Button>;\n}",
+          },
+        },
+      },
+      {
+        name: "Badge",
+        exports: ["Badge", "StatusPill"],
+        meta: {
+          summary: "Labels status.",
+          useWhen: ["A compact status label is needed."],
+          avoidWhen: [],
+          a11yNotes: ["Text remains visible."],
+          relatedComponents: [],
+          status: "experimental",
+        },
+        canonicalExample: {
+          source: "packages/react/src/canonical-examples.tsx#BadgeExample",
+          code: 'function BadgeExample() {\n  return <Badge>Status</Badge>;\n}',
+        },
+        exportExamples: {
+          Badge: {
+            source: "packages/react/src/canonical-examples.tsx#BadgeExample",
+            code: 'function BadgeExample() {\n  return <Badge>Status</Badge>;\n}',
+          },
+          StatusPill: {
+            source:
+              "packages/react/src/canonical-examples.tsx#StatusPillExample",
+            code: 'function StatusPillExample() {\n  return <StatusPill>Healthy</StatusPill>;\n}',
+          },
+        },
       },
     ],
     [
@@ -66,6 +99,9 @@ test("renders llms.txt from component metadata", () => {
   );
   assert.match(rendered, /\*\*Canonical example:\*\*/);
   assert.match(rendered, /```tsx\nfunction ButtonExample\(\)/);
+  assert.match(rendered, /### Badge/);
+  assert.match(rendered, /\*\*StatusPill example:\*\*/);
+  assert.match(rendered, /```tsx\nfunction StatusPillExample\(\)/);
   assert.match(rendered, /## Composition Templates/);
   assert.match(rendered, /### form-dialog/);
   assert.match(rendered, /\*\*Components:\*\* `Dialog`, `TextField`, `Inline`/);
@@ -240,6 +276,12 @@ test("renders a manifest from component metadata, props, variants, and tokens", 
           source: "packages/react/src/canonical-examples.tsx#ButtonExample",
           code: "function ButtonExample() {\n  return <Button>Save</Button>;\n}",
         },
+        exportExamples: {
+          Button: {
+            source: "packages/react/src/canonical-examples.tsx#ButtonExample",
+            code: "function ButtonExample() {\n  return <Button>Save</Button>;\n}",
+          },
+        },
       },
     ],
     templateCatalog: [
@@ -312,6 +354,10 @@ test("renders a manifest from component metadata, props, variants, and tokens", 
     source: "packages/react/src/canonical-examples.tsx#ButtonExample",
     code: "function ButtonExample() {\n  return <Button>Save</Button>;\n}",
   });
+  assert.deepEqual(manifest.components[0].exportExamples.Button, {
+    source: "packages/react/src/canonical-examples.tsx#ButtonExample",
+    code: "function ButtonExample() {\n  return <Button>Save</Button>;\n}",
+  });
   assert.deepEqual(manifest.components[0].variants[0].options, [
     "primary",
     "secondary",
@@ -349,6 +395,10 @@ test("renders a schema for the manifest contract", () => {
   assert.equal(
     schema.$defs.component.properties.canonicalExample.$ref,
     "#/$defs/canonicalExample",
+  );
+  assert.deepEqual(
+    schema.$defs.component.properties.exportExamples.additionalProperties,
+    { $ref: "#/$defs/canonicalExample" },
   );
   assert.equal(
     schema.$defs.template.properties.canonicalExample.$ref,

@@ -170,6 +170,12 @@
         "canonicalExample": {
           "$ref": "#/$defs/canonicalExample"
         },
+        "exportExamples": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/canonicalExample"
+          }
+        },
         "source": {
           "type": "string"
         },

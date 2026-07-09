@@ -17,21 +17,51 @@
         "draw": { "$value": "{base.motion.duration.draw}", "$type": "duration" }
       },
       "easing": {
-        "settle": { "$value": "{base.motion.easing.out}" },
-        "enter": { "$value": "{base.motion.easing.snap}" },
-        "emphasized": { "$value": "{base.motion.easing.decelerate}" },
-        "playful": { "$value": "{base.motion.easing.overshoot}" }
+        "settle": {
+          "$value": "{base.motion.easing.out}",
+          "$type": "cubicBezier"
+        },
+        "enter": {
+          "$value": "{base.motion.easing.snap}",
+          "$type": "cubicBezier"
+        },
+        "emphasized": {
+          "$value": "{base.motion.easing.decelerate}",
+          "$type": "cubicBezier"
+        },
+        "playful": {
+          "$value": "{base.motion.easing.overshoot}",
+          "$type": "cubicBezier"
+        }
       },
       "spring": {
         "overlay": {
-          "stiffness": { "$value": "{base.motion.spring.gentle.stiffness}" },
-          "damping": { "$value": "{base.motion.spring.gentle.damping}" },
-          "mass": { "$value": "{base.motion.spring.gentle.mass}" }
+          "stiffness": {
+            "$value": "{base.motion.spring.gentle.stiffness}",
+            "$type": "number"
+          },
+          "damping": {
+            "$value": "{base.motion.spring.gentle.damping}",
+            "$type": "number"
+          },
+          "mass": {
+            "$value": "{base.motion.spring.gentle.mass}",
+            "$type": "number"
+          }
         },
         "live-update": {
-          "stiffness": { "$value": "{base.motion.spring.snappy.stiffness}" },
-          "damping": { "$value": "{base.motion.spring.snappy.damping}" },
-          "mass": { "$value": "{base.motion.spring.snappy.mass}" }
+          "stiffness": {
+            "$value": "{base.motion.spring.snappy.stiffness}",
+            "$type": "number"
+          },
+          "damping": {
+            "$value": "{base.motion.spring.snappy.damping}",
+            "$type": "number"
+          },
+          "mass": {
+            "$value": "{base.motion.spring.snappy.mass}",
+            "$type": "number"
+          }
         }
       }
     }

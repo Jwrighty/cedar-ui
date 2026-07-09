@@ -30,6 +30,14 @@ function BadgeExample() {
 }
 ```
 
+- **StatusPill example:**
+
+```tsx
+function StatusPillExample() {
+  return <StatusPill status="success">Healthy</StatusPill>;
+}
+```
+
 ### Box
 
 - **Exports:** `Box`
@@ -314,6 +322,20 @@ function StatExample() {
       label="Runs"
       value="1,248"
       delta={{ direction: "positive", value: "+8%" }}
+    />
+  );
+}
+```
+
+- **MetricCard example:**
+
+```tsx
+function MetricCardExample() {
+  return (
+    <MetricCard
+      label="Spend"
+      value="$12.4k"
+      delta={{ direction: "negative", value: "-3%" }}
     />
   );
 }

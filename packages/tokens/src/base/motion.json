@@ -9,21 +9,33 @@
         "draw": { "$value": "600ms", "$type": "duration" }
       },
       "easing": {
-        "out": { "$value": "cubic-bezier(0.16, 1, 0.3, 1)" },
-        "snap": { "$value": "cubic-bezier(0.2, 0, 0, 1)" },
-        "decelerate": { "$value": "cubic-bezier(0.05, 0.7, 0.1, 1)" },
-        "overshoot": { "$value": "cubic-bezier(0.34, 1.56, 0.64, 1)" }
+        "out": {
+          "$value": "cubic-bezier(0.16, 1, 0.3, 1)",
+          "$type": "cubicBezier"
+        },
+        "snap": {
+          "$value": "cubic-bezier(0.2, 0, 0, 1)",
+          "$type": "cubicBezier"
+        },
+        "decelerate": {
+          "$value": "cubic-bezier(0.05, 0.7, 0.1, 1)",
+          "$type": "cubicBezier"
+        },
+        "overshoot": {
+          "$value": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+          "$type": "cubicBezier"
+        }
       },
       "spring": {
         "gentle": {
-          "stiffness": { "$value": 220 },
-          "damping": { "$value": 28 },
-          "mass": { "$value": 1 }
+          "stiffness": { "$value": 220, "$type": "number" },
+          "damping": { "$value": 28, "$type": "number" },
+          "mass": { "$value": 1, "$type": "number" }
         },
         "snappy": {
-          "stiffness": { "$value": 380 },
-          "damping": { "$value": 32 },
-          "mass": { "$value": 0.8 }
+          "stiffness": { "$value": 380, "$type": "number" },
+          "damping": { "$value": 32, "$type": "number" },
+          "mass": { "$value": 0.8, "$type": "number" }
         }
       }
     }

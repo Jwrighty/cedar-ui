@@ -56,6 +56,16 @@
         "source": "packages/react/src/canonical-examples.tsx#BadgeExample",
         "code": "function BadgeExample() {\n  return <Badge status=\"running\">Syncing</Badge>;\n}"
       },
+      "exportExamples": {
+        "Badge": {
+          "source": "packages/react/src/canonical-examples.tsx#BadgeExample",
+          "code": "function BadgeExample() {\n  return <Badge status=\"running\">Syncing</Badge>;\n}"
+        },
+        "StatusPill": {
+          "source": "packages/react/src/canonical-examples.tsx#StatusPillExample",
+          "code": "function StatusPillExample() {\n  return <StatusPill status=\"success\">Healthy</StatusPill>;\n}"
+        }
+      },
       "source": "packages/react/src/Badge.tsx",
       "props": [
         {
@@ -160,6 +170,12 @@
         "source": "packages/react/src/canonical-examples.tsx#BoxExample",
         "code": "function BoxExample() {\n  return (\n    <Box as=\"section\" padding=\"lg\" aria-label=\"Billing summary\">\n      <Text>Next invoice: $128.00</Text>\n    </Box>\n  );\n}"
       },
+      "exportExamples": {
+        "Box": {
+          "source": "packages/react/src/canonical-examples.tsx#BoxExample",
+          "code": "function BoxExample() {\n  return (\n    <Box as=\"section\" padding=\"lg\" aria-label=\"Billing summary\">\n      <Text>Next invoice: $128.00</Text>\n    </Box>\n  );\n}"
+        }
+      },
       "source": "packages/react/src/Box.tsx",
       "props": [
         {
@@ -244,6 +260,12 @@
       "canonicalExample": {
         "source": "packages/react/src/canonical-examples.tsx#ButtonExample",
         "code": "function ButtonExample() {\n  return <Button variant=\"primary\">Save changes</Button>;\n}"
+      },
+      "exportExamples": {
+        "Button": {
+          "source": "packages/react/src/canonical-examples.tsx#ButtonExample",
+          "code": "function ButtonExample() {\n  return <Button variant=\"primary\">Save changes</Button>;\n}"
+        }
       },
       "source": "packages/react/src/Button.tsx",
       "props": [
@@ -337,6 +359,12 @@
         "source": "packages/react/src/canonical-examples.tsx#CardExample",
         "code": "function CardExample() {\n  return (\n    <Card>\n      <CardHeader>\n        <Heading level={2} size=\"sm\">\n          Project health\n        </Heading>\n      </CardHeader>\n      <CardBody>\n        <Text tone=\"muted\">All checks passed in the last run.</Text>\n      </CardBody>\n      <CardFooter>\n        <Button variant=\"secondary\">View details</Button>\n      </CardFooter>\n    </Card>\n  );\n}"
       },
+      "exportExamples": {
+        "Card": {
+          "source": "packages/react/src/canonical-examples.tsx#CardExample",
+          "code": "function CardExample() {\n  return (\n    <Card>\n      <CardHeader>\n        <Heading level={2} size=\"sm\">\n          Project health\n        </Heading>\n      </CardHeader>\n      <CardBody>\n        <Text tone=\"muted\">All checks passed in the last run.</Text>\n      </CardBody>\n      <CardFooter>\n        <Button variant=\"secondary\">View details</Button>\n      </CardFooter>\n    </Card>\n  );\n}"
+        }
+      },
       "source": "packages/react/src/Card.tsx",
       "props": [
         {
@@ -415,6 +443,12 @@
         "source": "packages/react/src/canonical-examples.tsx#CheckboxExample",
         "code": "function CheckboxExample() {\n  return <Checkbox defaultSelected>Include archived runs</Checkbox>;\n}"
       },
+      "exportExamples": {
+        "Checkbox": {
+          "source": "packages/react/src/canonical-examples.tsx#CheckboxExample",
+          "code": "function CheckboxExample() {\n  return <Checkbox defaultSelected>Include archived runs</Checkbox>;\n}"
+        }
+      },
       "source": "packages/react/src/Checkbox.tsx",
       "props": [
         {
@@ -483,6 +517,12 @@
       "canonicalExample": {
         "source": "packages/react/src/canonical-examples.tsx#DialogExample",
         "code": "function DialogExample() {\n  return (\n    <Dialog.Root>\n      <Dialog.Trigger>Delete project</Dialog.Trigger>\n      <Dialog.Content>\n        <Dialog.Title>Delete project?</Dialog.Title>\n        <Text>This action cannot be undone.</Text>\n        <Inline gap=\"sm\">\n          <Dialog.Close>Cancel</Dialog.Close>\n          <Dialog.Close variant=\"primary\">Delete</Dialog.Close>\n        </Inline>\n      </Dialog.Content>\n    </Dialog.Root>\n  );\n}"
+      },
+      "exportExamples": {
+        "Dialog": {
+          "source": "packages/react/src/canonical-examples.tsx#DialogExample",
+          "code": "function DialogExample() {\n  return (\n    <Dialog.Root>\n      <Dialog.Trigger>Delete project</Dialog.Trigger>\n      <Dialog.Content>\n        <Dialog.Title>Delete project?</Dialog.Title>\n        <Text>This action cannot be undone.</Text>\n        <Inline gap=\"sm\">\n          <Dialog.Close>Cancel</Dialog.Close>\n          <Dialog.Close variant=\"primary\">Delete</Dialog.Close>\n        </Inline>\n      </Dialog.Content>\n    </Dialog.Root>\n  );\n}"
+        }
       },
       "source": "packages/react/src/Dialog.tsx",
       "props": [
@@ -598,6 +638,12 @@
       "canonicalExample": {
         "source": "packages/react/src/canonical-examples.tsx#HeadingExample",
         "code": "function HeadingExample() {\n  return (\n    <Heading level={2} size=\"lg\">\n      Billing details\n    </Heading>\n  );\n}"
+      },
+      "exportExamples": {
+        "Heading": {
+          "source": "packages/react/src/canonical-examples.tsx#HeadingExample",
+          "code": "function HeadingExample() {\n  return (\n    <Heading level={2} size=\"lg\">\n      Billing details\n    </Heading>\n  );\n}"
+        }
       },
       "source": "packages/react/src/Heading.tsx",
       "props": [
@@ -731,6 +777,12 @@
         "source": "packages/react/src/canonical-examples.tsx#IconButtonExample",
         "code": "function IconButtonExample() {\n  return (\n    <IconButton aria-label=\"Close\" variant=\"ghost\" size=\"sm\">\n      <span aria-hidden=\"true\">x</span>\n    </IconButton>\n  );\n}"
       },
+      "exportExamples": {
+        "IconButton": {
+          "source": "packages/react/src/canonical-examples.tsx#IconButtonExample",
+          "code": "function IconButtonExample() {\n  return (\n    <IconButton aria-label=\"Close\" variant=\"ghost\" size=\"sm\">\n      <span aria-hidden=\"true\">x</span>\n    </IconButton>\n  );\n}"
+        }
+      },
       "source": "packages/react/src/IconButton.tsx",
       "props": [
         {
@@ -830,6 +882,12 @@
         "source": "packages/react/src/canonical-examples.tsx#InlineExample",
         "code": "function InlineExample() {\n  return (\n    <Inline as=\"nav\" gap=\"sm\" aria-label=\"Pagination\">\n      <Button variant=\"secondary\">Previous</Button>\n      <Button variant=\"secondary\">Next</Button>\n    </Inline>\n  );\n}"
       },
+      "exportExamples": {
+        "Inline": {
+          "source": "packages/react/src/canonical-examples.tsx#InlineExample",
+          "code": "function InlineExample() {\n  return (\n    <Inline as=\"nav\" gap=\"sm\" aria-label=\"Pagination\">\n      <Button variant=\"secondary\">Previous</Button>\n      <Button variant=\"secondary\">Next</Button>\n    </Inline>\n  );\n}"
+        }
+      },
       "source": "packages/react/src/Inline.tsx",
       "props": [
         {
@@ -920,6 +978,12 @@
       "canonicalExample": {
         "source": "packages/react/src/canonical-examples.tsx#PopoverExample",
         "code": "function PopoverExample() {\n  return (\n    <Popover.Root>\n      <Popover.Trigger>View details</Popover.Trigger>\n      <Popover.Content aria-label=\"Project details\">\n        <Text>Last updated today.</Text>\n        <Button variant=\"secondary\">Open project</Button>\n      </Popover.Content>\n    </Popover.Root>\n  );\n}"
+      },
+      "exportExamples": {
+        "Popover": {
+          "source": "packages/react/src/canonical-examples.tsx#PopoverExample",
+          "code": "function PopoverExample() {\n  return (\n    <Popover.Root>\n      <Popover.Trigger>View details</Popover.Trigger>\n      <Popover.Content aria-label=\"Project details\">\n        <Text>Last updated today.</Text>\n        <Button variant=\"secondary\">Open project</Button>\n      </Popover.Content>\n    </Popover.Root>\n  );\n}"
+        }
       },
       "source": "packages/react/src/Popover.tsx",
       "props": [
@@ -1073,6 +1137,12 @@
         "source": "packages/react/src/canonical-examples.tsx#RadioGroupExample",
         "code": "function RadioGroupExample() {\n  return (\n    <RadioGroup label=\"Plan\" defaultValue=\"pro\">\n      <Radio value=\"free\">Free</Radio>\n      <Radio value=\"pro\">Pro</Radio>\n    </RadioGroup>\n  );\n}"
       },
+      "exportExamples": {
+        "RadioGroup": {
+          "source": "packages/react/src/canonical-examples.tsx#RadioGroupExample",
+          "code": "function RadioGroupExample() {\n  return (\n    <RadioGroup label=\"Plan\" defaultValue=\"pro\">\n      <Radio value=\"free\">Free</Radio>\n      <Radio value=\"pro\">Pro</Radio>\n    </RadioGroup>\n  );\n}"
+        }
+      },
       "source": "packages/react/src/RadioGroup.tsx",
       "props": [
         {
@@ -1198,6 +1268,12 @@
         "source": "packages/react/src/canonical-examples.tsx#SkeletonExample",
         "code": "function SkeletonExample() {\n  return <Skeleton shape=\"rounded\" style={{ height: 96, width: 240 }} />;\n}"
       },
+      "exportExamples": {
+        "Skeleton": {
+          "source": "packages/react/src/canonical-examples.tsx#SkeletonExample",
+          "code": "function SkeletonExample() {\n  return <Skeleton shape=\"rounded\" style={{ height: 96, width: 240 }} />;\n}"
+        }
+      },
       "source": "packages/react/src/Skeleton.tsx",
       "props": [
         {
@@ -1264,6 +1340,12 @@
       "canonicalExample": {
         "source": "packages/react/src/canonical-examples.tsx#StackExample",
         "code": "function StackExample() {\n  return (\n    <Stack as=\"ul\" gap=\"sm\">\n      <li>Queued</li>\n      <li>Running</li>\n      <li>Complete</li>\n    </Stack>\n  );\n}"
+      },
+      "exportExamples": {
+        "Stack": {
+          "source": "packages/react/src/canonical-examples.tsx#StackExample",
+          "code": "function StackExample() {\n  return (\n    <Stack as=\"ul\" gap=\"sm\">\n      <li>Queued</li>\n      <li>Running</li>\n      <li>Complete</li>\n    </Stack>\n  );\n}"
+        }
       },
       "source": "packages/react/src/Stack.tsx",
       "props": [
@@ -1345,6 +1427,16 @@
       "canonicalExample": {
         "source": "packages/react/src/canonical-examples.tsx#StatExample",
         "code": "function StatExample() {\n  return (\n    <Stat\n      label=\"Runs\"\n      value=\"1,248\"\n      delta={{ direction: \"positive\", value: \"+8%\" }}\n    />\n  );\n}"
+      },
+      "exportExamples": {
+        "Stat": {
+          "source": "packages/react/src/canonical-examples.tsx#StatExample",
+          "code": "function StatExample() {\n  return (\n    <Stat\n      label=\"Runs\"\n      value=\"1,248\"\n      delta={{ direction: \"positive\", value: \"+8%\" }}\n    />\n  );\n}"
+        },
+        "MetricCard": {
+          "source": "packages/react/src/canonical-examples.tsx#MetricCardExample",
+          "code": "function MetricCardExample() {\n  return (\n    <MetricCard\n      label=\"Spend\"\n      value=\"$12.4k\"\n      delta={{ direction: \"negative\", value: \"-3%\" }}\n    />\n  );\n}"
+        }
       },
       "source": "packages/react/src/Stat.tsx",
       "props": [
@@ -1495,6 +1587,12 @@
         "source": "packages/react/src/canonical-examples.tsx#SwitchExample",
         "code": "function SwitchExample() {\n  return <Switch defaultSelected>Enable notifications</Switch>;\n}"
       },
+      "exportExamples": {
+        "Switch": {
+          "source": "packages/react/src/canonical-examples.tsx#SwitchExample",
+          "code": "function SwitchExample() {\n  return <Switch defaultSelected>Enable notifications</Switch>;\n}"
+        }
+      },
       "source": "packages/react/src/Switch.tsx",
       "props": [
         {
@@ -1576,6 +1674,12 @@
       "canonicalExample": {
         "source": "packages/react/src/canonical-examples.tsx#TableExample",
         "code": "function TableExample() {\n  return (\n    <Table>\n      <thead>\n        <TableRow>\n          <TableHeaderCell>Run</TableHeaderCell>\n          <TableHeaderCell align=\"end\" isNumeric>\n            Latency\n          </TableHeaderCell>\n        </TableRow>\n      </thead>\n      <tbody>\n        <TableRow isInteractive>\n          <TableCell>run_123</TableCell>\n          <TableCell align=\"end\" isNumeric>\n            842 ms\n          </TableCell>\n        </TableRow>\n      </tbody>\n    </Table>\n  );\n}"
+      },
+      "exportExamples": {
+        "Table": {
+          "source": "packages/react/src/canonical-examples.tsx#TableExample",
+          "code": "function TableExample() {\n  return (\n    <Table>\n      <thead>\n        <TableRow>\n          <TableHeaderCell>Run</TableHeaderCell>\n          <TableHeaderCell align=\"end\" isNumeric>\n            Latency\n          </TableHeaderCell>\n        </TableRow>\n      </thead>\n      <tbody>\n        <TableRow isInteractive>\n          <TableCell>run_123</TableCell>\n          <TableCell align=\"end\" isNumeric>\n            842 ms\n          </TableCell>\n        </TableRow>\n      </tbody>\n    </Table>\n  );\n}"
+        }
       },
       "source": "packages/react/src/Table.tsx",
       "props": [
@@ -1761,6 +1865,12 @@
         "source": "packages/react/src/canonical-examples.tsx#TabsExample",
         "code": "function TabsExample() {\n  return (\n    <Tabs.Root defaultSelectedKey=\"details\">\n      <Tabs.List aria-label=\"Project sections\">\n        <Tabs.Tab id=\"details\">Details</Tabs.Tab>\n        <Tabs.Tab id=\"activity\">Activity</Tabs.Tab>\n      </Tabs.List>\n      <Tabs.Panel id=\"details\">Project details</Tabs.Panel>\n      <Tabs.Panel id=\"activity\">Recent activity</Tabs.Panel>\n    </Tabs.Root>\n  );\n}"
       },
+      "exportExamples": {
+        "Tabs": {
+          "source": "packages/react/src/canonical-examples.tsx#TabsExample",
+          "code": "function TabsExample() {\n  return (\n    <Tabs.Root defaultSelectedKey=\"details\">\n      <Tabs.List aria-label=\"Project sections\">\n        <Tabs.Tab id=\"details\">Details</Tabs.Tab>\n        <Tabs.Tab id=\"activity\">Activity</Tabs.Tab>\n      </Tabs.List>\n      <Tabs.Panel id=\"details\">Project details</Tabs.Panel>\n      <Tabs.Panel id=\"activity\">Recent activity</Tabs.Panel>\n    </Tabs.Root>\n  );\n}"
+        }
+      },
       "source": "packages/react/src/Tabs.tsx",
       "props": [
         {
@@ -1841,6 +1951,12 @@
       "canonicalExample": {
         "source": "packages/react/src/canonical-examples.tsx#TextExample",
         "code": "function TextExample() {\n  return (\n    <Text as=\"span\" size=\"sm\" tone=\"muted\">\n      Optional\n    </Text>\n  );\n}"
+      },
+      "exportExamples": {
+        "Text": {
+          "source": "packages/react/src/canonical-examples.tsx#TextExample",
+          "code": "function TextExample() {\n  return (\n    <Text as=\"span\" size=\"sm\" tone=\"muted\">\n      Optional\n    </Text>\n  );\n}"
+        }
       },
       "source": "packages/react/src/Text.tsx",
       "props": [
@@ -1974,6 +2090,12 @@
         "source": "packages/react/src/canonical-examples.tsx#TextFieldExample",
         "code": "function TextFieldExample() {\n  return (\n    <TextField\n      label=\"Email\"\n      description=\"We will never share it.\"\n      type=\"email\"\n      placeholder=\"you@example.com\"\n    />\n  );\n}"
       },
+      "exportExamples": {
+        "TextField": {
+          "source": "packages/react/src/canonical-examples.tsx#TextFieldExample",
+          "code": "function TextFieldExample() {\n  return (\n    <TextField\n      label=\"Email\"\n      description=\"We will never share it.\"\n      type=\"email\"\n      placeholder=\"you@example.com\"\n    />\n  );\n}"
+        }
+      },
       "source": "packages/react/src/TextField.tsx",
       "props": [
         {
@@ -2061,6 +2183,12 @@
       "canonicalExample": {
         "source": "packages/react/src/canonical-examples.tsx#ToastExample",
         "code": "function ToastExample() {\n  return (\n    <Toast.Provider\n      defaultToasts={[\n        {\n          id: \"saved\",\n          variant: \"success\",\n          title: \"Tags saved\",\n          description: \"The trace now has 3 tags.\",\n          duration: null,\n        },\n      ]}\n    >\n      <Toast.Region />\n    </Toast.Provider>\n  );\n}"
+      },
+      "exportExamples": {
+        "Toast": {
+          "source": "packages/react/src/canonical-examples.tsx#ToastExample",
+          "code": "function ToastExample() {\n  return (\n    <Toast.Provider\n      defaultToasts={[\n        {\n          id: \"saved\",\n          variant: \"success\",\n          title: \"Tags saved\",\n          description: \"The trace now has 3 tags.\",\n          duration: null,\n        },\n      ]}\n    >\n      <Toast.Region />\n    </Toast.Provider>\n  );\n}"
+        }
       },
       "source": "packages/react/src/Toast.tsx",
       "props": [
@@ -2291,6 +2419,12 @@
       "canonicalExample": {
         "source": "packages/react/src/canonical-examples.tsx#TooltipExample",
         "code": "function TooltipExample() {\n  return (\n    <Tooltip.Trigger>\n      <Button variant=\"secondary\">Save</Button>\n      <Tooltip>Save changes</Tooltip>\n    </Tooltip.Trigger>\n  );\n}"
+      },
+      "exportExamples": {
+        "Tooltip": {
+          "source": "packages/react/src/canonical-examples.tsx#TooltipExample",
+          "code": "function TooltipExample() {\n  return (\n    <Tooltip.Trigger>\n      <Button variant=\"secondary\">Save</Button>\n      <Tooltip>Save changes</Tooltip>\n    </Tooltip.Trigger>\n  );\n}"
+        }
       },
       "source": "packages/react/src/Tooltip.tsx",
       "props": [
@@ -2784,39 +2918,49 @@
               },
               "easing": {
                 "out": {
-                  "$value": "cubic-bezier(0.16, 1, 0.3, 1)"
+                  "$value": "cubic-bezier(0.16, 1, 0.3, 1)",
+                  "$type": "cubicBezier"
                 },
                 "snap": {
-                  "$value": "cubic-bezier(0.2, 0, 0, 1)"
+                  "$value": "cubic-bezier(0.2, 0, 0, 1)",
+                  "$type": "cubicBezier"
                 },
                 "decelerate": {
-                  "$value": "cubic-bezier(0.05, 0.7, 0.1, 1)"
+                  "$value": "cubic-bezier(0.05, 0.7, 0.1, 1)",
+                  "$type": "cubicBezier"
                 },
                 "overshoot": {
-                  "$value": "cubic-bezier(0.34, 1.56, 0.64, 1)"
+                  "$value": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+                  "$type": "cubicBezier"
                 }
               },
               "spring": {
                 "gentle": {
                   "stiffness": {
-                    "$value": 220
+                    "$value": 220,
+                    "$type": "number"
                   },
                   "damping": {
-                    "$value": 28
+                    "$value": 28,
+                    "$type": "number"
                   },
                   "mass": {
-                    "$value": 1
+                    "$value": 1,
+                    "$type": "number"
                   }
                 },
                 "snappy": {
                   "stiffness": {
-                    "$value": 380
+                    "$value": 380,
+                    "$type": "number"
                   },
                   "damping": {
-                    "$value": 32
+                    "$value": 32,
+                    "$type": "number"
                   },
                   "mass": {
-                    "$value": 0.8
+                    "$value": 0.8,
+                    "$type": "number"
                   }
                 }
               }
@@ -3707,39 +3851,49 @@
               },
               "easing": {
                 "settle": {
-                  "$value": "{base.motion.easing.out}"
+                  "$value": "{base.motion.easing.out}",
+                  "$type": "cubicBezier"
                 },
                 "enter": {
-                  "$value": "{base.motion.easing.snap}"
+                  "$value": "{base.motion.easing.snap}",
+                  "$type": "cubicBezier"
                 },
                 "emphasized": {
-                  "$value": "{base.motion.easing.decelerate}"
+                  "$value": "{base.motion.easing.decelerate}",
+                  "$type": "cubicBezier"
                 },
                 "playful": {
-                  "$value": "{base.motion.easing.overshoot}"
+                  "$value": "{base.motion.easing.overshoot}",
+                  "$type": "cubicBezier"
                 }
               },
               "spring": {
                 "overlay": {
                   "stiffness": {
-                    "$value": "{base.motion.spring.gentle.stiffness}"
+                    "$value": "{base.motion.spring.gentle.stiffness}",
+                    "$type": "number"
                   },
                   "damping": {
-                    "$value": "{base.motion.spring.gentle.damping}"
+                    "$value": "{base.motion.spring.gentle.damping}",
+                    "$type": "number"
                   },
                   "mass": {
-                    "$value": "{base.motion.spring.gentle.mass}"
+                    "$value": "{base.motion.spring.gentle.mass}",
+                    "$type": "number"
                   }
                 },
                 "live-update": {
                   "stiffness": {
-                    "$value": "{base.motion.spring.snappy.stiffness}"
+                    "$value": "{base.motion.spring.snappy.stiffness}",
+                    "$type": "number"
                   },
                   "damping": {
-                    "$value": "{base.motion.spring.snappy.damping}"
+                    "$value": "{base.motion.spring.snappy.damping}",
+                    "$type": "number"
                   },
                   "mass": {
-                    "$value": "{base.motion.spring.snappy.mass}"
+                    "$value": "{base.motion.spring.snappy.mass}",
+                    "$type": "number"
                   }
                 }
               }

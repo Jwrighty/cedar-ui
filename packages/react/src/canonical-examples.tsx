@@ -1,4 +1,4 @@
-import { Badge } from "./Badge";
+import { Badge, StatusPill } from "./Badge";
 import { Box } from "./Box";
 import { Button } from "./Button";
 import { Card, CardBody, CardFooter, CardHeader } from "./Card";
@@ -11,7 +11,7 @@ import { Popover } from "./Popover";
 import { Radio, RadioGroup } from "./RadioGroup";
 import { Skeleton } from "./Skeleton";
 import { Stack } from "./Stack";
-import { Stat } from "./Stat";
+import { MetricCard, Stat } from "./Stat";
 import { Switch } from "./Switch";
 import { Table, TableCell, TableHeaderCell, TableRow } from "./Table";
 import { Tabs } from "./Tabs";
@@ -22,6 +22,10 @@ import { Tooltip } from "./Tooltip";
 
 export function BadgeExample() {
   return <Badge status="running">Syncing</Badge>;
+}
+
+export function StatusPillExample() {
+  return <StatusPill status="success">Healthy</StatusPill>;
 }
 
 export function BoxExample() {
@@ -144,6 +148,16 @@ export function StatExample() {
   );
 }
 
+export function MetricCardExample() {
+  return (
+    <MetricCard
+      label="Spend"
+      value="$12.4k"
+      delta={{ direction: "negative", value: "-3%" }}
+    />
+  );
+}
+
 export function SwitchExample() {
   return <Switch defaultSelected>Enable notifications</Switch>;
 }
@@ -232,6 +246,7 @@ export function TooltipExample() {
 
 export const canonicalExamples = {
   Badge: BadgeExample,
+  StatusPill: StatusPillExample,
   Box: BoxExample,
   Button: ButtonExample,
   Card: CardExample,
@@ -245,6 +260,7 @@ export const canonicalExamples = {
   Skeleton: SkeletonExample,
   Stack: StackExample,
   Stat: StatExample,
+  MetricCard: MetricCardExample,
   Switch: SwitchExample,
   Tabs: TabsExample,
   Table: TableExample,
